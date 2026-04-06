@@ -22,8 +22,15 @@
           'Pato', 'Sapo', 'Borboleta', 'Formiga', 'Abelha', 'Aranha', 'Minhoca', 'Lesma', 'Caracol', 'Lagarta',
           'Elefante', 'Leão', 'Girafa', 'Macaco', 'Zebra', 'Hipopótamo', 'Crocodilo', 'Tartaruga', 'Pinguim', 'Urso',
           'Lobo', 'Raposa', 'Veado', 'Esquilo', 'Rato', 'Hamster', 'Iguana', 'Papagaio', 'Tucano', 'Flamingo',
-          'Pelicano', 'Canguru', 'Koala', 'Panda', 'Golfinho', 'Baleia', 'Polvo', 'Caranguejo', 'Camarão', 'Estrela-do-mar'
-        ]
+          'Pelicano', 'Canguru', 'Koala', 'Panda', 'Golfinho', 'Baleia', 'Polvo', 'Caranguejo', 'Camarão', 'Estrela-do-mar'        ],
+        movies: [
+          'Filme Fácil 1', 'Filme Fácil 2', 'Filme Fácil 3'
+        ],
+        professions: [
+          'Profissão Fácil 1', 'Profissão Fácil 2', 'Profissão Fácil 3'
+        ],
+        celebrities: [
+          'Celebridade Fácil 1', 'Celebridade Fácil 2', 'Celebridade Fácil 3'        ]
       },
       normal: {
         objects: [
@@ -46,6 +53,15 @@
           'Orca', 'Tubarão', 'Arraia', 'Lula', 'Cavalo-marinho', 'Ouriço-do-mar', 'Arara', 'Pavão', 'Avestruz', 'Casuar',
           'Albatroz', 'Cegonha', 'Pelicano', 'Íbis', 'Garça', 'Lontra', 'Foca', 'Morsa', 'Leão-marinho', 'Dugongo',
           'Cabra-da-montanha', 'Íbex', 'Antílope', 'Gnu', 'Búfalo', 'Javali', 'Texugo', 'Guaxinim', 'Furão', 'Musaranho'
+        ],
+        movies: [
+          'Filme Normal 1', 'Filme Normal 2', 'Filme Normal 3'
+        ],
+        professions: [
+          'Profissão Normal 1', 'Profissão Normal 2', 'Profissão Normal 3'
+        ],
+        celebrities: [
+          'Celebridade Normal 1', 'Celebridade Normal 2', 'Celebridade Normal 3'
         ]
       },
       hard: {
@@ -73,9 +89,29 @@
           'Escorpião', 'Tarântula', 'Mamba-negra', 'Taipan', 'Cobra-de-coral', 'Viperão', 'Cascavel', 'Boomslang', 'Lula-gigante', 'Polvo-de-anéis-azuis',
           'Baiacu', 'Peixe-pedra', 'Peixe-leão', 'Cone-do-mar', 'Medusa-da-caixa', 'Vespa-asiática', 'Besouro-bombardeiro', 'Mosquito-tigre', 'Formiga-bala', 'Lagarta-de-fogo',
           'Pangolim', 'Aye-aye', 'Loris-lento', 'Tatu-bola', 'Tatu-gigante', 'Tamanduá-bandeira', 'Preguiça-de-três-dedos', 'Ouriço-pigmeu', 'Musaranho-elefante', 'Marta-pinheira'
+        ],
+        movies: [
+          'Filme Difícil 1', 'Filme Difícil 2', 'Filme Difícil 3'
+        ],
+        professions: [
+          'Profissão Difícil 1', 'Profissão Difícil 2', 'Profissão Difícil 3'
+        ],
+        celebrities: [
+          'Celebridade Difícil 1', 'Celebridade Difícil 2', 'Celebridade Difícil 3'
         ]
       }
     };
+
+    // ============================================================
+    // CHALLENGES
+    // ============================================================
+    const CHALLENGES = [
+      'Faça a mímica sentado',
+      'Faça a mímica agachado',
+      'Faça a mímica pulando',
+      'Faça a mímica andando no lugar',
+      'Faça a mímica com uma mão nas costas'
+    ];
 
     let wordBank = JSON.parse(localStorage.getItem('mm_words_v2') || 'null') || JSON.parse(JSON.stringify(DEFAULT_WORDS));
 
@@ -85,10 +121,11 @@
       teamNames: { A: 'Time A', B: 'Time B' },
       scores: {}, currentPlayerIdx: 0,
       currentRound: 1, totalRounds: 3,
-      currentWord: null, usedWords: [],
+      currentWord: null, currentChallenge: null, usedWords: [],
       timerDur: 60, timerInterval: null, memInterval: null,
       timerLeft: 60, hintShown: false, wordVisible: false,
-      phase: 'preparing', totalTurns: 0, turnsDone: 0
+      phase: 'preparing', totalTurns: 0, turnsDone: 0,
+      randomChallenge: false, selectedCategories: ['objects', 'actions', 'animals']
     };
 
     // ============================================================
@@ -110,8 +147,8 @@
     function goTo(screen) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById('screen-' + screen).classList.add('active');
-      if (screen === 'wordbank') { wbDiff = 'easy'; wbCat = 'all'; syncWBDiffUI(); syncWBCatUI(); renderWordBank(); }
-      if (screen === 'setup') { renderSetupPlayers(); updateDiffWordCount(); }
+      if (screen === 'wordbank') { wbDiff = 'easy'; wbCat = 'objects'; syncWBDiffUI(); syncWBCatUI(); renderWordBank(); }
+      if (screen === 'setup') { renderSetupPlayers(); updateDiffWordCount(); renderCategorySelection(); }
     }
 
     // ============================================================
@@ -177,6 +214,36 @@
       let total = 0; Object.values(bank).forEach(arr => total += arr.length);
       document.getElementById('diff-word-count').textContent =
         `${DIFF_META[gameState.difficulty].label} · ${total} palavras disponíveis`;
+    }
+
+    function toggleRandomChallenge(enabled) {
+      gameState.randomChallenge = enabled;
+    }
+
+    function toggleCategory(category) {
+      if (gameState.selectedCategories.includes(category)) {
+        gameState.selectedCategories = gameState.selectedCategories.filter(c => c !== category);
+      } else {
+        gameState.selectedCategories.push(category);
+      }
+      renderCategorySelection();
+    }
+
+    function renderCategorySelection() {
+      const container = document.getElementById('category-selection');
+      const categories = [
+        { key: 'objects', label: 'Objetos', icon: '📦' },
+        { key: 'actions', label: 'Ações', icon: '🏃' },
+        { key: 'animals', label: 'Animais', icon: '🐾' },
+        { key: 'movies', label: 'Filmes', icon: '🎬' },
+        { key: 'professions', label: 'Profissões', icon: '👔' },
+        { key: 'celebrities', label: 'Celebridades', icon: '⭐' }
+      ];
+      container.innerHTML = categories.map(cat => `
+        <div class="category-card ${gameState.selectedCategories.includes(cat.key) ? 'selected' : ''}" onclick="toggleCategory('${cat.key}')">
+          ${cat.icon} ${cat.label}
+        </div>
+      `).join('');
     }
 
     // ============================================================
@@ -313,7 +380,7 @@
     function revealWord() {
       gameState.phase = 'memorizing';
       gameState.currentWord = pickWord();
-      const catLabels = { objects: '🧸 Objeto', actions: '🏃 Ação', animals: '🐾 Animal' };
+      const catLabels = { objects: '🧸 Objeto', actions: '🏃 Ação', animals: '🐾 Animal', movies: '🎬 Filme', professions: '👔 Profissão', celebrities: '⭐ Celebridade' };
       document.getElementById('mem-word-display').textContent = gameState.currentWord.word;
       document.getElementById('hint-text').textContent = catLabels[gameState.currentWord.cat] || 'Palavra';
       document.getElementById('hint-banner').style.display = 'none';
@@ -322,6 +389,16 @@
       document.getElementById('word-visible-content').style.display = 'none';
       document.getElementById('btn-toggle-word').textContent = '👁️ Mostrar palavra';
       gameState.wordVisible = false;
+
+      // Show challenge if enabled
+      const challengeEl = document.getElementById('mem-challenge-display');
+      const challengeTextEl = document.getElementById('mem-challenge-text');
+      if (gameState.currentChallenge) {
+        challengeTextEl.textContent = gameState.currentChallenge;
+        challengeEl.style.display = '';
+      } else {
+        challengeEl.style.display = 'none';
+      }
 
       document.getElementById('preparing-state').style.display = 'none';
       document.getElementById('memorize-state').style.display = '';
@@ -336,6 +413,8 @@
         if (memLeft > 0) playBeep(memLeft <= 2 ? 700 : 500);
         if (memLeft <= 0) {
           clearInterval(gameState.memInterval);
+          // Hide challenge after memorization
+          challengeEl.style.display = 'none';
           document.getElementById('memorize-state').style.display = 'none';
           document.getElementById('playing-state').style.display = '';
           gameState.phase = 'playing'; playBeep(880); startTimer();
@@ -353,8 +432,20 @@
       const vc = document.getElementById('word-visible-content');
       const btn = document.getElementById('btn-toggle-word');
       gameState.wordVisible = !gameState.wordVisible;
-      if (gameState.wordVisible) { ph.style.display = 'none'; vc.style.display = ''; btn.textContent = '🙈 Ocultar palavra'; }
-      else { ph.style.display = 'flex'; vc.style.display = 'none'; btn.textContent = '👁️ Mostrar palavra'; }
+      if (gameState.wordVisible) {
+        ph.style.display = 'none'; vc.style.display = ''; btn.textContent = '🙈 Ocultar palavra';
+        // Show challenge when revealing word
+        const challengeEl = document.getElementById('game-challenge-display');
+        const challengeTextEl = document.getElementById('game-challenge-text');
+        if (gameState.currentChallenge) {
+          challengeTextEl.textContent = gameState.currentChallenge;
+          challengeEl.style.display = '';
+        } else {
+          challengeEl.style.display = 'none';
+        }
+      } else {
+        ph.style.display = 'flex'; vc.style.display = 'none'; btn.textContent = '👁️ Mostrar palavra';
+      }
     }
 
     // ============================================================
@@ -364,12 +455,21 @@
       const shuffle = document.getElementById('toggle-shuffle').checked;
       const bank = wordBank[gameState.difficulty] || {};
       const allWords = [];
-      Object.entries(bank).forEach(([cat, words]) => words.forEach(w => allWords.push({ word: w, cat })));
+      gameState.selectedCategories.forEach(cat => {
+        (bank[cat] || []).forEach(w => allWords.push({ word: w, cat }));
+      });
       let available = allWords.filter(w => !gameState.usedWords.includes(w.word));
       if (available.length === 0) { gameState.usedWords = []; available = allWords; }
       if (available.length === 0) return { word: '???', cat: 'objects' };
       const picked = shuffle ? available[Math.floor(Math.random() * available.length)] : available[0];
       gameState.usedWords.push(picked.word);
+
+      // Pick challenge if enabled
+      gameState.currentChallenge = null;
+      if (gameState.randomChallenge) {
+        gameState.currentChallenge = CHALLENGES[Math.floor(Math.random() * CHALLENGES.length)];
+      }
+
       return picked;
     }
 
@@ -420,6 +520,60 @@
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
         osc.start(); osc.stop(ctx.currentTime + 0.2);
       } catch (e) { }
+    }
+
+    function playClickSound() {
+      playBeep(800);
+    }
+
+    function playCorrectSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(523, ctx.currentTime);
+        osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.start(); osc.stop(ctx.currentTime + 0.3);
+      } catch (e) { }
+    }
+
+    function playWrongSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(400, ctx.currentTime);
+        osc.frequency.setValueAtTime(300, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.start(); osc.stop(ctx.currentTime + 0.2);
+      } catch (e) { }
+    }
+
+    function animateButtonClick(button) {
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = '';
+      }, 100);
+    }
+
+    function animateWrongButton(button) {
+      button.style.transform = 'translateX(-5px)';
+      setTimeout(() => {
+        button.style.transform = 'translateX(5px)';
+      }, 50);
+      setTimeout(() => {
+        button.style.transform = 'translateX(-5px)';
+      }, 100);
+      setTimeout(() => {
+        button.style.transform = 'translateX(5px)';
+      }, 150);
+      setTimeout(() => {
+        button.style.transform = '';
+      }, 200);
     }
 
     // ============================================================
@@ -565,7 +719,7 @@
     // WORD BANK
     // ============================================================
     let wbDiff = 'easy';
-    let wbCat = 'all';
+    let wbCat = 'objects';
 
     function syncWBDiffUI() {
       ['easy', 'normal', 'hard'].forEach(d =>
@@ -576,7 +730,7 @@
     }
 
     function syncWBCatUI() {
-      ['all', 'objects', 'actions', 'animals'].forEach(t =>
+      ['objects', 'actions', 'animals', 'movies', 'professions', 'celebrities'].forEach(t =>
         document.getElementById('tab-' + t)?.classList.toggle('active', t === wbCat)
       );
     }
@@ -589,8 +743,8 @@
       const cont = document.getElementById('words-list'); cont.innerHTML = '';
       let count = 0;
       const bank = wordBank[wbDiff] || {};
-      const cats = wbCat === 'all' ? ['objects', 'actions', 'animals'] : [wbCat];
-      const catIcon = { objects: '🧸', actions: '🏃', animals: '🐾' };
+      const cats = [wbCat];
+      const catIcon = { objects: '🧸', actions: '🏃', animals: '🐾', movies: '🎬', professions: '👔', celebrities: '⭐' };
       cats.forEach(cat => {
         (bank[cat] || []).forEach(word => {
           count++;
@@ -654,12 +808,14 @@
         gameState = {
           mode: 'teams', difficulty: prevDiff,
           teams: { A: [], B: [] }, players: [],
+          teamNames: { A: 'Time A', B: 'Time B' },
           scores: {}, currentPlayerIdx: 0, currentRound: 1, totalRounds: 3,
-          currentWord: null, usedWords: [],
+          currentWord: null, currentChallenge: null, usedWords: [],
           timerDur: parseInt(document.getElementById('timer-slider').value) || 60,
           timerInterval: null, memInterval: null,
           timerLeft: 60, hintShown: false, wordVisible: false,
-          phase: 'preparing', totalTurns: 0, turnsDone: 0
+          phase: 'preparing', totalTurns: 0, turnsDone: 0,
+          randomChallenge: false, selectedCategories: ['objects', 'actions', 'animals']
         };
         selectMode('teams'); selectDifficulty(prevDiff);
         goTo('setup'); renderSetupPlayers();
