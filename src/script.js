@@ -82,6 +82,7 @@
     let gameState = {
       mode: 'teams', difficulty: 'easy',
       teams: { A: [], B: [] }, players: [],
+      teamNames: { A: 'Time A', B: 'Time B' },
       scores: {}, currentPlayerIdx: 0,
       currentRound: 1, totalRounds: 3,
       currentWord: null, usedWords: [],
@@ -123,7 +124,39 @@
     }
 
     // ============================================================
-    // DIFFICULTY (SETUP)
+    // LOAD LAST PLAYERS
+    // ============================================================
+    function loadPlayersForMode(mode) {
+      const key = mode === 'teams' ? 'mm_last_teams' : 'mm_last_ffa';
+      const saved = localStorage.getItem(key);
+      if (!saved) return;
+      try {
+        const data = JSON.parse(saved);
+        if (mode === 'teams' && data.teams) {
+          gameState.teams = JSON.parse(JSON.stringify(data.teams));
+          if (data.teamNames) gameState.teamNames = { ...data.teamNames };
+        } else if (mode === 'ffa' && data.players) {
+          gameState.players = [...data.players];
+        }
+      } catch (e) { }
+    }
+
+    function updateTeamName(team, name) {
+      gameState.teamNames[team] = name.trim() || `Time ${team}`;
+      updateTeamLabels();
+    }
+
+    function updateTeamLabels() {
+      try {
+        document.getElementById('team-label-a').innerHTML = `🔴 ${gameState.teamNames.A}`;
+        document.getElementById('team-label-b').innerHTML = `🔵 ${gameState.teamNames.B}`;
+        document.getElementById('team-name-a').value = gameState.teamNames.A;
+        document.getElementById('team-name-b').value = gameState.teamNames.B;
+      } catch (e) { }
+    }
+
+    // ============================================================
+    // UPDATE TEAM NAMES
     // ============================================================
     const DIFF_META = {
       easy: { label: '🌱 Fácil', color: 'var(--diff-easy)' },
@@ -155,6 +188,9 @@
       document.getElementById('mode-ffa').classList.toggle('selected', mode === 'ffa');
       document.getElementById('step-teams').style.display = mode === 'teams' ? '' : 'none';
       document.getElementById('step-ffa').style.display = mode === 'ffa' ? '' : 'none';
+      loadPlayersForMode(mode);
+      updateTeamLabels();
+      renderSetupPlayers();
     }
 
     // ============================================================
@@ -239,6 +275,14 @@
       gameState.currentPlayerIdx = 0; gameState.currentRound = 1;
       gameState.usedWords = []; gameState.turnsDone = 0;
       gameState.totalTurns = gameState.players.length * rounds;
+
+      // Save last players
+      const key = gameState.mode === 'teams' ? 'mm_last_teams' : 'mm_last_ffa';
+      const toSave = gameState.mode === 'teams'
+        ? { teams: gameState.teams, teamNames: gameState.teamNames }
+        : { players: gameState.players.map(p => p.name || p) };
+      localStorage.setItem(key, JSON.stringify(toSave));
+
       initTurn(); goTo('game');
     }
 
@@ -254,7 +298,8 @@
       const badge = document.getElementById('current-team-badge');
       if (player.team) {
         const color = player.team === 'A' ? 'var(--team1)' : 'var(--team2)';
-        badge.innerHTML = `<span class="team-badge" style="background:${color}22;color:${color}">Time ${player.team === 'A' ? 'A 🔴' : 'B 🔵'}</span>`;
+        const label = gameState.teamNames[player.team] || `Time ${player.team}`;
+        badge.innerHTML = `<span class="team-badge" style="background:${color}22;color:${color}">${label}</span>`;
       } else badge.innerHTML = '';
       document.getElementById('preparing-state').style.display = '';
       document.getElementById('memorize-state').style.display = 'none';
@@ -381,7 +426,8 @@
     // RESULT
     // ============================================================
     function markResult(correct, timeUp = false) {
-      clearInterval(gameState.timerInterval); clearInterval(gameState.memInterval);
+      clearInterval(gameState.timerInterval);
+      clearInterval(gameState.memInterval);
       document.getElementById('memorize-state').style.display = 'none';
       const player = gameState.players[gameState.currentPlayerIdx];
       const pName = player.name || player;
@@ -393,34 +439,52 @@
         if (gameState.mode === 'teams') {
           gameState.scores['team' + player.team] = (gameState.scores['team' + player.team] || 0) + 10;
           gameState.scores[pName] = (gameState.scores[pName] || 0) + 10;
-        } else { gameState.scores[pName] = (gameState.scores[pName] || 0) + 10; }
-        emoji.textContent = '🎉'; title.textContent = 'Acertou!'; title.style.color = '#6bcb77';
+        } else {
+          gameState.scores[pName] = (gameState.scores[pName] || 0) + 10;
+        }
+
+        emoji.textContent = '🎉';
+        title.textContent = 'Acertou!';
+        title.style.color = '#6bcb77';
         sub.textContent = gameState.mode === 'teams'
           ? `+10 pontos para o Time ${player.team === 'A' ? 'A 🔴' : 'B 🔵'}`
           : `+10 pontos para ${pName}!`;
-        launchConfetti(); playBeep(523);
+        launchConfetti();
+        playBeep(523);
       } else {
         if (document.getElementById('toggle-penalty').checked && !timeUp) {
           if (gameState.mode === 'teams') {
             gameState.scores['team' + player.team] = Math.max(0, (gameState.scores['team' + player.team] || 0) - 10);
             gameState.scores[pName] = Math.max(0, (gameState.scores[pName] || 0) - 10);
-          } else { gameState.scores[pName] = Math.max(0, (gameState.scores[pName] || 0) - 10); }
+          } else {
+            gameState.scores[pName] = Math.max(0, (gameState.scores[pName] || 0) - 10);
+          }
           sub.textContent = '-10 pontos (penalidade por skip)';
-        } else { sub.textContent = timeUp ? 'O tempo acabou! Sem pontos.' : 'Palavra pulada. Sem pontos.'; }
+        } else {
+          sub.textContent = timeUp ? 'O tempo acabou! Sem pontos.' : 'Palavra pulada. Sem pontos.';
+        }
         emoji.textContent = timeUp ? '⏰' : '😅';
         title.textContent = timeUp ? 'Tempo esgotado!' : 'Errou!';
         title.style.color = '#ff6b6b';
       }
+
       document.getElementById('resultOverlay').classList.add('show');
     }
 
     function nextTurn() {
       document.getElementById('resultOverlay').classList.remove('show');
       gameState.turnsDone++;
-      if (gameState.turnsDone >= gameState.totalTurns) { showFinalScore(); return; }
+      if (gameState.turnsDone >= gameState.totalTurns) {
+        showFinalScore();
+        return;
+      }
       gameState.currentPlayerIdx = (gameState.currentPlayerIdx + 1) % gameState.players.length;
-      if (gameState.currentPlayerIdx === 0) { gameState.currentRound++; showMidScore(); }
-      else initTurn();
+      if (gameState.currentPlayerIdx === 0) {
+        gameState.currentRound++;
+        showMidScore();
+      } else {
+        initTurn();
+      }
     }
 
     // ============================================================
@@ -433,7 +497,8 @@
           const color = t === 'A' ? 'var(--team1)' : 'var(--team2)';
           const el = document.createElement('div');
           el.style.cssText = `background:${color}22;border:1px solid ${color}44;border-radius:12px;padding:8px 14px;display:flex;align-items:center;gap:8px;white-space:nowrap`;
-          el.innerHTML = `<span style="font-weight:800;color:${color}">Time ${t}</span><span style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:${color}">${gameState.scores['team' + t] || 0}</span>`;
+          const label = gameState.teamNames[t] || `Time ${t}`;
+          el.innerHTML = `<span style="font-weight:800;color:${color}">${label}</span><span style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:${color}">${gameState.scores['team' + t] || 0}</span>`;
           cont.appendChild(el);
         });
       } else {
@@ -451,7 +516,7 @@
       const cont = document.getElementById(isFinal ? 'final-scoreboard' : 'scoreboard-list'); cont.innerHTML = '';
       let entries = [];
       if (gameState.mode === 'teams') {
-        entries = [{ name: '🔴 Time A', pts: gameState.scores.teamA || 0, team: 'A' }, { name: '🔵 Time B', pts: gameState.scores.teamB || 0, team: 'B' }];
+        entries = [{ name: `🔴 ${gameState.teamNames.A || 'Time A'}`, pts: gameState.scores.teamA || 0, team: 'A' }, { name: `🔵 ${gameState.teamNames.B || 'Time B'}`, pts: gameState.scores.teamB || 0, team: 'B' }];
       } else {
         entries = gameState.players.map(p => ({ name: p.name || p, pts: gameState.scores[p.name || p] || 0 }));
       }
@@ -481,7 +546,9 @@
       let winner = '';
       if (gameState.mode === 'teams') {
         const a = gameState.scores.teamA || 0, b = gameState.scores.teamB || 0;
-        if (a > b) winner = '🔴 Time A'; else if (b > a) winner = '🔵 Time B'; else winner = 'EMPATE!';
+        if (a > b) winner = `🔴 ${gameState.teamNames.A || 'Time A'}`;
+        else if (b > a) winner = `🔵 ${gameState.teamNames.B || 'Time B'}`;
+        else winner = 'EMPATE!';
         document.getElementById('final-trophy').textContent = (a === b) ? '🤝' : '🏆';
       } else {
         const sorted = gameState.players.map(p => ({ name: p.name || p, pts: gameState.scores[p.name || p] || 0 })).sort((a, b) => b.pts - a.pts);

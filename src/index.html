@@ -32,7 +32,7 @@
       <div class="logo-sub">🎭 O jogo da mímica</div>
       <div class="card" style="margin-bottom:16px">
         <div class="flex-col">
-          <button class="btn btn-primary btn-lg btn-block" onclick="goTo('setup')">🎮 Novo Jogo</button>
+          <button class="btn btn-primary btn-lg btn-block" onclick="goTo('setup')">🎮 Nova Partida</button>
           <button class="btn btn-ghost btn-lg btn-block" onclick="goTo('wordbank')">📝 Banco de Palavras</button>
           <button class="btn btn-ghost btn-lg btn-block" onclick="goTo('settings')">⚙️ Configurações</button>
         </div>
@@ -94,7 +94,8 @@
       <!-- STEP 2: PLAYERS TEAMS -->
       <div class="card" id="step-teams" style="margin-bottom:16px">
         <div class="card-title">2️⃣ Jogadores por Time</div>
-        <div class="section-head"><span style="color:var(--team1)">🔴 Time A</span></div>
+        <input class="inp" id="team-name-a" placeholder="Nome do Time A" value="Time A" style="margin-bottom:12px" onchange="updateTeamName('A', this.value)">
+        <div class="section-head"><span id="team-label-a" style="color:var(--team1)">🔴 Time A</span></div>
         <div id="team-a-players" class="flex-col" style="margin-bottom:16px"></div>
         <div class="flex-row">
           <input class="inp" id="inp-team-a" placeholder="Nome do jogador..."
@@ -103,7 +104,8 @@
             onclick="addTeamPlayer('A')">+ Adicionar</button>
         </div>
         <div style="height:1px;background:rgba(255,255,255,0.06);margin:20px 0"></div>
-        <div class="section-head"><span style="color:var(--team2)">🔵 Time B</span></div>
+        <input class="inp" id="team-name-b" placeholder="Nome do Time B" value="Time B" style="margin-bottom:12px" onchange="updateTeamName('B', this.value)">
+        <div class="section-head"><span id="team-label-b" style="color:var(--team2)">🔵 Time B</span></div>
         <div id="team-b-players" class="flex-col" style="margin-bottom:16px"></div>
         <div class="flex-row">
           <input class="inp" id="inp-team-b" placeholder="Nome do jogador..."
