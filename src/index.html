@@ -20,44 +20,44 @@
     <div class="result-emoji" id="resultEmoji">🎉</div>
     <div class="result-title" id="resultTitle">Acertou!</div>
     <div class="result-sub" id="resultSub">+10 pontos</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
-      <button class="btn btn-success btn-lg" onclick="nextTurn()">➡️ Próximo turno</button>
+    <div class="action-row action-row-center action-row-wrap">
+      <button class="btn btn-success btn-lg" data-action="next-turn">➡️ Próximo turno</button>
     </div>
   </div>
 
   <!-- ========== HOME ========== -->
   <div class="screen active" id="screen-home">
-    <div style="width:100%;max-width:480px">
+    <div class="page-shell">
       <div class="logo">MimiMania</div>
       <div class="logo-sub">🎭 O jogo da mímica</div>
-      <div class="card" style="margin-bottom:16px">
+      <div class="card mb">
         <div class="flex-col">
-          <button class="btn btn-primary btn-lg btn-block" onclick="animateButtonClick(this); playClickSound(); goTo('setup')">🎮 Nova Partida</button>
-          <button class="btn btn-ghost btn-lg btn-block" onclick="animateButtonClick(this); playClickSound(); goTo('wordbank')">📝 Banco de Palavras</button>
-          <button class="btn btn-ghost btn-lg btn-block" onclick="animateButtonClick(this); playClickSound(); goTo('settings')">⚙️ Configurações</button>
+          <button class="btn btn-primary btn-lg btn-block" data-nav="setup">🎮 Nova Partida</button>
+          <button class="btn btn-ghost btn-lg btn-block" data-nav="wordbank">📝 Banco de Palavras</button>
+          <button class="btn btn-ghost btn-lg btn-block" data-nav="settings">⚙️ Configurações</button>
         </div>
       </div>
       <div class="card">
         <div class="card-title">🏆 Como jogar</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="font-size:1.5rem;flex-shrink:0">👤</div>
+        <div class="how-to-list">
+          <div class="media-row media-row-start">
+            <div class="emoji-lg emoji-fixed">👤</div>
             <div>
-              <div style="font-weight:800;font-size:0.9rem">O Mimo</div>
+              <div class="text-strong text-sm-title">O Mimo</div>
               <div class="text-sm">Vê a palavra e faz a mímica sem falar nada!</div>
             </div>
           </div>
-          <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="font-size:1.5rem;flex-shrink:0">🕐</div>
+          <div class="media-row media-row-start">
+            <div class="emoji-lg emoji-fixed">🕐</div>
             <div>
-              <div style="font-weight:800;font-size:0.9rem">O Tempo</div>
+              <div class="text-strong text-sm-title">O Tempo</div>
               <div class="text-sm">Tentem adivinhar antes do timer acabar!</div>
             </div>
           </div>
-          <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="font-size:1.5rem;flex-shrink:0">⭐</div>
+          <div class="media-row media-row-start">
+            <div class="emoji-lg emoji-fixed">⭐</div>
             <div>
-              <div style="font-weight:800;font-size:0.9rem">Os Pontos</div>
+              <div class="text-strong text-sm-title">Os Pontos</div>
               <div class="text-sm">Cada acerto vale 10 pontos. Quem tiver mais pontos vence!</div>
             </div>
           </div>
@@ -68,22 +68,22 @@
 
   <!-- ========== SETUP ========== -->
   <div class="screen" id="screen-setup">
-    <div style="width:100%;max-width:480px">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
-        <button class="btn btn-ghost btn-sm" onclick="animateButtonClick(this); playClickSound(); goTo('home')">← Voltar</button>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--accent2)">Nova Partida</div>
+    <div class="page-shell">
+      <div class="page-header">
+        <button class="btn btn-ghost btn-sm" data-nav="home">← Voltar</button>
+        <div class="page-title">Nova Partida</div>
       </div>
 
       <!-- STEP 1: MODE -->
-      <div class="card" style="margin-bottom:16px">
+      <div class="card mb">
         <div class="card-title">1️⃣ Modo de Jogo</div>
         <div class="mode-grid">
-          <div class="mode-card selected" id="mode-teams" onclick="selectMode('teams')">
+          <div class="mode-card selected" id="mode-teams" data-mode="teams">
             <div class="mode-icon">🤝</div>
             <div class="mode-name">Dois Times</div>
             <div class="mode-desc">Equipes competem</div>
           </div>
-          <div class="mode-card" id="mode-ffa" onclick="selectMode('ffa')">
+          <div class="mode-card" id="mode-ffa" data-mode="ffa">
             <div class="mode-icon">🏆</div>
             <div class="mode-name">Cada um por si</div>
             <div class="mode-desc">Todos contra todos</div>
@@ -92,75 +92,67 @@
       </div>
 
       <!-- STEP 2: PLAYERS TEAMS -->
-      <div class="card" id="step-teams" style="margin-bottom:16px">
+      <div class="card mb" id="step-teams">
         <div class="card-title">2️⃣ Jogadores por Time</div>
-        <input class="inp" id="team-name-a" placeholder="Nome do Time A" value="Time A" style="margin-bottom:12px" onchange="updateTeamName('A', this.value)">
-        <div class="section-head"><span id="team-label-a" style="color:var(--team1)">🔴 Time A</span></div>
-        <div id="team-a-players" class="flex-col" style="margin-bottom:16px"></div>
+        <input class="inp mb-sm" id="team-name-a" placeholder="Nome do Time A" value="Time A" data-team-name="A">
+        <div class="section-head"><span id="team-label-a" class="team-label team-label-a">🔴 Time A</span></div>
+        <div id="team-a-players" class="flex-col mb"></div>
         <div class="flex-row">
-          <input class="inp" id="inp-team-a" placeholder="Nome do jogador..."
-            onkeydown="if(event.key==='Enter')addTeamPlayer('A')">
-          <button class="btn btn-sm" style="background:var(--team1);color:white;white-space:nowrap"
-            onclick="addTeamPlayer('A')">+ Adicionar</button>
+          <input class="inp" id="inp-team-a" placeholder="Nome do jogador..." data-enter-submit="team-A">
+          <button class="btn btn-sm btn-team-a btn-nowrap" data-action="add-team-player" data-team="A">+ Adicionar</button>
         </div>
-        <div style="height:1px;background:rgba(255,255,255,0.06);margin:20px 0"></div>
-        <input class="inp" id="team-name-b" placeholder="Nome do Time B" value="Time B" style="margin-bottom:12px" onchange="updateTeamName('B', this.value)">
-        <div class="section-head"><span id="team-label-b" style="color:var(--team2)">🔵 Time B</span></div>
-        <div id="team-b-players" class="flex-col" style="margin-bottom:16px"></div>
+        <div class="divider"></div>
+        <input class="inp mb-sm" id="team-name-b" placeholder="Nome do Time B" value="Time B" data-team-name="B">
+        <div class="section-head"><span id="team-label-b" class="team-label team-label-b">🔵 Time B</span></div>
+        <div id="team-b-players" class="flex-col mb"></div>
         <div class="flex-row">
-          <input class="inp" id="inp-team-b" placeholder="Nome do jogador..."
-            onkeydown="if(event.key==='Enter')addTeamPlayer('B')">
-          <button class="btn btn-sm" style="background:var(--team2);color:white;white-space:nowrap"
-            onclick="addTeamPlayer('B')">+ Adicionar</button>
+          <input class="inp" id="inp-team-b" placeholder="Nome do jogador..." data-enter-submit="team-B">
+          <button class="btn btn-sm btn-team-b btn-nowrap" data-action="add-team-player" data-team="B">+ Adicionar</button>
         </div>
-        <div
-          style="margin-top:16px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);font-size:0.8rem;color:var(--text3)">
+        <div class="helper-box mt">
           💡 Mínimo 1 por time, máximo 3 por time (até 6 jogadores)
         </div>
       </div>
 
       <!-- STEP 2 FFA -->
-      <div class="card" id="step-ffa" style="margin-bottom:16px;display:none">
+      <div class="card mb hidden" id="step-ffa">
         <div class="card-title">2️⃣ Jogadores</div>
-        <div id="ffa-players" class="flex-col" style="margin-bottom:16px"></div>
+        <div id="ffa-players" class="flex-col mb"></div>
         <div class="flex-row">
-          <input class="inp" id="inp-ffa" placeholder="Nome do jogador..."
-            onkeydown="if(event.key==='Enter')addFFAPlayer()">
-          <button class="btn btn-secondary btn-sm" style="white-space:nowrap" onclick="addFFAPlayer()">+
+          <input class="inp" id="inp-ffa" placeholder="Nome do jogador..." data-enter-submit="ffa">
+          <button class="btn btn-secondary btn-sm btn-nowrap" data-action="add-ffa-player">+
             Adicionar</button>
         </div>
-        <div
-          style="margin-top:16px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);font-size:0.8rem;color:var(--text3)">
+        <div class="helper-box mt">
           💡 Mínimo 3, máximo 6 jogadores
         </div>
       </div>
 
       <!-- STEP 3: DIFFICULTY -->
-      <div class="card" style="margin-bottom:16px">
+      <div class="card mb">
         <div class="card-title">3️⃣ Dificuldade</div>
         <div class="diff-grid">
-          <div class="diff-card easy selected" id="diff-easy" onclick="selectDifficulty('easy')">
+          <div class="diff-card easy selected" id="diff-easy" data-difficulty="easy">
             <div class="diff-icon">🌱</div>
             <div class="diff-name">Fácil</div>
             <div class="diff-desc">Ótimo para crianças e iniciantes</div>
           </div>
-          <div class="diff-card normal" id="diff-normal" onclick="selectDifficulty('normal')">
+          <div class="diff-card normal" id="diff-normal" data-difficulty="normal">
             <div class="diff-icon">⚡</div>
             <div class="diff-name">Normal</div>
             <div class="diff-desc">Desafio equilibrado para a família</div>
           </div>
-          <div class="diff-card hard" id="diff-hard" onclick="selectDifficulty('hard')">
+          <div class="diff-card hard" id="diff-hard" data-difficulty="hard">
             <div class="diff-icon">🔥</div>
             <div class="diff-name">Difícil</div>
             <div class="diff-desc">Palavras complexas, para os corajosos!</div>
           </div>
         </div>
-        <div id="diff-word-count"
-          style="margin-top:12px;text-align:center;font-size:0.8rem;color:var(--text3);font-weight:700"></div>
+        <div id="diff-word-count" class="text-meta center mt-sm"></div>
       </div>
 
       <!-- STEP 4: CHALLENGE & CATEGORIES -->
-      <div class="card" style="margin-bottom:16px">
+      <div class="card mb">
         <div class="card-title">4️⃣ Opções de Jogo</div>
         <div class="toggle-wrap">
           <div>
@@ -168,12 +160,12 @@
             <div class="toggle-sub">Adiciona modificadores à mímica</div>
           </div>
           <label class="toggle">
-            <input type="checkbox" id="random-challenge-toggle" onchange="toggleRandomChallenge(this.checked)">
+            <input type="checkbox" id="random-challenge-toggle">
             <span class="toggle-slider"></span>
           </label>
         </div>
-        <div style="margin-top:16px">
-          <div class="toggle-label" style="margin-bottom:8px">Categorias Disponíveis</div>
+        <div class="mt">
+          <div class="toggle-label mb-xs">Categorias Disponíveis</div>
           <div class="category-grid" id="category-selection">
             <!-- Categories will be populated by JS -->
           </div>
@@ -181,86 +173,78 @@
       </div>
 
       <!-- STEP 5: ROUNDS -->
-      <div class="card" style="margin-bottom:16px">
+      <div class="card mb">
         <div class="card-title">5️⃣ Configurar Partida</div>
-        <div class="toggle-wrap" style="border:none">
+        <div class="toggle-wrap toggle-wrap-last">
           <div>
             <div class="toggle-label">Número de Rodadas</div>
             <div class="toggle-sub">Quantas rodadas por jogador</div>
           </div>
-          <div class="range-wrap" style="width:160px">
-            <input type="range" class="range-inp" id="rounds-slider" min="1" max="5" value="3"
-              oninput="document.getElementById('rounds-val').textContent=this.value">
+          <div class="range-wrap range-wrap-fixed">
+            <input type="range" class="range-inp" id="rounds-slider" min="1" max="5" value="3">
             <div class="range-val" id="rounds-val">3</div>
           </div>
         </div>
       </div>
 
-      <button class="btn btn-primary btn-lg btn-block" onclick="animateButtonClick(this); playClickSound(); startGame()" style="margin-bottom:20px">🎭 Começar o
+      <button class="btn btn-primary btn-lg btn-block mb-lg" data-action="start-game">🎭 Começar o
         Jogo!</button>
     </div>
   </div>
 
   <!-- ========== GAME ========== -->
   <div class="screen" id="screen-game">
-    <div style="width:100%;max-width:520px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="page-shell page-shell-wide">
+      <div class="action-row action-row-between mb-sm">
         <div class="round-info" id="round-display">Rodada 1 de 3</div>
-        <button class="btn btn-ghost btn-sm" onclick="confirmRestart()">🔄 Reiniciar</button>
+        <button class="btn btn-ghost btn-sm" data-action="confirm-restart">🔄 Reiniciar</button>
       </div>
-      <div id="score-mini" style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px"></div>
+      <div id="score-mini" class="score-mini-row"></div>
       <div class="current-player">
         <div class="cp-label">Vez de fazer a mímica:</div>
         <div class="cp-name" id="current-player-name">--</div>
-        <div id="current-team-badge" style="margin-top:4px"></div>
+        <div id="current-team-badge" class="mt-xs"></div>
       </div>
 
       <!-- PREPARING -->
-      <div id="preparing-state" class="card" style="text-align:center">
-        <div style="font-size:3.5rem;margin-bottom:12px">🎭</div>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:8px">Prontos para ver a palavra?
+      <div id="preparing-state" class="card center">
+        <div class="emoji-hero mb-sm">🎭</div>
+        <div class="section-title mb-xs">Prontos para ver a palavra?
         </div>
-        <div class="text-sm" style="margin-bottom:20px">Só o mimo deve ver! Os outros fechem os olhos! 👀</div>
-        <button class="btn btn-primary btn-lg btn-block" onclick="revealWord()">🎲 Revelar Palavra</button>
+        <div class="text-sm mb-lg">Só o mimo deve ver! Os outros fechem os olhos! 👀</div>
+        <button class="btn btn-primary btn-lg btn-block" data-action="reveal-word">🎲 Revelar Palavra</button>
       </div>
 
       <!-- MEMORIZE -->
-      <div id="memorize-state" style="display:none">
-        <div style="text-align:center;margin-bottom:12px">
-          <div
-            style="font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent5);margin-bottom:6px">
+      <div id="memorize-state" class="hidden">
+        <div class="center mb-sm">
+          <div class="eyebrow eyebrow-accent mb-xs">
             ⚡ Memorize a palavra!</div>
-          <div style="font-size:0.8rem;color:var(--text3);font-weight:700">O jogo começa em...</div>
+          <div class="text-meta">O jogo começa em...</div>
         </div>
-        <div style="display:flex;align-items:center;justify-content:center;margin-bottom:16px">
-          <div style="position:relative;width:80px;height:80px">
-            <svg style="width:100%;height:100%;transform:rotate(-90deg)" viewBox="0 0 80 80">
+        <div class="action-row action-row-center mb">
+          <div class="countdown-wrap">
+            <svg class="countdown-svg" viewBox="0 0 80 80">
               <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6" />
               <circle id="memCircle" cx="40" cy="40" r="34" fill="none" stroke="#c77dff" stroke-width="6"
-                stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0"
-                style="transition:stroke-dashoffset 0.5s linear" />
+                stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0" class="countdown-progress" />
             </svg>
-            <div id="mem-num"
-              style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:2.2rem;color:#c77dff">
+            <div id="mem-num" class="countdown-number">
               5</div>
           </div>
         </div>
-        <div class="word-card"
-          style="border:2px solid rgba(199,125,255,0.4);background:linear-gradient(135deg,rgba(199,125,255,0.12),rgba(77,150,255,0.08))">
-          <div class="word-text" id="mem-word-display"
-            style="color:#c77dff;filter:drop-shadow(0 2px 12px rgba(199,125,255,0.5))">---</div>
-          <div id="mem-challenge-display"
-            style="font-size:0.8rem;color:rgba(255,255,255,0.7);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:8px;display:none">
+        <div class="word-card word-card-memorize">
+          <div class="word-text word-text-memorize" id="mem-word-display">---</div>
+          <div id="mem-challenge-display" class="challenge-text hidden">
             🎯 Desafio: <span id="mem-challenge-text">---</span>
           </div>
-          <div
-            style="font-size:0.75rem;color:rgba(255,255,255,0.35);font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-top:8px">
+          <div class="eyebrow eyebrow-muted mt-xs">
             Só o mimo pode ver!</div>
         </div>
       </div>
 
       <!-- PLAYING -->
-      <div id="playing-state" style="display:none">
+      <div id="playing-state" class="hidden">
         <div class="timer-wrap">
           <svg class="timer-svg" viewBox="0 0 160 160">
             <circle class="timer-track" cx="80" cy="80" r="68" />
@@ -271,36 +255,31 @@
           <div class="timer-label">SEGUNDOS</div>
         </div>
         <div class="word-card">
-          <div id="word-hidden-placeholder"
-            style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:8px 0">
-            <div style="font-size:2.8rem;line-height:1">🙈</div>
-            <div
-              style="font-size:0.8rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--text3)">
+          <div id="word-hidden-placeholder" class="word-placeholder">
+            <div class="emoji-xl emoji-tight">🙈</div>
+            <div class="eyebrow eyebrow-muted">
               Palavra oculta</div>
           </div>
-          <div id="word-visible-content" style="display:none">
+          <div id="word-visible-content" class="hidden">
             <div class="word-text" id="word-display">---</div>
-            <div id="game-challenge-display"
-              style="font-size:0.8rem;color:rgba(255,255,255,0.7);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:8px;display:none">
+            <div id="game-challenge-display" class="challenge-text hidden">
               🎯 Desafio: <span id="game-challenge-text">---</span>
             </div>
           </div>
-          <div id="hint-banner"
-            style="display:none;margin-top:10px;padding:8px 14px;background:rgba(255,217,61,0.12);border:1px solid rgba(255,217,61,0.3);border-radius:10px">
-            <div
-              style="font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,217,61,0.6);margin-bottom:2px">
+          <div id="hint-banner" class="hint-banner hidden">
+            <div class="eyebrow eyebrow-hint mb-xxs">
               💡 Dica</div>
-            <div id="hint-text" style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--accent2)">---
+            <div id="hint-text" class="hint-text">---
             </div>
           </div>
         </div>
-        <div style="display:flex;justify-content:center;margin:10px 0 4px">
-          <button id="btn-toggle-word" class="btn btn-ghost btn-sm" onclick="toggleWordVisibility()">👁️ Mostrar
+        <div class="action-row action-row-center action-row-compact">
+          <button id="btn-toggle-word" class="btn btn-ghost btn-sm" data-action="toggle-word">👁️ Mostrar
             palavra</button>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px">
-          <button class="btn btn-success btn-lg" onclick="animateButtonClick(this); playCorrectSound(); markResult(true)">✅ Acertou!</button>
-          <button class="btn btn-danger btn-lg" onclick="animateWrongButton(this); playWrongSound(); markResult(false)">❌ Errou / Skip</button>
+        <div class="game-actions-grid">
+          <button class="btn btn-success btn-lg" data-action="mark-correct">✅ Acertou!</button>
+          <button class="btn btn-danger btn-lg" data-action="mark-wrong">❌ Errou / Skip</button>
         </div>
       </div>
     </div>
@@ -308,18 +287,17 @@
 
   <!-- ========== SCOREBOARD ========== -->
   <div class="screen" id="screen-score">
-    <div style="width:100%;max-width:480px">
-      <div
-        style="font-family:'Fredoka One',cursive;font-size:2rem;text-align:center;margin-bottom:4px;background:linear-gradient(135deg,#ffd93d,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+    <div class="page-shell">
+      <div class="hero-title hero-title-score">
         🏆 Placar</div>
       <div class="text-sm center mb" id="score-subtitle"></div>
       <div id="scoreboard-list" class="mb"></div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-title" style="font-size:1.1rem">🎊 Próxima Rodada</div>
+      <div class="card mb">
+        <div class="card-title card-title-sm">🎊 Próxima Rodada</div>
         <div id="next-round-info" class="text-sm mb"></div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-primary btn-block" onclick="continueGame()">▶️ Continuar</button>
-          <button class="btn btn-ghost btn-block" onclick="confirmRestart()">🔄 Reiniciar</button>
+        <div class="action-row">
+          <button class="btn btn-primary btn-block" data-action="continue-game">▶️ Continuar</button>
+          <button class="btn btn-ghost btn-block" data-action="confirm-restart">🔄 Reiniciar</button>
         </div>
       </div>
     </div>
@@ -327,40 +305,40 @@
 
   <!-- ========== FINAL ========== -->
   <div class="screen" id="screen-final">
-    <div style="width:100%;max-width:480px;text-align:center">
-      <div style="font-size:5rem;margin-bottom:12px" id="final-trophy">🏆</div>
-      <div class="logo" style="font-size:2.5rem;margin-bottom:4px" id="final-winner">--</div>
+    <div class="page-shell center">
+      <div class="emoji-trophy mb-sm" id="final-trophy">🏆</div>
+      <div class="logo logo-final" id="final-winner">--</div>
       <div class="logo-sub">VENCEDOR!</div>
-      <div class="card" style="margin:20px 0;text-align:left">
+      <div class="card my-lg text-left">
         <div class="card-title">📊 Resultado Final</div>
         <div id="final-scoreboard"></div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-primary btn-lg btn-block" onclick="confirmRestart()">🎮 Jogar de Novo</button>
-        <button class="btn btn-ghost btn-block" onclick="goTo('home')">🏠 Início</button>
+      <div class="action-row action-row-wrap">
+        <button class="btn btn-primary btn-lg btn-block" data-action="confirm-restart">🎮 Jogar de Novo</button>
+        <button class="btn btn-ghost btn-block" data-nav="home">🏠 Início</button>
       </div>
     </div>
   </div>
 
   <!-- ========== WORD BANK ========== -->
   <div class="screen" id="screen-wordbank">
-    <div style="width:100%;max-width:480px">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
-        <button class="btn btn-ghost btn-sm" onclick="animateButtonClick(this); playClickSound(); goTo('home')">← Voltar</button>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--accent2)">Banco de Palavras</div>
+    <div class="page-shell">
+      <div class="page-header page-header-tight">
+        <button class="btn btn-ghost btn-sm" data-nav="home">← Voltar</button>
+        <div class="page-title">Banco de Palavras</div>
       </div>
 
       <!-- DIFFICULTY SELECTOR -->
-      <div class="diff-grid" style="margin-bottom:14px">
-        <div class="diff-card easy selected" id="wb-diff-easy" onclick="switchWBDiff('easy')">
+      <div class="diff-grid mb-sm">
+        <div class="diff-card easy selected" id="wb-diff-easy" data-wb-difficulty="easy">
           <div class="diff-icon">🌱</div>
           <div class="diff-name">Fácil</div>
         </div>
-        <div class="diff-card normal" id="wb-diff-normal" onclick="switchWBDiff('normal')">
+        <div class="diff-card normal" id="wb-diff-normal" data-wb-difficulty="normal">
           <div class="diff-icon">⚡</div>
           <div class="diff-name">Normal</div>
         </div>
-        <div class="diff-card hard" id="wb-diff-hard" onclick="switchWBDiff('hard')">
+        <div class="diff-card hard" id="wb-diff-hard" data-wb-difficulty="hard">
           <div class="diff-icon">🔥</div>
           <div class="diff-name">Difícil</div>
         </div>
@@ -368,20 +346,19 @@
 
       <!-- CATEGORY TABS -->
       <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchWordTab('objects')" id="tab-objects">🧸 Objetos</button>
-        <button class="tab-btn" onclick="switchWordTab('actions')" id="tab-actions">🏃 Ações</button>
-        <button class="tab-btn" onclick="switchWordTab('animals')" id="tab-animals">🐾 Animais</button>
-        <button class="tab-btn" onclick="switchWordTab('movies')" id="tab-movies">🎬 Filmes</button>
-        <button class="tab-btn" onclick="switchWordTab('professions')" id="tab-professions">👔 Profissões</button>
-        <button class="tab-btn" onclick="switchWordTab('celebrities')" id="tab-celebrities">⭐ Celebridades</button>
+        <button class="tab-btn active" data-wb-tab="objects" id="tab-objects">🧸 Objetos</button>
+        <button class="tab-btn" data-wb-tab="actions" id="tab-actions">🏃 Ações</button>
+        <button class="tab-btn" data-wb-tab="animals" id="tab-animals">🐾 Animais</button>
+        <button class="tab-btn" data-wb-tab="movies" id="tab-movies">🎬 Filmes</button>
+        <button class="tab-btn" data-wb-tab="professions" id="tab-professions">👔 Profissões</button>
+        <button class="tab-btn" data-wb-tab="celebrities" id="tab-celebrities">⭐ Celebridades</button>
       </div>
 
       <!-- ADD WORD -->
-      <div class="card" style="margin-bottom:16px">
-        <div class="card-title" style="font-size:1.1rem">➕ Adicionar Palavra</div>
+      <div class="card mb">
+        <div class="card-title card-title-sm">➕ Adicionar Palavra</div>
         <div class="flex-col">
-          <input class="inp" id="inp-new-word" placeholder="Digite a palavra..."
-            onkeydown="if(event.key==='Enter')addWord()">
+          <input class="inp" id="inp-new-word" placeholder="Digite a palavra..." data-enter-submit="add-word">
           <select class="inp" id="inp-word-cat">
             <option value="objects">🧸 Objetos</option>
             <option value="actions">🏃 Ações</option>
@@ -390,17 +367,17 @@
             <option value="professions">👔 Profissões</option>
             <option value="celebrities">⭐ Celebridades</option>
           </select>
-          <div style="font-size:0.8rem;color:var(--text3);font-weight:700;padding:0 4px">Será adicionada à dificuldade:
-            <span id="wb-diff-label" style="color:var(--accent2)">🌱 Fácil</span></div>
-          <button class="btn btn-secondary btn-block" onclick="addWord()">➕ Adicionar Palavra</button>
+          <div class="text-meta px-xs">Será adicionada à dificuldade:
+            <span id="wb-diff-label" class="text-accent">🌱 Fácil</span></div>
+          <button class="btn btn-secondary btn-block" data-action="add-word">➕ Adicionar Palavra</button>
         </div>
       </div>
 
       <!-- LIST -->
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div class="card-title" style="margin:0;font-size:1.1rem">📋 Palavras (<span id="word-count">0</span>)</div>
-          <button class="btn btn-ghost btn-sm" onclick="resetWords()">↺ Restaurar</button>
+        <div class="action-row action-row-between mb">
+          <div class="card-title card-title-sm card-title-inline">📋 Palavras (<span id="word-count">0</span>)</div>
+          <button class="btn btn-ghost btn-sm" data-action="reset-words">↺ Restaurar</button>
         </div>
         <div class="words-container" id="words-list"></div>
       </div>
@@ -409,10 +386,10 @@
 
   <!-- ========== SETTINGS ========== -->
   <div class="screen" id="screen-settings">
-    <div style="width:100%;max-width:480px">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
-        <button class="btn btn-ghost btn-sm" onclick="animateButtonClick(this); playClickSound(); goTo('home')">← Voltar</button>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--accent2)">Configurações</div>
+    <div class="page-shell">
+      <div class="page-header">
+        <button class="btn btn-ghost btn-sm" data-nav="home">← Voltar</button>
+        <div class="page-title">Configurações</div>
       </div>
       <div class="card">
         <div class="card-title">⏱️ Timer</div>
@@ -421,9 +398,8 @@
             <div class="toggle-label">Tempo por Rodada</div>
             <div class="toggle-sub">Segundos para adivinhar</div>
           </div>
-          <div class="range-wrap" style="width:160px">
-            <input type="range" class="range-inp" id="timer-slider" min="20" max="120" step="10" value="60"
-              oninput="updateTimerLabel(this.value)">
+          <div class="range-wrap range-wrap-fixed">
+            <input type="range" class="range-inp" id="timer-slider" min="20" max="120" step="10" value="60">
             <div class="range-val" id="timer-val">60s</div>
           </div>
         </div>
@@ -436,7 +412,7 @@
             <div class="toggle-switch"></div>
           </label>
         </div>
-        <div class="toggle-wrap" style="border:none">
+        <div class="toggle-wrap toggle-wrap-last">
           <div>
             <div class="toggle-label">Penalidade por Skip</div>
             <div class="toggle-sub">−10 pontos ao pular</div>
@@ -446,9 +422,9 @@
           </label>
         </div>
       </div>
-      <div class="card" style="margin-top:16px">
+      <div class="card mt">
         <div class="card-title">🎲 Palavras</div>
-        <div class="toggle-wrap" style="border:none">
+        <div class="toggle-wrap toggle-wrap-last">
           <div>
             <div class="toggle-label">Embaralhar Palavras</div>
             <div class="toggle-sub">Ordem aleatória a cada jogo</div>
@@ -461,10 +437,9 @@
     </div>
   </div>
 
-  <footer
-    style="position:relative;z-index:1;text-align:center;padding:20px 16px 28px;font-size:0.75rem;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:0.5px">
+  <footer class="site-footer">
     © 2025 MimiMania · Flavio Matiello · Publicado no <a href="https://github.com/matiello" target="_blank"
-      style="color:rgba(255,255,255,0.35);text-decoration:none;">GitHub Pages</a>
+      class="site-footer-link">GitHub Pages</a>
   </footer>
 
   <script src="script.js"></script>

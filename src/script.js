@@ -236,7 +236,7 @@
         { key: 'celebrities', label: 'Celebridades', icon: '⭐' }
       ];
       container.innerHTML = categories.map(cat => `
-        <div class="category-card ${gameState.selectedCategories.includes(cat.key) ? 'selected' : ''}" onclick="toggleCategory('${cat.key}')">
+        <div class="category-card ${gameState.selectedCategories.includes(cat.key) ? 'selected' : ''}" data-category="${cat.key}">
           ${cat.icon} ${cat.label}
         </div>
       `).join('');
@@ -249,8 +249,8 @@
       gameState.mode = mode;
       document.getElementById('mode-teams').classList.toggle('selected', mode === 'teams');
       document.getElementById('mode-ffa').classList.toggle('selected', mode === 'ffa');
-      document.getElementById('step-teams').style.display = mode === 'teams' ? '' : 'none';
-      document.getElementById('step-ffa').style.display = mode === 'ffa' ? '' : 'none';
+      document.getElementById('step-teams').classList.toggle('hidden', mode !== 'teams');
+      document.getElementById('step-ffa').classList.toggle('hidden', mode !== 'ffa');
       loadPlayersForMode(mode);
       updateTeamLabels();
       renderSetupPlayers();
@@ -267,7 +267,7 @@
         (gameState.teams[t] || []).forEach((p, i) => {
           const color = t === 'A' ? 'var(--team1)' : 'var(--team2)';
           const el = document.createElement('div'); el.className = 'player-row';
-          el.innerHTML = `<div class="player-avatar" style="background:${color}22;color:${color}">${p[0].toUpperCase()}</div><div style="flex:1;font-weight:800">${p}</div><button class="btn btn-ghost btn-sm" onclick="removeTeamPlayer('${t}',${i})">✕</button>`;
+          el.innerHTML = `<div class="player-avatar" style="background:${color}22;color:${color}">${p[0].toUpperCase()}</div><div class="player-name">${p}</div><button class="btn btn-ghost btn-sm" data-action="remove-team-player" data-team="${t}" data-index="${i}">✕</button>`;
           cont.appendChild(el);
         });
       });
@@ -291,7 +291,7 @@
       (gameState.players || []).forEach((p, i) => {
         const n = p.name || p;
         const el = document.createElement('div'); el.className = 'player-row';
-        el.innerHTML = `<div class="player-avatar" style="background:rgba(255,255,255,0.08);color:white">${n[0].toUpperCase()}</div><div style="flex:1;font-weight:800">${n}</div><button class="btn btn-ghost btn-sm" onclick="removeFFAPlayer(${i})">✕</button>`;
+        el.innerHTML = `<div class="player-avatar" style="background:rgba(255,255,255,0.08);color:white">${n[0].toUpperCase()}</div><div class="player-name">${n}</div><button class="btn btn-ghost btn-sm" data-action="remove-ffa-player" data-index="${i}">✕</button>`;
         cont.appendChild(el);
       });
     }
@@ -364,9 +364,9 @@
         const label = gameState.teamNames[player.team] || `Time ${player.team}`;
         badge.innerHTML = `<span class="team-badge" style="background:${color}22;color:${color}">${label}</span>`;
       } else badge.innerHTML = '';
-      document.getElementById('preparing-state').style.display = '';
-      document.getElementById('memorize-state').style.display = 'none';
-      document.getElementById('playing-state').style.display = 'none';
+      document.getElementById('preparing-state').classList.remove('hidden');
+      document.getElementById('memorize-state').classList.add('hidden');
+      document.getElementById('playing-state').classList.add('hidden');
       renderScoreMini();
     }
 
@@ -379,10 +379,10 @@
       const catLabels = { objects: '🧸 Objeto', actions: '🏃 Ação', animals: '🐾 Animal', movies: '🎬 Filme', professions: '👔 Profissão', celebrities: '⭐ Celebridade' };
       document.getElementById('mem-word-display').textContent = gameState.currentWord.word;
       document.getElementById('hint-text').textContent = catLabels[gameState.currentWord.cat] || 'Palavra';
-      document.getElementById('hint-banner').style.display = 'none';
+      document.getElementById('hint-banner').classList.add('hidden');
       document.getElementById('word-display').textContent = gameState.currentWord.word;
-      document.getElementById('word-hidden-placeholder').style.display = 'flex';
-      document.getElementById('word-visible-content').style.display = 'none';
+      document.getElementById('word-hidden-placeholder').classList.remove('hidden');
+      document.getElementById('word-visible-content').classList.add('hidden');
       document.getElementById('btn-toggle-word').textContent = '👁️ Mostrar palavra';
       gameState.wordVisible = false;
 
@@ -391,14 +391,14 @@
       const challengeTextEl = document.getElementById('mem-challenge-text');
       if (gameState.currentChallenge) {
         challengeTextEl.textContent = gameState.currentChallenge;
-        challengeEl.style.display = '';
+        challengeEl.classList.remove('hidden');
       } else {
-        challengeEl.style.display = 'none';
+        challengeEl.classList.add('hidden');
       }
 
-      document.getElementById('preparing-state').style.display = 'none';
-      document.getElementById('memorize-state').style.display = '';
-      document.getElementById('playing-state').style.display = 'none';
+      document.getElementById('preparing-state').classList.add('hidden');
+      document.getElementById('memorize-state').classList.remove('hidden');
+      document.getElementById('playing-state').classList.add('hidden');
 
       let memLeft = 5;
       const mc = document.getElementById('memCircle'), mn = document.getElementById('mem-num');
@@ -410,9 +410,9 @@
         if (memLeft <= 0) {
           clearInterval(gameState.memInterval);
           // Hide challenge after memorization
-          challengeEl.style.display = 'none';
-          document.getElementById('memorize-state').style.display = 'none';
-          document.getElementById('playing-state').style.display = '';
+          challengeEl.classList.add('hidden');
+          document.getElementById('memorize-state').classList.add('hidden');
+          document.getElementById('playing-state').classList.remove('hidden');
           gameState.phase = 'playing'; playBeep(880); startTimer();
         }
       }, 1000);
@@ -429,18 +429,18 @@
       const btn = document.getElementById('btn-toggle-word');
       gameState.wordVisible = !gameState.wordVisible;
       if (gameState.wordVisible) {
-        ph.style.display = 'none'; vc.style.display = ''; btn.textContent = '🙈 Ocultar palavra';
+        ph.classList.add('hidden'); vc.classList.remove('hidden'); btn.textContent = '🙈 Ocultar palavra';
         // Show challenge when revealing word
         const challengeEl = document.getElementById('game-challenge-display');
         const challengeTextEl = document.getElementById('game-challenge-text');
         if (gameState.currentChallenge) {
           challengeTextEl.textContent = gameState.currentChallenge;
-          challengeEl.style.display = '';
+          challengeEl.classList.remove('hidden');
         } else {
-          challengeEl.style.display = 'none';
+          challengeEl.classList.add('hidden');
         }
       } else {
-        ph.style.display = 'flex'; vc.style.display = 'none'; btn.textContent = '👁️ Mostrar palavra';
+        ph.classList.remove('hidden'); vc.classList.add('hidden'); btn.textContent = '👁️ Mostrar palavra';
       }
     }
 
@@ -484,7 +484,7 @@
         if (!gameState.hintShown && elapsed >= Math.floor(dur * 0.75)) {
           gameState.hintShown = true;
           const hint = document.getElementById('hint-banner');
-          hint.style.display = '';
+          hint.classList.remove('hidden');
           hint.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 400, fill: 'forwards' });
           playBeep(523);
         }
@@ -578,7 +578,7 @@
     function markResult(correct, timeUp = false) {
       clearInterval(gameState.timerInterval);
       clearInterval(gameState.memInterval);
-      document.getElementById('memorize-state').style.display = 'none';
+      document.getElementById('memorize-state').classList.add('hidden');
       const player = gameState.players[gameState.currentPlayerIdx];
       const pName = player.name || player;
       const emoji = document.getElementById('resultEmoji');
@@ -746,7 +746,7 @@
           count++;
           const tag = document.createElement('span'); tag.className = 'word-tag';
           const idx = (wordBank[wbDiff][cat] || []).indexOf(word);
-          tag.innerHTML = `${catIcon[cat] || ''} ${word} <span class="del-btn" onclick="removeWord('${cat}',${idx})">✕</span>`;
+          tag.innerHTML = `${catIcon[cat] || ''} ${word} <span class="del-btn" data-action="remove-word" data-word-category="${cat}" data-index="${idx}">✕</span>`;
           cont.appendChild(tag);
         });
       });
@@ -818,9 +818,122 @@
       }
     }
 
+    function handleNavigation(button) {
+      animateButtonClick(button);
+      playClickSound();
+      goTo(button.dataset.nav);
+    }
+
+    function handleEnterSubmit(key) {
+      if (key === 'team-A') addTeamPlayer('A');
+      if (key === 'team-B') addTeamPlayer('B');
+      if (key === 'ffa') addFFAPlayer();
+      if (key === 'add-word') addWord();
+    }
+
+    function handleAction(button) {
+      const { action, team, index, wordCategory } = button.dataset;
+
+      if (action === 'next-turn') return nextTurn();
+      if (action === 'add-team-player') return addTeamPlayer(team);
+      if (action === 'add-ffa-player') return addFFAPlayer();
+      if (action === 'start-game') {
+        animateButtonClick(button);
+        playClickSound();
+        return startGame();
+      }
+      if (action === 'confirm-restart') return confirmRestart();
+      if (action === 'reveal-word') return revealWord();
+      if (action === 'toggle-word') return toggleWordVisibility();
+      if (action === 'mark-correct') {
+        animateButtonClick(button);
+        playCorrectSound();
+        return markResult(true);
+      }
+      if (action === 'mark-wrong') {
+        animateWrongButton(button);
+        playWrongSound();
+        return markResult(false);
+      }
+      if (action === 'continue-game') return continueGame();
+      if (action === 'add-word') return addWord();
+      if (action === 'reset-words') return resetWords();
+      if (action === 'remove-word') return removeWord(wordCategory, Number(index));
+      if (action === 'remove-team-player') return removeTeamPlayer(team, Number(index));
+      if (action === 'remove-ffa-player') return removeFFAPlayer(Number(index));
+    }
+
+    function registerEventListeners() {
+      document.addEventListener('click', event => {
+        const navButton = event.target.closest('[data-nav]');
+        if (navButton) {
+          handleNavigation(navButton);
+          return;
+        }
+
+        const modeCard = event.target.closest('[data-mode]');
+        if (modeCard) {
+          selectMode(modeCard.dataset.mode);
+          return;
+        }
+
+        const difficultyCard = event.target.closest('[data-difficulty]');
+        if (difficultyCard) {
+          selectDifficulty(difficultyCard.dataset.difficulty);
+          return;
+        }
+
+        const categoryCard = event.target.closest('.category-card[data-category]');
+        if (categoryCard) {
+          toggleCategory(categoryCard.dataset.category);
+          return;
+        }
+
+        const wbDifficultyCard = event.target.closest('[data-wb-difficulty]');
+        if (wbDifficultyCard) {
+          switchWBDiff(wbDifficultyCard.dataset.wbDifficulty);
+          return;
+        }
+
+        const wbTabButton = event.target.closest('[data-wb-tab]');
+        if (wbTabButton) {
+          switchWordTab(wbTabButton.dataset.wbTab);
+          return;
+        }
+
+        const actionButton = event.target.closest('[data-action]');
+        if (actionButton) {
+          handleAction(actionButton);
+        }
+      });
+
+      document.querySelectorAll('[data-team-name]').forEach(input => {
+        input.addEventListener('change', () => updateTeamName(input.dataset.teamName, input.value));
+      });
+
+      document.querySelectorAll('[data-enter-submit]').forEach(input => {
+        input.addEventListener('keydown', event => {
+          if (event.key === 'Enter') handleEnterSubmit(input.dataset.enterSubmit);
+        });
+      });
+
+      document.getElementById('rounds-slider').addEventListener('input', event => {
+        document.getElementById('rounds-val').textContent = event.target.value;
+      });
+
+      document.getElementById('timer-slider').addEventListener('input', event => {
+        updateTimerLabel(event.target.value);
+      });
+
+      document.getElementById('random-challenge-toggle').addEventListener('change', event => {
+        toggleRandomChallenge(event.target.checked);
+      });
+    }
+
     // ============================================================
     // INIT
     // ============================================================
+    registerEventListeners();
     selectMode('teams');
     selectDifficulty('easy');
     updateTimerLabel(60);

@@ -35,6 +35,10 @@
       overflow-x: hidden;
     }
 
+    a {
+      color: inherit;
+    }
+
     body::before {
       content: '';
       position: fixed;
@@ -132,6 +136,14 @@
       gap: 10px;
     }
 
+    .card-title-sm {
+      font-size: 1.1rem;
+    }
+
+    .card-title-inline {
+      margin: 0;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -203,6 +215,20 @@
 
     .btn-block {
       width: 100%;
+    }
+
+    .btn-nowrap {
+      white-space: nowrap;
+    }
+
+    .btn-team-a {
+      background: var(--team1);
+      color: white;
+    }
+
+    .btn-team-b {
+      background: var(--team2);
+      color: white;
     }
 
     .inp {
@@ -363,12 +389,25 @@
       font-weight: 800;
     }
 
+    .player-name {
+      flex: 1;
+      font-weight: 800;
+    }
+
     .team-badge {
       font-size: 0.75rem;
       font-weight: 800;
       padding: 3px 10px;
       border-radius: 20px;
       letter-spacing: 0.5px;
+    }
+
+    .team-label-a {
+      color: var(--team1);
+    }
+
+    .team-label-b {
+      color: var(--team2);
     }
 
     .timer-wrap {
@@ -432,12 +471,54 @@
       margin: 16px 0;
     }
 
+    .word-card-memorize {
+      border: 2px solid rgba(199, 125, 255, 0.4);
+      background: linear-gradient(135deg, rgba(199, 125, 255, 0.12), rgba(77, 150, 255, 0.08));
+    }
+
     .word-text {
       font-family: 'Fredoka One', cursive;
       font-size: clamp(2rem, 6vw, 3.5rem);
       color: var(--accent2);
       filter: drop-shadow(0 2px 8px rgba(255, 217, 61, 0.4));
       word-break: break-word;
+    }
+
+    .word-text-memorize {
+      color: #c77dff;
+      filter: drop-shadow(0 2px 12px rgba(199, 125, 255, 0.5));
+    }
+
+    .word-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 0;
+    }
+
+    .challenge-text {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 8px;
+    }
+
+    .hint-banner {
+      margin-top: 10px;
+      padding: 8px 14px;
+      background: rgba(255, 217, 61, 0.12);
+      border: 1px solid rgba(255, 217, 61, 0.3);
+      border-radius: 10px;
+    }
+
+    .hint-text {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      color: var(--accent2);
     }
 
     .score-row {
@@ -504,6 +585,223 @@
       font-family: 'Fredoka One', cursive;
       font-size: 1.6rem;
       color: white;
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .page-shell-wide {
+      max-width: 860px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .page-header-tight {
+      margin-bottom: 20px;
+    }
+
+    .page-title,
+    .section-title {
+      font-family: 'Fredoka One', cursive;
+      color: var(--accent2);
+    }
+
+    .page-title {
+      font-size: 1.4rem;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+    }
+
+    .hero-title {
+      font-family: 'Fredoka One', cursive;
+      text-align: center;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, #ffd93d, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-title-score {
+      font-size: 2rem;
+    }
+
+    .logo-final {
+      font-size: 2.5rem;
+      margin-bottom: 4px;
+    }
+
+    .emoji-hero {
+      font-size: 3.5rem;
+    }
+
+    .emoji-trophy {
+      font-size: 5rem;
+    }
+
+    .emoji-lg {
+      font-size: 1.5rem;
+    }
+
+    .emoji-xl {
+      font-size: 2.8rem;
+    }
+
+    .emoji-tight {
+      line-height: 1;
+    }
+
+    .emoji-fixed {
+      flex-shrink: 0;
+    }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-accent {
+      color: var(--accent5);
+    }
+
+    .eyebrow-muted {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .eyebrow-hint {
+      font-size: 0.7rem;
+      color: rgba(255, 217, 61, 0.6);
+    }
+
+    .text-strong {
+      font-weight: 800;
+    }
+
+    .text-sm-title {
+      font-size: 0.9rem;
+    }
+
+    .text-meta {
+      font-size: 0.8rem;
+      color: var(--text3);
+      font-weight: 700;
+    }
+
+    .text-accent {
+      color: var(--accent2);
+    }
+
+    .text-left {
+      text-align: left;
+    }
+
+    .how-to-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .media-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .media-row-start {
+      align-items: flex-start;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .action-row-center {
+      justify-content: center;
+    }
+
+    .action-row-between {
+      justify-content: space-between;
+    }
+
+    .action-row-wrap {
+      flex-wrap: wrap;
+    }
+
+    .action-row-compact {
+      justify-content: center;
+      margin: 10px 0 4px;
+    }
+
+    .game-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .score-mini-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .helper-box {
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      color: var(--text3);
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 20px 0;
+    }
+
+    .countdown-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .countdown-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .countdown-progress {
+      transition: stroke-dashoffset 0.5s linear;
+    }
+
+    .countdown-number {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.2rem;
+      color: #c77dff;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     .word-tag {
@@ -675,6 +973,10 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
+    .toggle-wrap-last {
+      border: none;
+    }
+
     .toggle-label {
       font-weight: 700;
       font-size: 0.95rem;
@@ -804,6 +1106,10 @@
       gap: 12px;
     }
 
+    .range-wrap-fixed {
+      width: 160px;
+    }
+
     .range-inp {
       flex: 1;
       -webkit-appearance: none;
@@ -865,8 +1171,40 @@
       margin-top: 16px;
     }
 
+    .mt-xs {
+      margin-top: 4px;
+    }
+
+    .mt-sm {
+      margin-top: 12px;
+    }
+
     .mb {
       margin-bottom: 16px;
+    }
+
+    .mb-xs {
+      margin-bottom: 8px;
+    }
+
+    .mb-xxs {
+      margin-bottom: 2px;
+    }
+
+    .mb-sm {
+      margin-bottom: 12px;
+    }
+
+    .mb-lg {
+      margin-bottom: 20px;
+    }
+
+    .my-lg {
+      margin: 20px 0;
+    }
+
+    .px-xs {
+      padding: 0 4px;
     }
 
     .text-sm {
@@ -875,11 +1213,26 @@
       font-weight: 700;
     }
 
+    .site-footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 20px 16px 28px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.25);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .site-footer-link {
+      color: rgba(255, 255, 255, 0.35);
+      text-decoration: none;
+    }
+
     #screen-game {
-      max-width: 520px;
       width: 100%;
       margin: 0 auto;
-      padding: 16px;
+      padding: 16px 20px;
     }
 
     .confetti-piece {
@@ -910,5 +1263,46 @@
 
       .card {
         padding: 20px
+      }
+
+      .action-row,
+      .page-header {
+        flex-wrap: wrap;
+      }
+
+      .game-actions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .range-wrap-fixed {
+        width: 100%;
+      }
+
+      .toggle-wrap {
+        gap: 14px;
+        align-items: flex-start;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .screen {
+        padding: 32px;
+      }
+
+      .page-shell,
+      #screen-game {
+        max-width: 720px;
+      }
+
+      .page-shell-wide {
+        max-width: 960px;
+      }
+
+      .card {
+        padding: 30px;
+      }
+
+      .word-card {
+        padding: 36px 32px;
       }
     }
