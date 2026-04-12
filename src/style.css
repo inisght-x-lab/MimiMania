@@ -93,6 +93,20 @@
       flex-direction: column;
     }
 
+    #screen-home {
+      align-items: center;
+    }
+
+    #screen-home .page-shell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #screen-home .page-shell > .card {
+      width: 100%;
+    }
+
     .logo {
       font-family: 'Fredoka One', cursive;
       font-size: clamp(3rem, 8vw, 5.5rem);
@@ -590,10 +604,11 @@
     .page-shell {
       width: 100%;
       max-width: 480px;
+      margin: 0 auto;
     }
 
     .page-shell-wide {
-      max-width: 860px;
+      max-width: 480px;
     }
 
     .page-header {
@@ -619,6 +634,10 @@
 
     .section-title {
       font-size: 1.3rem;
+    }
+
+    .section-title-light {
+      color: var(--text);
     }
 
     .hero-title {
@@ -1110,6 +1129,18 @@
       width: 160px;
     }
 
+    #screen-setup .range-wrap-fixed {
+      width: 148px;
+      padding-right: 8px;
+      justify-content: flex-end;
+    }
+
+    #screen-settings .range-wrap-fixed {
+      width: 148px;
+      padding-right: 8px;
+      justify-content: flex-end;
+    }
+
     .range-inp {
       flex: 1;
       -webkit-appearance: none;
@@ -1289,13 +1320,12 @@
         padding: 32px;
       }
 
-      .page-shell,
-      #screen-game {
-        max-width: 720px;
+      .page-shell {
+        max-width: 480px;
       }
 
       .page-shell-wide {
-        max-width: 960px;
+        max-width: 480px;
       }
 
       .card {
