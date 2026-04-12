@@ -831,6 +831,18 @@
       if (key === 'add-word') addWord();
     }
 
+    function applyLayoutPreview(mode = 'auto') {
+      document.body.dataset.previewMode = mode;
+      localStorage.setItem('mm_layout_preview', mode);
+      const select = document.getElementById('dev-layout-preview');
+      if (select && select.value !== mode) select.value = mode;
+    }
+
+    function initializeLayoutPreview() {
+      const saved = localStorage.getItem('mm_layout_preview') || 'auto';
+      applyLayoutPreview(saved);
+    }
+
     function handleAction(button) {
       const { action, team, index, wordCategory } = button.dataset;
 
@@ -928,11 +940,19 @@
       document.getElementById('random-challenge-toggle').addEventListener('change', event => {
         toggleRandomChallenge(event.target.checked);
       });
+
+      const previewSelect = document.getElementById('dev-layout-preview');
+      if (previewSelect) {
+        previewSelect.addEventListener('change', event => {
+          applyLayoutPreview(event.target.value);
+        });
+      }
     }
 
     // ============================================================
     // INIT
     // ============================================================
+    initializeLayoutPreview();
     registerEventListeners();
     selectMode('teams');
     selectDifficulty('easy');

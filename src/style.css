@@ -22,6 +22,14 @@
       --page-width: 480px;
       --page-width-game: 480px;
       --range-control-width: 148px;
+      --game-state-width: 480px;
+      --game-overview-secondary: 320px;
+      --game-sidebar-width: 280px;
+      --timer-size: 160px;
+      --timer-number-size: 3.5rem;
+      --timer-label-size: 0.62rem;
+      --timer-label-bottom: 24px;
+      --game-word-card-min-height: 158px;
     }
 
     * {
@@ -117,6 +125,78 @@
       text-transform: uppercase;
       font-weight: 700;
       margin-bottom: 40px;
+    }
+
+    .dev-preview-panel {
+      display: grid;
+      gap: 14px;
+      width: 100%;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(199, 125, 255, 0.18);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(8, 6, 28, 0.22);
+    }
+
+    .dev-preview-copy {
+      display: grid;
+      gap: 8px;
+    }
+
+    .dev-preview-field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .dev-preview-select {
+      min-width: 0;
+    }
+
+    .home-grid,
+    .setup-grid,
+    .wordbank-layout,
+    .settings-grid,
+    .game-overview,
+    .game-play-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .home-card,
+    .setup-grid > *,
+    .wordbank-layout > *,
+    .settings-grid > * {
+      margin: 0;
+    }
+
+    .wordbank-sidebar {
+      display: grid;
+      gap: 20px;
+    }
+
+    .wordbank-filter-card,
+    .wordbank-list-card,
+    .wordbank-add-card {
+      height: 100%;
+    }
+
+    .wordbank-tabs {
+      margin-bottom: 0;
+    }
+
+    .wordbank-list-card .words-container {
+      max-height: min(58vh, 680px);
+    }
+
+    .settings-grid > .card {
+      height: 100%;
+    }
+
+    .setup-cta {
+      margin: 0;
     }
 
     .card {
@@ -414,8 +494,8 @@
 
     .timer-wrap {
       position: relative;
-      width: 160px;
-      height: 160px;
+      width: var(--timer-size);
+      height: var(--timer-size);
       margin: 0 auto 24px;
     }
 
@@ -445,17 +525,17 @@
       align-items: center;
       justify-content: center;
       font-family: 'Fredoka One', cursive;
-      font-size: 3.5rem;
+      font-size: var(--timer-number-size);
       line-height: 1;
     }
 
     .timer-label {
       position: absolute;
-      bottom: 16px;
+      bottom: var(--timer-label-bottom);
       left: 0;
       right: 0;
       text-align: center;
-      font-size: 0.62rem;
+      font-size: var(--timer-label-size);
       line-height: 1.1;
       letter-spacing: 1.6px;
       color: var(--text3);
@@ -587,6 +667,87 @@
       font-family: 'Fredoka One', cursive;
       font-size: 1.6rem;
       color: white;
+    }
+
+    .game-meta {
+      min-width: 0;
+    }
+
+    .game-overview {
+      margin-bottom: 20px;
+    }
+
+    .game-meta,
+    .game-overview .current-player {
+      width: 100%;
+      margin-inline: auto;
+    }
+
+    .game-overview .current-player {
+      margin-bottom: 0;
+    }
+
+    .game-state-card,
+    .game-stage-stack {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .game-play-side {
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .game-play-side .timer-wrap {
+      margin-bottom: 0;
+    }
+
+    .game-play-side .action-row-compact {
+      margin: 0;
+    }
+
+    .game-play-main {
+      min-width: 0;
+      display: grid;
+      align-content: start;
+      gap: 16px;
+    }
+
+    .game-play-main .word-card {
+      margin: 0;
+      min-height: var(--game-word-card-min-height);
+      display: grid;
+      align-items: center;
+    }
+
+    .game-play-main .action-row-compact {
+      margin: 0;
+    }
+
+    .game-play-main .game-actions-grid {
+      margin-top: 0;
+    }
+
+    .game-play-main #word-hidden-placeholder,
+    .game-play-main #word-visible-content {
+      min-height: 0;
+    }
+
+    .game-play-main #hint-banner {
+      min-height: 56px;
+      visibility: hidden;
+      display: block !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .game-play-main #hint-banner:not(.hidden) {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .page-shell {
@@ -1231,7 +1392,7 @@
       }
     }
 
-    @media(max-width:480px) {
+    @media (max-width: 480px) {
       .mode-grid {
         grid-template-columns: 1fr
       }
@@ -1259,9 +1420,23 @@
       }
     }
 
-    @media (min-width: 900px) {
+    @media (min-width: 768px) {
+      :root {
+        --page-width: 920px;
+        --page-width-game: 920px;
+        --range-control-width: 190px;
+        --game-state-width: 920px;
+        --game-overview-secondary: 300px;
+        --game-sidebar-width: 250px;
+        --timer-size: 250px;
+        --timer-number-size: 5.3rem;
+        --timer-label-size: 0.78rem;
+        --timer-label-bottom: 34px;
+        --game-word-card-min-height: 208px;
+      }
+
       .screen {
-        padding: 32px;
+        padding: 28px;
       }
 
       .card {
@@ -1271,4 +1446,275 @@
       .word-card {
         padding: 36px 32px;
       }
+
+      .dev-preview-panel {
+        grid-template-columns: minmax(0, 1fr) 220px;
+        align-items: end;
+      }
+
+      .home-grid {
+        grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+      }
+
+      .setup-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      }
+
+      .setup-block-full,
+      .setup-cta {
+        grid-column: 1 / -1;
+      }
+
+      .setup-block-players {
+        grid-row: span 3;
+      }
+
+      .wordbank-layout {
+        grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+      }
+
+      .settings-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .game-play-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 28px;
+        align-items: stretch;
+      }
+
+      .score-mini-row {
+        flex-wrap: wrap;
+        overflow-x: visible;
+      }
+    }
+
+    @media (min-width: 1180px) {
+      :root {
+        --page-width: 1180px;
+        --page-width-game: 1180px;
+        --range-control-width: 220px;
+        --game-state-width: 1180px;
+        --game-overview-secondary: 360px;
+        --game-sidebar-width: 300px;
+        --timer-size: 320px;
+        --timer-number-size: 6.8rem;
+        --timer-label-size: 0.9rem;
+        --timer-label-bottom: 42px;
+        --game-word-card-min-height: 230px;
+      }
+
+      .screen {
+        padding: 36px;
+      }
+
+      .home-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(380px, 0.95fr);
+        gap: 24px;
+      }
+
+      .wordbank-layout {
+        grid-template-columns: minmax(360px, 390px) minmax(0, 1fr);
+      }
+
+      .game-play-layout {
+        gap: 36px;
+      }
+
+      .wordbank-list-card .words-container {
+        max-height: min(66vh, 760px);
+      }
+    }
+
+    body[data-preview-mode="mobile"] {
+      --page-width: 480px;
+      --page-width-game: 480px;
+      --range-control-width: 148px;
+      --game-state-width: 480px;
+      --game-overview-secondary: 320px;
+      --game-sidebar-width: 280px;
+      --timer-size: 160px;
+      --timer-number-size: 3.5rem;
+      --timer-label-size: 0.62rem;
+      --timer-label-bottom: 24px;
+      --game-word-card-min-height: 158px;
+    }
+
+    body[data-preview-mode="mobile"] .screen {
+      padding: 20px;
+    }
+
+    body[data-preview-mode="mobile"] .dev-preview-panel {
+      grid-template-columns: 1fr;
+    }
+
+    body[data-preview-mode="mobile"] .home-grid,
+    body[data-preview-mode="mobile"] .setup-grid,
+    body[data-preview-mode="mobile"] .wordbank-layout,
+    body[data-preview-mode="mobile"] .settings-grid,
+    body[data-preview-mode="mobile"] .game-overview,
+    body[data-preview-mode="mobile"] .game-play-layout {
+      grid-template-columns: 1fr;
+    }
+
+    body[data-preview-mode="mobile"] .action-row,
+    body[data-preview-mode="mobile"] .page-header {
+      flex-wrap: wrap;
+    }
+
+    body[data-preview-mode="mobile"] .game-actions-grid {
+      grid-template-columns: 1fr;
+    }
+
+    body[data-preview-mode="mobile"] .range-wrap-fixed {
+      width: 100%;
+    }
+
+    body[data-preview-mode="mobile"] .toggle-wrap {
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    body[data-preview-mode="mobile"] .card {
+      padding: 20px;
+    }
+
+    body[data-preview-mode="mobile"] .score-mini-row {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+
+    body[data-preview-mode="mobile"] .setup-block-full,
+    body[data-preview-mode="mobile"] .setup-block-players,
+    body[data-preview-mode="mobile"] .setup-cta {
+      grid-column: auto;
+      grid-row: auto;
+    }
+
+    body[data-preview-mode="mobile"] .game-play-side {
+      position: static;
+    }
+
+    body[data-preview-mode="tablet"],
+    body[data-preview-mode="desktop"] {
+      --page-width: 920px;
+      --page-width-game: 920px;
+      --range-control-width: 190px;
+      --game-state-width: 920px;
+      --game-overview-secondary: 300px;
+      --game-sidebar-width: 250px;
+      --timer-size: 250px;
+      --timer-number-size: 5.3rem;
+      --timer-label-size: 0.78rem;
+      --timer-label-bottom: 34px;
+      --game-word-card-min-height: 208px;
+    }
+
+    body[data-preview-mode="tablet"] .screen,
+    body[data-preview-mode="desktop"] .screen {
+      padding: 28px;
+    }
+
+    body[data-preview-mode="tablet"] .card,
+    body[data-preview-mode="desktop"] .card {
+      padding: 30px;
+    }
+
+    body[data-preview-mode="tablet"] .dev-preview-panel,
+    body[data-preview-mode="desktop"] .dev-preview-panel {
+      grid-template-columns: minmax(0, 1fr) 220px;
+      align-items: end;
+    }
+
+    body[data-preview-mode="tablet"] .word-card,
+    body[data-preview-mode="desktop"] .word-card {
+      padding: 36px 32px;
+    }
+
+    body[data-preview-mode="tablet"] .home-grid,
+    body[data-preview-mode="desktop"] .home-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+    }
+
+    body[data-preview-mode="tablet"] .setup-grid,
+    body[data-preview-mode="desktop"] .setup-grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    }
+
+    body[data-preview-mode="tablet"] .setup-block-full,
+    body[data-preview-mode="tablet"] .setup-cta,
+    body[data-preview-mode="desktop"] .setup-block-full,
+    body[data-preview-mode="desktop"] .setup-cta {
+      grid-column: 1 / -1;
+    }
+
+    body[data-preview-mode="tablet"] .setup-block-players,
+    body[data-preview-mode="desktop"] .setup-block-players {
+      grid-row: span 3;
+    }
+
+    body[data-preview-mode="tablet"] .wordbank-layout,
+    body[data-preview-mode="desktop"] .wordbank-layout {
+      grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+    }
+
+    body[data-preview-mode="tablet"] .settings-grid,
+    body[data-preview-mode="desktop"] .settings-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body[data-preview-mode="tablet"] .game-play-layout,
+    body[data-preview-mode="desktop"] .game-play-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    body[data-preview-mode="tablet"] .score-mini-row,
+    body[data-preview-mode="desktop"] .score-mini-row {
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+
+    body[data-preview-mode="tablet"] .game-play-side {
+      position: static;
+    }
+
+    body[data-preview-mode="tablet"] .wordbank-list-card .words-container {
+      max-height: min(58vh, 680px);
+    }
+
+    body[data-preview-mode="desktop"] {
+      --page-width: 1180px;
+      --page-width-game: 1180px;
+      --range-control-width: 220px;
+      --game-state-width: 1180px;
+      --game-overview-secondary: 360px;
+      --game-sidebar-width: 300px;
+      --timer-size: 320px;
+      --timer-number-size: 6.8rem;
+      --timer-label-size: 0.9rem;
+      --timer-label-bottom: 42px;
+      --game-word-card-min-height: 230px;
+    }
+
+    body[data-preview-mode="desktop"] .screen {
+      padding: 36px;
+    }
+
+    body[data-preview-mode="desktop"] .home-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(380px, 0.95fr);
+      gap: 24px;
+    }
+
+    body[data-preview-mode="desktop"] .wordbank-layout {
+      grid-template-columns: minmax(360px, 390px) minmax(0, 1fr);
+    }
+
+    body[data-preview-mode="desktop"] .game-play-layout {
+      gap: 36px;
+    }
+
+    body[data-preview-mode="desktop"] .wordbank-list-card .words-container {
+      max-height: min(66vh, 760px);
     }
