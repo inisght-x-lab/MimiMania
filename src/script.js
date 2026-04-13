@@ -175,6 +175,7 @@
       return {
         timerDur: parseInt(document.getElementById('timer-slider').value, 10) || 60,
         soundEnabled: document.getElementById('toggle-sound').checked,
+        navigationSoundEnabled: document.getElementById('toggle-navigation-sound').checked,
         penaltyEnabled: document.getElementById('toggle-penalty').checked,
         shuffleEnabled: document.getElementById('toggle-shuffle').checked,
         theme: document.getElementById('theme-select').value || 'cosmic'
@@ -189,6 +190,7 @@
       const defaults = {
         timerDur: 60,
         soundEnabled: true,
+        navigationSoundEnabled: true,
         penaltyEnabled: false,
         shuffleEnabled: true,
         theme: 'cosmic'
@@ -201,6 +203,7 @@
 
       document.getElementById('timer-slider').value = saved.timerDur;
       document.getElementById('toggle-sound').checked = Boolean(saved.soundEnabled);
+      document.getElementById('toggle-navigation-sound').checked = Boolean(saved.navigationSoundEnabled);
       document.getElementById('toggle-penalty').checked = Boolean(saved.penaltyEnabled);
       document.getElementById('toggle-shuffle').checked = Boolean(saved.shuffleEnabled);
       document.getElementById('theme-select').value = applyTheme(saved.theme);
@@ -573,8 +576,18 @@
       } catch (e) { }
     }
 
+    function isNavigationSoundEnabled() {
+      const toggle = document.getElementById('toggle-navigation-sound');
+      return toggle ? toggle.checked : true;
+    }
+
     function playClickSound() {
       playBeep(800);
+    }
+
+    function playNavigationSound() {
+      if (!isNavigationSoundEnabled()) return;
+      playClickSound();
     }
 
     function playCorrectSound() {
@@ -882,7 +895,7 @@
 
     function handleNavigation(button) {
       animateButtonClick(button);
-      playClickSound();
+      playNavigationSound();
       goTo(button.dataset.nav);
     }
 
@@ -905,15 +918,22 @@
       applyLayoutPreview(saved);
     }
 
+    function shouldPlayNavigationSoundForAction(action) {
+      return action !== 'mark-correct' && action !== 'mark-wrong';
+    }
+
     function handleAction(button) {
       const { action, team, index, wordCategory } = button.dataset;
+
+      if (shouldPlayNavigationSoundForAction(action)) {
+        playNavigationSound();
+      }
 
       if (action === 'next-turn') return nextTurn();
       if (action === 'add-team-player') return addTeamPlayer(team);
       if (action === 'add-ffa-player') return addFFAPlayer();
       if (action === 'start-game') {
         animateButtonClick(button);
-        playClickSound();
         return startGame();
       }
       if (action === 'confirm-restart') return confirmRestart();
@@ -971,6 +991,7 @@
 
         const wbTabButton = event.target.closest('[data-wb-tab]');
         if (wbTabButton) {
+          playNavigationSound();
           switchWordTab(wbTabButton.dataset.wbTab);
           return;
         }
@@ -1005,6 +1026,7 @@
       });
 
       document.getElementById('toggle-sound').addEventListener('change', saveSettings);
+      document.getElementById('toggle-navigation-sound').addEventListener('change', saveSettings);
       document.getElementById('toggle-penalty').addEventListener('change', saveSettings);
       document.getElementById('toggle-shuffle').addEventListener('change', saveSettings);
       document.getElementById('theme-select').addEventListener('change', event => {

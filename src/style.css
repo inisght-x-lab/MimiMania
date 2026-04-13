@@ -332,6 +332,13 @@
       cursor: pointer;
     }
 
+    select.inp option,
+    select.inp optgroup {
+      background: var(--select-option-bg, var(--card));
+      color: var(--select-option-text, var(--text));
+      font-family: var(--font-body);
+    }
+
     .mode-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
