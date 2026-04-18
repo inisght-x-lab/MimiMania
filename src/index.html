@@ -48,8 +48,12 @@
       </div>
       <div class="home-grid">
         <div class="card home-card">
-          <div class="flex-col">
+          <div class="flex-col home-actions">
             <button class="btn btn-primary btn-lg btn-block" data-nav="setup" data-i18n="home.newGame">🎮 Nova Partida</button>
+            <button class="btn btn-secondary btn-lg btn-block btn-quick-game" data-action="quick-game">
+              <span data-i18n="home.quickGame">⚡ Jogo Rápido</span>
+              <span class="btn-quick-game-summary" id="quick-game-summary">Free for All | 4 players | Objects, Actions, Animals | 3 rounds</span>
+            </button>
             <button class="btn btn-ghost btn-lg btn-block" data-nav="wordbank" data-i18n="home.wordBank">📝 Banco de Palavras</button>
             <button class="btn btn-ghost btn-lg btn-block" data-nav="settings" data-i18n="home.settings">⚙️ Configurações</button>
           </div>
@@ -58,24 +62,31 @@
           <h2 class="card-title" data-i18n="home.howToTitle">🏆 Como jogar</h2>
           <div class="how-to-list">
             <div class="media-row media-row-start">
-              <div class="emoji-lg emoji-fixed">👤</div>
+              <div class="emoji-lg emoji-fixed">🎮</div>
               <div>
-                <div class="text-strong text-sm-title" data-i18n="home.howTo.mimeTitle">O Mimo</div>
-                <div class="text-sm" data-i18n="home.howTo.mimeDesc">Vê a palavra e faz a mímica sem falar nada!</div>
+                <div class="text-strong text-sm-title" data-i18n="home.howTo.setupTitle">Monte a partida</div>
+                <div class="text-sm" data-i18n="home.howTo.setupDesc">Escolha entre times ou todos contra todos, defina rodadas, dificuldade e categorias.</div>
               </div>
             </div>
             <div class="media-row media-row-start">
-              <div class="emoji-lg emoji-fixed">🕐</div>
+              <div class="emoji-lg emoji-fixed">🎭</div>
               <div>
-                <div class="text-strong text-sm-title" data-i18n="home.howTo.timeTitle">O Tempo</div>
-                <div class="text-sm" data-i18n="home.howTo.timeDesc">Tentem adivinhar antes do timer acabar!</div>
+                <div class="text-strong text-sm-title" data-i18n="home.howTo.turnTitle">Veja e atue</div>
+                <div class="text-sm" data-i18n="home.howTo.turnDesc">Um jogador vê a palavra, memoriza e faz a mímica sem falar enquanto o resto tenta adivinhar.</div>
               </div>
             </div>
             <div class="media-row media-row-start">
-              <div class="emoji-lg emoji-fixed">⭐</div>
+              <div class="emoji-lg emoji-fixed">⏱️</div>
               <div>
-                <div class="text-strong text-sm-title" data-i18n="home.howTo.pointsTitle">Os Pontos</div>
-                <div class="text-sm" data-i18n="home.howTo.pointsDesc">Cada acerto vale 10 pontos. Quem tiver mais pontos vence!</div>
+                <div class="text-strong text-sm-title" data-i18n="home.howTo.timerTitle">Corra contra o tempo</div>
+                <div class="text-sm" data-i18n="home.howTo.timerDesc">O cronômetro, as dicas e os sons de alerta ajudam a manter cada turno rápido e divertido.</div>
+              </div>
+            </div>
+            <div class="media-row media-row-start">
+              <div class="emoji-lg emoji-fixed">🏆</div>
+              <div>
+                <div class="text-strong text-sm-title" data-i18n="home.howTo.winTitle">Marque pontos e vença</div>
+                <div class="text-sm" data-i18n="home.howTo.winDesc">Cada acerto vale 10 pontos. No fim das rodadas, o placar decide o vencedor.</div>
               </div>
             </div>
           </div>

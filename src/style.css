@@ -290,6 +290,28 @@
       width: 100%;
     }
 
+    .home-actions > .btn {
+      min-height: 76px;
+    }
+
+    .btn-quick-game {
+      flex-direction: column;
+      gap: 2px;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .btn-quick-game-summary {
+      font-size: 0.62rem;
+      line-height: 1.15;
+      font-weight: 700;
+      opacity: 0.85;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
     .btn-nowrap {
       white-space: nowrap;
     }

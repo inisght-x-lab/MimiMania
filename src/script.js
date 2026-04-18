@@ -1,7 +1,8 @@
-    const DEFAULT_LANGUAGE = 'pt';
+    const DEFAULT_LANGUAGE = 'en';
     const SETTINGS_KEY = 'mm_settings_v2';
     const CONTENT_KEY = 'mm_content_v1';
     const LEGACY_WORDS_KEY = 'mm_words_v2';
+    const QUICK_GAME_KEY = 'mm_quick_game_v1';
     const AVAILABLE_THEMES = ['cosmic', 'liquid-glass', 'material3'];
     const SUPPORTED_LANGUAGES = ['pt', 'en', 'es'];
     const LANGUAGE_HTML_MAP = { pt: 'pt-BR', en: 'en', es: 'es' };
@@ -29,7 +30,11 @@
           continue: '▶️ Continuar',
           restart: '🔄 Reiniciar',
           home: '🏠 Início',
-          pointsShort: 'pts'
+          pointsShort: 'pts',
+          playerSingular: 'jogador',
+          playerPlural: 'jogadores',
+          roundSingular: 'rodada',
+          roundPlural: 'rodadas'
         },
         language: {
           pt: 'Português',
@@ -50,16 +55,19 @@
         home: {
           subtitle: '🎭 O jogo da mímica',
           newGame: '🎮 Nova Partida',
+          quickGame: '⚡ Jogo Rápido',
           wordBank: '📝 Banco de Palavras',
           settings: '⚙️ Configurações',
           howToTitle: '🏆 Como jogar',
           howTo: {
-            mimeTitle: 'O Mimo',
-            mimeDesc: 'Vê a palavra e faz a mímica sem falar nada!',
-            timeTitle: 'O Tempo',
-            timeDesc: 'Tentem adivinhar antes do timer acabar!',
-            pointsTitle: 'Os Pontos',
-            pointsDesc: 'Cada acerto vale 10 pontos. Quem tiver mais pontos vence!'
+            setupTitle: 'Monte a partida',
+            setupDesc: 'Escolha entre times ou todos contra todos, defina rodadas, dificuldade e categorias.',
+            turnTitle: 'Veja e atue',
+            turnDesc: 'Um jogador vê a palavra, memoriza e faz a mímica sem falar enquanto o resto tenta adivinhar.',
+            timerTitle: 'Corra contra o tempo',
+            timerDesc: 'O cronômetro, as dicas e os sons de alerta ajudam a manter cada turno rápido e divertido.',
+            winTitle: 'Marque pontos e vença',
+            winDesc: 'Cada acerto vale 10 pontos. No fim das rodadas, o placar decide o vencedor.'
           }
         },
         setup: {
@@ -178,6 +186,9 @@
           defaultA: 'Time A',
           defaultB: 'Time B'
         },
+        players: {
+          defaultName: 'Jogador {number}'
+        },
         dynamic: {
           roundDisplay: ({ current, total }) => `Rodada ${current} de ${total}`,
           diffCount: ({ difficulty, count }) => `${difficulty} · ${count} palavras disponíveis`,
@@ -212,7 +223,11 @@
           continue: '▶️ Continue',
           restart: '🔄 Restart',
           home: '🏠 Home',
-          pointsShort: 'pts'
+          pointsShort: 'pts',
+          playerSingular: 'player',
+          playerPlural: 'players',
+          roundSingular: 'round',
+          roundPlural: 'rounds'
         },
         language: {
           pt: 'Portuguese',
@@ -233,16 +248,19 @@
         home: {
           subtitle: '🎭 The charades game',
           newGame: '🎮 New Game',
+          quickGame: '⚡ Quick Game',
           wordBank: '📝 Word Bank',
           settings: '⚙️ Settings',
           howToTitle: '🏆 How to play',
           howTo: {
-            mimeTitle: 'The Mime',
-            mimeDesc: 'Sees the word and acts it out without saying anything!',
-            timeTitle: 'The Time',
-            timeDesc: 'Try to guess it before the timer runs out!',
-            pointsTitle: 'The Points',
-            pointsDesc: 'Each correct answer is worth 10 points. Whoever has the most points wins!'
+            setupTitle: 'Set up the match',
+            setupDesc: 'Choose teams or free for all, then set rounds, difficulty, and categories.',
+            turnTitle: 'See it and act it out',
+            turnDesc: 'One player sees the word, memorizes it, and acts it out without speaking while everyone else guesses.',
+            timerTitle: 'Race against the clock',
+            timerDesc: 'The timer, hints, and alert sounds keep every turn fast, clear, and fun.',
+            winTitle: 'Score and win',
+            winDesc: 'Each correct answer is worth 10 points. At the end of the rounds, the scoreboard decides the winner.'
           }
         },
         setup: {
@@ -361,6 +379,9 @@
           defaultA: 'Team A',
           defaultB: 'Team B'
         },
+        players: {
+          defaultName: 'Player {number}'
+        },
         dynamic: {
           roundDisplay: ({ current, total }) => `Round ${current} of ${total}`,
           diffCount: ({ difficulty, count }) => `${difficulty} · ${count} available words`,
@@ -395,7 +416,11 @@
           continue: '▶️ Continuar',
           restart: '🔄 Reiniciar',
           home: '🏠 Inicio',
-          pointsShort: 'pts'
+          pointsShort: 'pts',
+          playerSingular: 'jugador',
+          playerPlural: 'jugadores',
+          roundSingular: 'ronda',
+          roundPlural: 'rondas'
         },
         language: {
           pt: 'Portugués',
@@ -416,16 +441,19 @@
         home: {
           subtitle: '🎭 El juego de la mímica',
           newGame: '🎮 Nueva Partida',
+          quickGame: '⚡ Juego Rápido',
           wordBank: '📝 Banco de Palabras',
           settings: '⚙️ Configuración',
           howToTitle: '🏆 Cómo jugar',
           howTo: {
-            mimeTitle: 'El mimo',
-            mimeDesc: 'Ve la palabra y la representa sin hablar.',
-            timeTitle: 'El tiempo',
-            timeDesc: 'Intenten adivinar antes de que termine el temporizador.',
-            pointsTitle: 'Los puntos',
-            pointsDesc: 'Cada acierto vale 10 puntos. ¡Quien tenga más puntos gana!'
+            setupTitle: 'Prepara la partida',
+            setupDesc: 'Elige entre equipos o todos contra todos y define rondas, dificultad y categorías.',
+            turnTitle: 'Mira y representa',
+            turnDesc: 'Un jugador ve la palabra, la memoriza y hace la mímica sin hablar mientras los demás intentan adivinar.',
+            timerTitle: 'Corre contra el tiempo',
+            timerDesc: 'El temporizador, las pistas y los sonidos de alerta hacen que cada turno sea rápido y divertido.',
+            winTitle: 'Suma puntos y gana',
+            winDesc: 'Cada acierto vale 10 puntos. Al final de las rondas, el marcador define al ganador.'
           }
         },
         setup: {
@@ -543,6 +571,9 @@
         teams: {
           defaultA: 'Equipo A',
           defaultB: 'Equipo B'
+        },
+        players: {
+          defaultName: 'Jugador {number}'
         },
         dynamic: {
           roundDisplay: ({ current, total }) => `Ronda ${current} de ${total}`,
@@ -1013,8 +1044,41 @@
       return t(`teams.default${team}`, {}, language);
     }
 
+    function getDefaultPlayerName(number, language = currentLanguage) {
+      return t('players.defaultName', { number }, language);
+    }
+
     function isDefaultTeamName(name, team) {
       return SUPPORTED_LANGUAGES.some(language => name === getDefaultTeamName(team, language));
+    }
+
+    function getDefaultSelectedCategories() {
+      return ['objects', 'actions', 'animals'];
+    }
+
+    function formatCount(count, singularKey, pluralKey) {
+      return `${count} ${t(count === 1 ? singularKey : pluralKey)}`;
+    }
+
+    function getQuickGamePlayerCount(config) {
+      return config.mode === 'teams'
+        ? (config.teams.A?.length || 0) + (config.teams.B?.length || 0)
+        : (config.players?.length || 0);
+    }
+
+    function getQuickGameSummary(config) {
+      const normalized = normalizeQuickGameConfig(config);
+      const modeLabel = normalized.mode === 'teams' ? t('setup.modeTeamsName') : t('setup.modeFfaName');
+      const playerCountLabel = formatCount(getQuickGamePlayerCount(normalized), 'common.playerSingular', 'common.playerPlural');
+      const categoriesLabel = normalized.selectedCategories.map(category => getCategoryLabel(category)).join(', ');
+      const roundsLabel = formatCount(normalized.rounds, 'common.roundSingular', 'common.roundPlural');
+      return [modeLabel, playerCountLabel, categoriesLabel, roundsLabel].join(' | ');
+    }
+
+    function renderQuickGameSummary() {
+      const summary = document.getElementById('quick-game-summary');
+      if (!summary) return;
+      summary.textContent = getQuickGameSummary(loadQuickGameConfig());
     }
 
     function syncTeamNamesForLanguage(previousLanguage, nextLanguage) {
@@ -1050,7 +1114,7 @@
       totalTurns: 0,
       turnsDone: 0,
       randomChallenge: false,
-      selectedCategories: ['objects', 'actions', 'animals']
+      selectedCategories: getDefaultSelectedCategories()
     };
 
     let wbDiff = 'easy';
@@ -1091,6 +1155,7 @@
 
     function refreshLocalizedUI() {
       applyTranslations();
+      renderQuickGameSummary();
       updateTeamLabels();
       renderCategorySelection();
       renderSetupPlayers();
@@ -1176,6 +1241,17 @@
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(collectSettings()));
     }
 
+    function detectBrowserLanguage() {
+      const browserLanguages = Array.isArray(navigator?.languages) && navigator.languages.length
+        ? navigator.languages
+        : [navigator?.language].filter(Boolean);
+      for (const language of browserLanguages) {
+        const normalized = String(language).toLowerCase().split('-')[0];
+        if (SUPPORTED_LANGUAGES.includes(normalized)) return normalized;
+      }
+      return DEFAULT_LANGUAGE;
+    }
+
     function initializeSettings() {
       const defaults = {
         timerDur: 60,
@@ -1187,10 +1263,13 @@
         language: DEFAULT_LANGUAGE
       };
 
-      let saved = defaults;
+      let rawSaved = null;
       try {
-        saved = { ...defaults, ...(JSON.parse(localStorage.getItem(SETTINGS_KEY) || 'null') || {}) };
+        rawSaved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || 'null');
       } catch (e) { }
+      const shouldAutoDetectLanguage = !rawSaved || !SUPPORTED_LANGUAGES.includes(rawSaved.language);
+      const resolvedLanguage = shouldAutoDetectLanguage ? detectBrowserLanguage() : rawSaved.language;
+      const saved = { ...defaults, ...(rawSaved || {}), language: resolvedLanguage };
 
       document.getElementById('timer-slider').value = saved.timerDur;
       document.getElementById('toggle-sound').checked = Boolean(saved.soundEnabled);
@@ -1201,6 +1280,7 @@
       document.getElementById('language-select').value = SUPPORTED_LANGUAGES.includes(saved.language) ? saved.language : DEFAULT_LANGUAGE;
       updateTimerLabel(saved.timerDur);
       setLanguage(saved.language || DEFAULT_LANGUAGE);
+      if (shouldAutoDetectLanguage) saveSettings();
     }
 
     // ============================================================
@@ -1275,13 +1355,14 @@
       `).join('');
     }
 
-    function selectMode(mode) {
+    function selectMode(mode, options = {}) {
+      const { skipLoadPlayers = false } = options;
       gameState.mode = mode;
       document.getElementById('mode-teams').classList.toggle('selected', mode === 'teams');
       document.getElementById('mode-ffa').classList.toggle('selected', mode === 'ffa');
       document.getElementById('step-teams').classList.toggle('hidden', mode !== 'teams');
       document.getElementById('step-ffa').classList.toggle('hidden', mode !== 'ffa');
-      loadPlayersForMode(mode);
+      if (!skipLoadPlayers) loadPlayersForMode(mode);
       updateTeamLabels();
       renderSetupPlayers();
     }
@@ -1373,6 +1454,98 @@
       renderFFAPlayers();
     }
 
+    function normalizeQuickGameConfig(config) {
+      const mode = config?.mode === 'teams' ? 'teams' : 'ffa';
+      const difficulty = DIFFICULTY_KEYS.includes(config?.difficulty) ? config.difficulty : 'easy';
+      const rounds = Math.min(5, Math.max(1, parseInt(config?.rounds, 10) || 3));
+      const selectedCategories = (Array.isArray(config?.selectedCategories) ? config.selectedCategories : [])
+        .filter(category => CATEGORY_KEYS.includes(category));
+      const teams = {
+        A: Array.isArray(config?.teams?.A) ? config.teams.A.map(name => String(name).trim()).filter(Boolean).slice(0, 3) : [],
+        B: Array.isArray(config?.teams?.B) ? config.teams.B.map(name => String(name).trim()).filter(Boolean).slice(0, 3) : []
+      };
+      const players = Array.isArray(config?.players)
+        ? config.players.map(name => String(name).trim()).filter(Boolean).slice(0, 6)
+        : [];
+      return {
+        mode,
+        difficulty,
+        rounds,
+        randomChallenge: Boolean(config?.randomChallenge),
+        selectedCategories: selectedCategories.length ? selectedCategories : getDefaultSelectedCategories(),
+        teams,
+        players,
+        teamNames: {
+          A: String(config?.teamNames?.A || getDefaultTeamName('A')).trim() || getDefaultTeamName('A'),
+          B: String(config?.teamNames?.B || getDefaultTeamName('B')).trim() || getDefaultTeamName('B')
+        }
+      };
+    }
+
+    function buildQuickGameConfig() {
+      return normalizeQuickGameConfig({
+        mode: gameState.mode,
+        difficulty: gameState.difficulty,
+        rounds: parseInt(document.getElementById('rounds-slider').value, 10) || gameState.totalRounds || 3,
+        randomChallenge: gameState.randomChallenge,
+        selectedCategories: [...gameState.selectedCategories],
+        teams: clone(gameState.teams),
+        players: (gameState.players || []).map(player => player.name || player),
+        teamNames: { ...gameState.teamNames }
+      });
+    }
+
+    function saveQuickGameConfig(config = buildQuickGameConfig()) {
+      localStorage.setItem(QUICK_GAME_KEY, JSON.stringify(normalizeQuickGameConfig(config)));
+      renderQuickGameSummary();
+    }
+
+    function getFirstAccessQuickGameConfig() {
+      return normalizeQuickGameConfig({
+        mode: 'ffa',
+        difficulty: 'easy',
+        rounds: 3,
+        randomChallenge: false,
+        selectedCategories: getDefaultSelectedCategories(),
+        teams: { A: [], B: [] },
+        players: [1, 2, 3, 4].map(number => getDefaultPlayerName(number)),
+        teamNames: {
+          A: getDefaultTeamName('A'),
+          B: getDefaultTeamName('B')
+        }
+      });
+    }
+
+    function loadQuickGameConfig() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(QUICK_GAME_KEY) || 'null');
+        if (saved) return normalizeQuickGameConfig(saved);
+      } catch (e) { }
+      return getFirstAccessQuickGameConfig();
+    }
+
+    function applyQuickGameConfig(config) {
+      const normalized = normalizeQuickGameConfig(config);
+      selectMode(normalized.mode, { skipLoadPlayers: true });
+      gameState.teams = clone(normalized.teams);
+      gameState.players = normalized.mode === 'ffa' ? [...normalized.players] : [];
+      gameState.teamNames = { ...normalized.teamNames };
+      gameState.randomChallenge = normalized.randomChallenge;
+      gameState.selectedCategories = [...normalized.selectedCategories];
+      document.getElementById('random-challenge-toggle').checked = normalized.randomChallenge;
+      document.getElementById('rounds-slider').value = String(normalized.rounds);
+      document.getElementById('rounds-val').textContent = String(normalized.rounds);
+      selectDifficulty(normalized.difficulty);
+      updateTeamLabels();
+      renderSetupPlayers();
+      renderCategorySelection();
+    }
+
+    function startQuickGame() {
+      applyQuickGameConfig(loadQuickGameConfig());
+      startGame();
+    }
+
     // ============================================================
     // START GAME
     // ============================================================
@@ -1413,6 +1586,7 @@
       gameState.usedWords = [];
       gameState.turnsDone = 0;
       gameState.totalTurns = gameState.players.length * rounds;
+      saveQuickGameConfig();
 
       const key = gameState.mode === 'teams' ? 'mm_last_teams' : 'mm_last_ffa';
       const toSave = gameState.mode === 'teams'
@@ -2063,7 +2237,7 @@
           totalTurns: 0,
           turnsDone: 0,
           randomChallenge: false,
-          selectedCategories: ['objects', 'actions', 'animals']
+          selectedCategories: getDefaultSelectedCategories()
         };
         selectMode('teams');
         selectDifficulty(prevDiff);
@@ -2109,6 +2283,10 @@
       }
 
       if (action === 'next-turn') return nextTurn();
+      if (action === 'quick-game') {
+        animateButtonClick(button);
+        return startQuickGame();
+      }
       if (action === 'add-team-player') return addTeamPlayer(team);
       if (action === 'add-ffa-player') return addFFAPlayer();
       if (action === 'start-game') {
