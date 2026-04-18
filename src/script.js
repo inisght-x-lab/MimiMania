@@ -11,6 +11,11 @@
     const CATEGORY_ICONS = { objects: '🧸', actions: '🏃', animals: '🐾', movies: '🎬', professions: '👔', celebrities: '⭐' };
     const DIFFICULTY_ICONS = { easy: '🌱', normal: '⚡', hard: '🔥' };
     const CORE_PACK_ID = 'core-default';
+    // Replace these placeholder URLs with your real donation pages.
+    const DONATION_LINKS = {
+      buyMeCoffee: 'https://buymeacoffee.com/your-page',
+      koFi: 'https://ko-fi.com/your-page'
+    };
     let currentLanguage = DEFAULT_LANGUAGE;
 
     function clone(value) {
@@ -57,6 +62,7 @@
           newGame: '🎮 Nova Partida',
           quickGame: '⚡ Jogo Rápido',
           wordBank: '📝 Banco de Palavras',
+          donate: '❤️ Doar',
           settings: '⚙️ Configurações',
           howToTitle: '🏆 Como jogar',
           howTo: {
@@ -173,6 +179,18 @@
           themeLabel: 'Tema visual',
           themeSub: 'Troque cores, transparências e tipografia da interface'
         },
+        donate: {
+          title: 'Apoie o MimiMania',
+          chooseTitle: '❤️ Escolha como doar',
+          subtitle: 'Selecione sua plataforma preferida para apoiar o jogo e ajudar a financiar novos packs de palavras, idiomas e melhorias.',
+          buyMeCoffee: 'Buy Me a Coffee',
+          buyMeCoffeeSub: 'Apoio rápido e direto com uma doação avulsa.',
+          koFi: 'Ko-fi',
+          koFiSub: 'Doe via Ko-fi e ajude o projeto a continuar crescendo.',
+          whyTitle: '🎭 Por que doar?',
+          whyLanguages: 'Seu apoio ajuda a financiar novos idiomas, packs de conteúdo e futuras expansões do banco de palavras.',
+          whyUpdates: 'Também ajuda a manter o MimiMania atualizado com polimento, ajustes de balanceamento e novos recursos.'
+        },
         theme: {
           cosmic: 'Cósmico',
           'liquid-glass': 'Outono',
@@ -208,7 +226,8 @@
           maxPlayers: '❌ Máximo 6 jogadores!',
           maxTeamPlayers: '❌ Máximo 3 por time!',
           minTeamPlayers: '❌ Mínimo 1 por time!',
-          minFfaPlayers: '❌ Mínimo 3 jogadores!'
+          minFfaPlayers: '❌ Mínimo 3 jogadores!',
+          donationLinkUnavailable: '⚠️ Configure o link de doação deste parceiro para ativá-lo.'
         },
         confirmations: {
           resetWords: 'Restaurar o banco de palavras padrão? Palavras customizadas serão perdidas.',
@@ -250,6 +269,7 @@
           newGame: '🎮 New Game',
           quickGame: '⚡ Quick Game',
           wordBank: '📝 Word Bank',
+          donate: '❤️ Donate',
           settings: '⚙️ Settings',
           howToTitle: '🏆 How to play',
           howTo: {
@@ -366,6 +386,18 @@
           themeLabel: 'Visual theme',
           themeSub: 'Change colors, transparencies, and interface typography'
         },
+        donate: {
+          title: 'Support MimiMania',
+          chooseTitle: '❤️ Choose how to donate',
+          subtitle: 'Pick your preferred platform to support the game and help fund new word packs, languages, and updates.',
+          buyMeCoffee: 'Buy Me a Coffee',
+          buyMeCoffeeSub: 'Fast one-time support through Buy Me a Coffee.',
+          koFi: 'Ko-fi',
+          koFiSub: 'Donate with Ko-fi and keep the project growing.',
+          whyTitle: '🎭 Why donate?',
+          whyLanguages: 'Your support helps fund new languages, content packs, and future word bank expansions.',
+          whyUpdates: 'It also helps keep MimiMania maintained with polish, balance tweaks, and new features.'
+        },
         theme: {
           cosmic: 'Cosmic',
           'liquid-glass': 'Autumn',
@@ -401,7 +433,8 @@
           maxPlayers: '❌ Maximum 6 players!',
           maxTeamPlayers: '❌ Maximum 3 per team!',
           minTeamPlayers: '❌ At least 1 per team!',
-          minFfaPlayers: '❌ At least 3 players!'
+          minFfaPlayers: '❌ At least 3 players!',
+          donationLinkUnavailable: '⚠️ Configure this partner donation link to enable it.'
         },
         confirmations: {
           resetWords: 'Restore the default word bank? Custom words will be lost.',
@@ -443,6 +476,7 @@
           newGame: '🎮 Nueva Partida',
           quickGame: '⚡ Juego Rápido',
           wordBank: '📝 Banco de Palabras',
+          donate: '❤️ Donar',
           settings: '⚙️ Configuración',
           howToTitle: '🏆 Cómo jugar',
           howTo: {
@@ -559,6 +593,18 @@
           themeLabel: 'Tema visual',
           themeSub: 'Cambia colores, transparencias y tipografía de la interfaz'
         },
+        donate: {
+          title: 'Apoya a MimiMania',
+          chooseTitle: '❤️ Elige cómo donar',
+          subtitle: 'Selecciona tu plataforma preferida para apoyar el juego y ayudar a financiar nuevos packs de palabras, idiomas y mejoras.',
+          buyMeCoffee: 'Buy Me a Coffee',
+          buyMeCoffeeSub: 'Apoyo rápido con una donación puntual a través de Buy Me a Coffee.',
+          koFi: 'Ko-fi',
+          koFiSub: 'Dona con Ko-fi y ayuda a que el proyecto siga creciendo.',
+          whyTitle: '🎭 ¿Por qué donar?',
+          whyLanguages: 'Tu apoyo ayuda a financiar nuevos idiomas, packs de contenido y futuras expansiones del banco de palabras.',
+          whyUpdates: 'También ayuda a mantener MimiMania con más pulido, ajustes de balance y nuevas funciones.'
+        },
         theme: {
           cosmic: 'Cósmico',
           'liquid-glass': 'Otoño',
@@ -594,7 +640,8 @@
           maxPlayers: '❌ ¡Máximo 6 jugadores!',
           maxTeamPlayers: '❌ ¡Máximo 3 por equipo!',
           minTeamPlayers: '❌ ¡Mínimo 1 por equipo!',
-          minFfaPlayers: '❌ ¡Mínimo 3 jugadores!'
+          minFfaPlayers: '❌ ¡Mínimo 3 jugadores!',
+          donationLinkUnavailable: '⚠️ Configura el enlace de donación de este socio para activarlo.'
         },
         confirmations: {
           resetWords: '¿Restaurar el banco de palabras predeterminado? Las palabras personalizadas se perderán.',
@@ -1214,6 +1261,25 @@
       el.style.color = textColor;
       el.classList.add('show');
       setTimeout(() => el.classList.remove('show'), 2400);
+    }
+
+    function getDonationUrl(platform) {
+      return DONATION_LINKS[platform] || '';
+    }
+
+    function isDonationUrlConfigured(url) {
+      return Boolean(url) && !/your-page/i.test(url);
+    }
+
+    function openDonationLink(platform) {
+      const url = getDonationUrl(platform);
+      if (!isDonationUrlConfigured(url)) {
+        showNotif(t('notifications.donationLinkUnavailable'), 'var(--accent2)', 'var(--text)');
+        return;
+      }
+
+      const openedWindow = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!openedWindow) window.location.href = url;
     }
 
     function applyTheme(theme = 'cosmic') {
@@ -2286,6 +2352,14 @@
       if (action === 'quick-game') {
         animateButtonClick(button);
         return startQuickGame();
+      }
+      if (action === 'donate-bmc') {
+        animateButtonClick(button);
+        return openDonationLink('buyMeCoffee');
+      }
+      if (action === 'donate-kofi') {
+        animateButtonClick(button);
+        return openDonationLink('koFi');
       }
       if (action === 'add-team-player') return addTeamPlayer(team);
       if (action === 'add-ffa-player') return addFFAPlayer();

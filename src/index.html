@@ -55,6 +55,7 @@
               <span class="btn-quick-game-summary" id="quick-game-summary">Free for All | 4 players | Objects, Actions, Animals | 3 rounds</span>
             </button>
             <button class="btn btn-ghost btn-lg btn-block" data-nav="wordbank" data-i18n="home.wordBank">📝 Banco de Palavras</button>
+            <button class="btn btn-ghost btn-lg btn-block" data-nav="donate" data-i18n="home.donate">❤️ Donate</button>
             <button class="btn btn-ghost btn-lg btn-block" data-nav="settings" data-i18n="home.settings">⚙️ Configurações</button>
           </div>
         </div>
@@ -527,6 +528,53 @@
               <option value="liquid-glass" data-i18n="theme.liquid-glass">Outono</option>
               <option value="material3" data-i18n="theme.material3">Primavera</option>
             </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DONATE ========== -->
+  <div class="screen" id="screen-donate">
+    <div class="page-shell">
+      <header class="page-header page-header-tight">
+        <button class="btn btn-ghost btn-sm" data-nav="home" data-i18n="common.back">← Voltar</button>
+        <h1 class="page-title" data-i18n="donate.title">Support MimiMania</h1>
+      </header>
+      <div class="donate-layout">
+        <div class="card">
+          <h2 class="card-title" data-i18n="donate.chooseTitle">❤️ Choose how to donate</h2>
+          <p class="text-sm mb" data-i18n="donate.subtitle">Pick your preferred platform to support the game and help fund new word packs, languages, and updates.</p>
+          <div class="donate-grid">
+            <button class="donate-option" data-action="donate-bmc">
+              <span class="donate-option-badge">☕</span>
+              <span class="donate-option-copy">
+                <span class="donate-option-title" data-i18n="donate.buyMeCoffee">Buy Me a Coffee</span>
+                <span class="donate-option-sub" data-i18n="donate.buyMeCoffeeSub">Fast one-time support through Buy Me a Coffee.</span>
+              </span>
+              <span class="donate-option-arrow">↗</span>
+            </button>
+            <button class="donate-option" data-action="donate-kofi">
+              <span class="donate-option-badge">🎁</span>
+              <span class="donate-option-copy">
+                <span class="donate-option-title" data-i18n="donate.koFi">Ko-fi</span>
+                <span class="donate-option-sub" data-i18n="donate.koFiSub">Donate with Ko-fi and keep the project growing.</span>
+              </span>
+              <span class="donate-option-arrow">↗</span>
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <h2 class="card-title card-title-sm" data-i18n="donate.whyTitle">🎭 Why donate?</h2>
+          <div class="how-to-list">
+            <div class="media-row media-row-start">
+              <div class="emoji-lg emoji-fixed">🌍</div>
+              <div class="text-sm" data-i18n="donate.whyLanguages">Your support helps fund new languages, content packs, and future word bank expansions.</div>
+            </div>
+            <div class="media-row media-row-start">
+              <div class="emoji-lg emoji-fixed">🛠️</div>
+              <div class="text-sm" data-i18n="donate.whyUpdates">It also helps keep MimiMania maintained with polish, balance tweaks, and new features.</div>
+            </div>
           </div>
         </div>
       </div>

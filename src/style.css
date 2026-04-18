@@ -168,9 +168,15 @@
       gap: 20px;
     }
 
+    .donate-layout {
+      display: grid;
+      gap: 20px;
+    }
+
     .wordbank-filter-card,
     .wordbank-list-card,
-    .wordbank-add-card {
+    .wordbank-add-card,
+    .donate-layout > .card {
       height: 100%;
     }
 
@@ -314,6 +320,74 @@
 
     .btn-nowrap {
       white-space: nowrap;
+    }
+
+    .donate-option {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 18px 20px;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      background: var(--surface-bg);
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 800;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .donate-option:hover {
+      transform: translateY(-1px);
+      background: var(--surface-bg-hover);
+      border-color: var(--accent4);
+      box-shadow: var(--shadow);
+    }
+
+    .donate-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .donate-option-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: var(--tag-bg);
+      font-size: 1.5rem;
+      box-shadow: inset 0 0 0 1px var(--card-border);
+    }
+
+    .donate-option-copy {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .donate-option-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--text);
+    }
+
+    .donate-option-sub {
+      color: var(--text3);
+      font-size: 0.92rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .donate-option-arrow {
+      color: var(--accent4);
+      font-size: 1.1rem;
+      font-weight: 900;
     }
 
     .btn-team-a {
