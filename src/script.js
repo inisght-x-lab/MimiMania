@@ -11,10 +11,11 @@
     const CATEGORY_ICONS = { objects: '🧸', actions: '🏃', animals: '🐾', movies: '🎬', professions: '👔', celebrities: '⭐' };
     const DIFFICULTY_ICONS = { easy: '🌱', normal: '⚡', hard: '🔥' };
     const CORE_PACK_ID = 'core-default';
-    // Replace these placeholder URLs with your real donation pages.
+    const KO_FI_WIDGET_SCRIPT_URL = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
+    const KO_FI_SLUG = 'insightxlabgamestudio';
     const DONATION_LINKS = {
-      buyMeCoffee: 'https://buymeacoffee.com/your-page',
-      koFi: 'https://ko-fi.com/your-page'
+      buyMeCoffee: 'https://buymeacoffee.com/insight.x.lab.game.studio',
+      koFi: `https://ko-fi.com/${KO_FI_SLUG}`
     };
     let currentLanguage = DEFAULT_LANGUAGE;
 
@@ -867,57 +868,265 @@
       'Faça a mímica como se estivesse sendo observado por uma plateia gigante', 'Faça a mímica como se fosse a última chance de ganhar o jogo'
     ];
 
-    const SAMPLE_WORDS_EN = {
+    const DEFAULT_WORDS_EN = {
       easy: {
-        objects: ['Ball', 'Cup', 'Book'],
-        actions: ['Run', 'Jump', 'Sleep'],
-        animals: ['Dog', 'Cat', 'Fish'],
-        movies: ['Titanic', 'Frozen', 'Shrek'],
-        professions: ['Doctor', 'Teacher', 'Pilot'],
-        celebrities: ['Taylor Swift', 'Messi', 'Beyonce']
+        objects: [
+          'Ball', 'Cup', 'Hat', 'Shoe', 'Book', 'Chair', 'Table', 'Bed', 'Door', 'Window',
+          'Pencil', 'Eraser', 'Backpack', 'Glasses', 'Umbrella', 'Phone', 'Mirror', 'Brush', 'Comb', 'Scissors',
+          'Key', 'Fork', 'Spoon', 'Plate', 'Bottle', 'Pillow', 'Blanket', 'Towel', 'Soap', 'Balloon',
+          'Doll', 'Toy car', 'Popcorn', 'Ice cream', 'Cake', 'Apple', 'Banana', 'Grapes', 'Flower', 'Tree',
+          'Sun', 'Moon', 'Star', 'Cloud', 'Rain', 'Wardrobe', 'Cabinet', 'Refrigerator', 'Stove', 'Television'
+        ],
+        actions: [
+          'Run', 'Jump', 'Sleep', 'Eat', 'Drink', 'Laugh', 'Cry', 'Dance', 'Sing', 'Swim',
+          'Fly', 'Walk', 'Sit', 'Stand up', 'Hug', 'Play', 'Draw', 'Paint', 'Read', 'Write',
+          'Listen', 'Shout', 'Blow', 'Breathe', 'Cough', 'Sneeze', 'Yawn', 'Clap', 'Wave', 'Point',
+          'Grab', 'Throw', 'Kick', 'Push', 'Pull', 'Open', 'Close', 'Wash hands', 'Brush teeth', 'Comb hair',
+          'Put on shoes', 'Take off shoes', 'Turn on TV', 'Turn off the light', 'Clap hands', 'Spin', 'Roll', 'Kiss', 'Smile', 'Think'
+        ],
+        animals: [
+          'Dog', 'Cat', 'Fish', 'Bird', 'Rabbit', 'Chicken', 'Cow', 'Horse', 'Pig', 'Sheep',
+          'Duck', 'Frog', 'Butterfly', 'Ant', 'Bee', 'Spider', 'Earthworm', 'Slug', 'Snail', 'Caterpillar',
+          'Elephant', 'Lion', 'Giraffe', 'Monkey', 'Zebra', 'Hippopotamus', 'Crocodile', 'Turtle', 'Penguin', 'Bear',
+          'Wolf', 'Fox', 'Deer', 'Squirrel', 'Mouse', 'Hamster', 'Iguana', 'Parrot', 'Toucan', 'Flamingo',
+          'Pelican', 'Kangaroo', 'Koala', 'Panda', 'Dolphin', 'Whale', 'Octopus', 'Crab', 'Shrimp', 'Starfish'
+        ],
+        movies: [
+          'Titanic', 'Avatar', 'The Lion King', 'Toy Story', 'Frozen', 'Shrek', 'Harry Potter', 'Spider-Man', 'Batman', 'Superman',
+          'Jurassic Park', 'The Avengers', 'Star Wars', 'Minions', 'Cars', 'Finding Nemo', 'Inside Out', 'Aladdin',
+          'Cinderella', 'Snow White', 'The Matrix', 'Gladiator', 'E.T.', 'King Kong', 'Godzilla', 'Black Panther', 'Iron Man',
+          'Captain America', 'Thor', 'Hulk', 'Deadpool', 'Venom', 'Transformers', 'Pirates of the Caribbean', 'Jumanji',
+          'Mission: Impossible', '007', 'Rocky', 'Rambo', 'The Karate Kid', 'Gremlins', 'Ghostbusters', 'Scooby-Doo', 'Madagascar',
+          'Kung Fu Panda', 'Monsters, Inc.', 'Up', 'Encanto', 'Moana', 'Zootopia'
+        ],
+        professions: [
+          'Doctor', 'Dentist', 'Teacher', 'Police officer', 'Firefighter', 'Driver', 'Cook', 'Waiter', 'Baker', 'Mail carrier',
+          'Mechanic', 'Engineer', 'Lawyer', 'Nurse', 'Veterinarian', 'Pilot', 'Hairdresser', 'Barber', 'Actor', 'Singer',
+          'Dancer', 'Cleaner', 'Security guard', 'Farmer', 'Fisherman', 'Electrician', 'Bricklayer', 'Painter', 'Gardener',
+          'Taxi driver', 'Delivery driver', 'Salesperson', 'Cashier', 'Secretary', 'Receptionist', 'Coach', 'Personal trainer', 'Babysitter',
+          'Caregiver', 'Janitor', 'Garbage collector', 'Gas station attendant', 'Bus driver', 'Truck driver', 'Tour guide', 'Photographer',
+          'Reporter', 'Radio host', 'Checkout operator', 'Instructor'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.easy.celebrities]
       },
       normal: {
-        objects: ['Computer', 'Camera', 'Backpack'],
-        actions: ['Cook', 'Drive', 'Paint'],
-        animals: ['Eagle', 'Shark', 'Panda'],
-        movies: ['Inception', 'Interstellar', 'Joker'],
-        professions: ['Designer', 'Chef', 'Lawyer'],
-        celebrities: ['Zendaya', 'Keanu Reeves', 'Dua Lipa']
+        objects: [
+          'Computer', 'Keyboard', 'Radio', 'Washing machine', 'Vacuum cleaner', 'Blender', 'Mixer', 'Coffee maker', 'Sofa', 'Shelf',
+          'Fan', 'Air conditioner', 'Microwave', 'Oven', 'Sink', 'Bathtub', 'Shower', 'Suitcase', 'Flashlight', 'Binoculars',
+          'Camera', 'Clock', 'Calculator', 'Thermometer', 'Scale', 'Compass', 'Acoustic guitar', 'Piano', 'Drum', 'Flute',
+          'Accordion', 'Trumpet', 'Violin', 'Harmonica', 'Xylophone', 'Racket', 'Skateboard', 'Roller skates', 'Boxing glove', 'Helmet',
+          'Vest', 'Belt', 'Tie', 'Bag', 'Umbrella', 'Cane', 'Crutch', 'Wheelchair', 'Sunglasses', 'Cap'
+        ],
+        actions: [
+          'Cook', 'Drive', 'Ride a bike', 'Fish', 'Dive', 'Climb', 'Camp', 'Do yoga', 'Meditate', 'Take photos',
+          'Film', 'Paint a picture', 'Sculpt', 'Knit', 'Sew', 'Embroider', 'Garden', 'Water plants', 'Prune a tree', 'Sweep',
+          'Clean a window', 'Iron clothes', 'Fold clothes', 'Make the bed', 'Wash dishes', 'Dry dishes', 'Peel fruit', 'Grate cheese',
+          'Knead bread', 'Row', 'Surf', 'Ski', 'Skate', 'Dribble', 'Throw', 'Block a goal', 'Serve in tennis',
+          'Exercise', 'Applaud', 'Give a speech', 'Interview', 'Climb a wall', 'Do magic', 'Balance', 'Juggle',
+          'Type', 'Make a phone call', 'Take a selfie', 'Pay a bill', 'Wait in line'
+        ],
+        animals: [
+          'Eagle', 'Falcon', 'Owl', 'Bat', 'Camel', 'Llama', 'Alpaca', 'Bison', 'Moose', 'Coyote',
+          'Cheetah', 'Leopard', 'Jaguar', 'Puma', 'Rhinoceros', 'Anaconda', 'Platypus', 'Dingo', 'Cockatoo', 'Emu',
+          'Orca', 'Shark', 'Stingray', 'Squid', 'Seahorse', 'Sea urchin', 'Macaw', 'Peacock', 'Ostrich', 'Cassowary',
+          'Albatross', 'Stork', 'Pelican', 'Ibis', 'Heron', 'Otter', 'Seal', 'Walrus', 'Sea lion', 'Dugong',
+          'Mountain goat', 'Ibex', 'Antelope', 'Wildebeest', 'Buffalo', 'Boar', 'Badger', 'Raccoon', 'Ferret', 'Shrew'
+        ],
+        movies: [
+          'Interstellar', 'Inception', 'Dune', 'Fight Club', 'Pulp Fiction', 'The Wolf of Wall Street', 'Joker', 'Parasite',
+          'The Great Gatsby', 'Django Unchained', 'Inglourious Basterds', 'Whiplash', 'La La Land', 'Black Swan', 'The Shining',
+          'Doctor Strange', 'Guardians of the Galaxy', 'Captain Marvel', 'Logan', 'John Wick', 'The Matrix Reloaded', 'The Matrix Revolutions',
+          'The Revenant', 'Gravity', 'Mad Max: Fury Road', 'Blade Runner 2049', 'The Terminator', 'Back to the Future',
+          'The Sixth Sense', 'The Truman Show', 'The Mummy', 'The Da Vinci Code', 'Angels & Demons', 'The Hunger Games', 'Twilight',
+          'It', 'The Conjuring', 'Annabelle', 'The Nun', 'Saw', 'Get Out', 'Us', 'Split', 'Glass',
+          'Fast & Furious', 'Top Gun', 'Mission: Impossible - Fallout', 'Kingsman', 'Sherlock Holmes', 'Man of Steel'
+        ],
+        professions: [
+          'Programmer', 'Designer', 'Architect', 'Nutritionist', 'Psychologist', 'Psychiatrist', 'Physical therapist', 'Pharmacist',
+          'Biologist', 'Chemist', 'Physicist', 'Geologist', 'Astronomer', 'Translator', 'Interpreter', 'Video editor', 'Film director',
+          'Music producer', 'DJ', 'YouTuber', 'Influencer', 'Streamer', 'Advertiser', 'Copywriter', 'Systems analyst',
+          'Administrator', 'Accountant', 'Economist', 'Real estate agent', 'Insurance broker', 'Investigator', 'Detective',
+          'Forensic expert', 'Auditor', 'Consultant', 'Coach', 'Sports coach', 'Professional athlete', 'Surfer',
+          'Football player', 'Fighter', 'Choreographer', 'Makeup artist', 'Esthetician', 'Tattoo artist', 'Illustrator', 'Animator',
+          'Game designer', 'Screenwriter', 'Voice actor'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.normal.celebrities]
       },
       hard: {
-        objects: ['Microscope', 'Compass', 'Telescope'],
-        actions: ['Juggle', 'Skydive', 'Meditate'],
-        animals: ['Axolotl', 'Narwhal', 'Tarantula'],
-        movies: ['Memento', 'Parasite', 'Whiplash'],
-        professions: ['Neurosurgeon', 'Astronomer', 'Architect'],
-        celebrities: ['Cillian Murphy', 'Pedro Almodovar', 'Fei-Fei Li']
+        objects: [
+          'Stethoscope', 'Scalpel', 'Microscope', 'Telescope', 'Sextant', 'Astrolabe', 'Stopwatch', 'Metronome', 'Tuner', 'Defibrillator',
+          'Catapult', 'Periscope', 'Distiller', 'Centrifuge', 'Incubator', 'Autoclave', 'Spectrometer', 'Chromatograph', 'Calorimeter', 'Potentiometer',
+          'Slingshot', 'Harpoon', 'Boomerang', 'Bow and arrow', 'Crossbow', 'Spear', 'Mace', 'Axe', 'Sickle', 'Trident',
+          'Sandwich maker', 'Food dehydrator', 'Fermenter', 'Slow cooker', 'Wok', 'Tagine', 'Fondue set', 'Barbecue grill', 'Smoker', 'Still',
+          'Theodolite', 'Altimeter', 'Barometer', 'Hygrometer', 'Anemometer', 'Rain gauge', 'Seismograph', 'Generator', 'Transformer', 'Oscilloscope'
+        ],
+        actions: [
+          'Balance on a tightrope', 'Swallow fire', 'Escape from a straitjacket', 'Break bricks with your hand',
+          'Walk on hot coals', 'Read braille', 'Use diving hand signals', 'Communicate in sign language', 'Use Morse code', 'Play an instrument with your feet',
+          'Pull a tooth', 'Perform surgery', 'Resuscitate', 'Immobilize a fracture', 'Apply a tourniquet',
+          'Fence', 'Practice tai chi', 'Do a karate strike', 'Throw a hammer', 'Olympic javelin throw',
+          'Plow the land', 'Milk a cow', 'Shear a sheep', 'Shoe a horse', 'Tame an ox',
+          'Weave on a loom', 'Blow glass', 'Forge metal', 'Shape pottery on a wheel', 'Restore a painting',
+          'Take off in an airplane', 'Land a helicopter', 'Sail a sailboat', 'Operate a crane', 'Drive a train',
+          'Rappel', 'Rock climb', 'Zipline', 'Free climb', 'Slackline',
+          'Defuse a bomb', 'Negotiate with hostages', 'Skydive', 'Obstacle race', 'Olympic weightlifting'
+        ],
+        animals: [
+          'Axolotl', 'Tarsier', 'Fossa', 'Quokka', 'Numbat', 'Kakapo', 'Tuatara', 'Okapi', 'Takin', 'Saiga',
+          'Dugong', 'Manatee', 'Narwhal', 'Beluga', 'Sperm whale', 'Fin whale', 'Humpback whale', 'River dolphin', 'Porpoise', 'Franciscana',
+          'Scorpion', 'Tarantula', 'Black mamba', 'Taipan', 'Coral snake', 'Viper', 'Rattlesnake', 'Boomslang', 'Giant squid', 'Blue-ringed octopus',
+          'Pufferfish', 'Stonefish', 'Lionfish', 'Cone snail', 'Box jellyfish', 'Asian giant hornet', 'Bombardier beetle', 'Tiger mosquito', 'Bullet ant', 'Fire caterpillar',
+          'Pangolin', 'Aye-aye', 'Slow loris', 'Three-banded armadillo', 'Giant armadillo', 'Giant anteater', 'Three-toed sloth', 'Pygmy hedgehog', 'Elephant shrew', 'Pine marten'
+        ],
+        movies: [
+          'The Lighthouse', 'Hereditary', 'Midsommar', 'The Witch', 'The Killing of a Sacred Deer', 'The Lobster', 'Dogville', 'Antichrist',
+          'Melancholia', 'The Tree of Life', 'Synecdoche, New York', 'Donnie Darko', 'The Double', 'Enemy', 'Ex Machina', 'Annihilation',
+          'Coherence', 'Primer', 'Arrival', 'Moon', 'Solaris', 'Stalker', 'Mirror', 'Persona', 'The Seventh Seal', 'Memento',
+          'Mulholland Drive', 'Blue Velvet', 'Eraserhead', 'The Fountain', 'The Well', 'The Platform', 'Climax', 'Irreversible',
+          'Enter the Void', 'The Host', 'Oldboy', 'Memories of Murder', 'The Handmaiden', 'Drive', 'Only God Forgives', 'The Master',
+          'Magnolia', 'There Will Be Blood', 'The Hunt', 'Neighbouring Sounds', 'Bacurau', 'The Wolf Behind the Door', 'The Second Mother'
+        ],
+        professions: [
+          'Neurosurgeon', 'Oncologist', 'Anesthesiologist', 'Cardiologist', 'Orthopedist', 'Endocrinologist', 'Gynecologist', 'Urologist',
+          'Radiologist', 'Pathologist', 'Epidemiologist', 'Bioinformatician', 'Data engineer', 'Data scientist', 'Aerospace engineer',
+          'Nuclear engineer', 'Petroleum engineer', 'Cybersecurity specialist', 'Software architect', 'DevOps engineer', 'Product manager',
+          'Scrum master', 'UX researcher', 'UX designer', 'UI designer', 'SEO specialist', 'Trader', 'Financial analyst',
+          'Investment manager', 'Actuary', 'Diplomat', 'Consul', 'Ambassador', 'Museum curator', 'Art conservator', 'Archaeologist',
+          'Paleontologist', 'Oceanographer', 'Meteorologist', 'Fighter pilot', 'Air traffic controller', 'Ship captain', 'Sommelier',
+          'Master brewer', 'Executive chef', 'Perfumer', 'Automotive designer', 'Robotics engineer', 'AI specialist'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.hard.celebrities]
       }
     };
 
-    const SAMPLE_WORDS_ES = {
+    const DEFAULT_WORDS_ES = {
       easy: {
-        objects: ['Pelota', 'Taza', 'Libro'],
-        actions: ['Correr', 'Saltar', 'Dormir'],
-        animals: ['Perro', 'Gato', 'Pez'],
-        movies: ['Titanic', 'Frozen', 'Shrek'],
-        professions: ['Doctor', 'Profesor', 'Piloto'],
-        celebrities: ['Taylor Swift', 'Messi', 'Shakira']
+        objects: [
+          'Pelota', 'Vaso', 'Sombrero', 'Zapato', 'Libro', 'Silla', 'Mesa', 'Cama', 'Puerta', 'Ventana',
+          'Lápiz', 'Borrador', 'Mochila', 'Gafas', 'Paraguas', 'Teléfono', 'Espejo', 'Cepillo', 'Peine', 'Tijeras',
+          'Llave', 'Tenedor', 'Cuchara', 'Plato', 'Botella', 'Almohada', 'Manta', 'Toalla', 'Jabón', 'Globo',
+          'Muñeca', 'Carrito', 'Palomitas', 'Helado', 'Pastel', 'Manzana', 'Banana', 'Uvas', 'Flor', 'Árbol',
+          'Sol', 'Luna', 'Estrella', 'Nube', 'Lluvia', 'Armario', 'Gabinete', 'Refrigerador', 'Estufa', 'Televisión'
+        ],
+        actions: [
+          'Correr', 'Saltar', 'Dormir', 'Comer', 'Beber', 'Reír', 'Llorar', 'Bailar', 'Cantar', 'Nadar',
+          'Volar', 'Caminar', 'Sentarse', 'Levantarse', 'Abrazar', 'Jugar', 'Dibujar', 'Pintar', 'Leer', 'Escribir',
+          'Escuchar', 'Gritar', 'Soplar', 'Respirar', 'Toser', 'Estornudar', 'Bostezar', 'Aplaudir', 'Saludar', 'Señalar',
+          'Agarrar', 'Lanzar', 'Patear', 'Empujar', 'Jalar', 'Abrir', 'Cerrar', 'Lavar las manos', 'Cepillarse los dientes', 'Peinarse',
+          'Ponerse los zapatos', 'Quitarse los zapatos', 'Encender la TV', 'Apagar la luz', 'Dar palmadas', 'Girar', 'Rodar', 'Besar', 'Sonreír', 'Pensar'
+        ],
+        animals: [
+          'Perro', 'Gato', 'Pez', 'Pájaro', 'Conejo', 'Gallina', 'Vaca', 'Caballo', 'Cerdo', 'Oveja',
+          'Pato', 'Rana', 'Mariposa', 'Hormiga', 'Abeja', 'Araña', 'Lombriz', 'Babosa', 'Caracol', 'Oruga',
+          'Elefante', 'León', 'Jirafa', 'Mono', 'Cebra', 'Hipopótamo', 'Cocodrilo', 'Tortuga', 'Pingüino', 'Oso',
+          'Lobo', 'Zorro', 'Ciervo', 'Ardilla', 'Ratón', 'Hámster', 'Iguana', 'Loro', 'Tucán', 'Flamenco',
+          'Pelícano', 'Canguro', 'Koala', 'Panda', 'Delfín', 'Ballena', 'Pulpo', 'Cangrejo', 'Camarón', 'Estrella de mar'
+        ],
+        movies: [
+          'Titanic', 'Avatar', 'El Rey León', 'Toy Story', 'Frozen', 'Shrek', 'Harry Potter', 'Spider-Man', 'Batman', 'Superman',
+          'Jurassic Park', 'Los Vengadores', 'Star Wars', 'Minions', 'Cars', 'Buscando a Nemo', 'Intensamente', 'Aladdín',
+          'Cenicienta', 'Blancanieves', 'Matrix', 'Gladiador', 'E.T.', 'King Kong', 'Godzilla', 'Pantera Negra', 'Iron Man',
+          'Capitán América', 'Thor', 'Hulk', 'Deadpool', 'Venom', 'Transformers', 'Piratas del Caribe', 'Jumanji',
+          'Misión: Imposible', '007', 'Rocky', 'Rambo', 'Karate Kid', 'Gremlins', 'Ghostbusters', 'Scooby-Doo', 'Madagascar',
+          'Kung Fu Panda', 'Monsters, Inc.', 'Up', 'Encanto', 'Moana', 'Zootopia'
+        ],
+        professions: [
+          'Médico', 'Dentista', 'Profesor', 'Policía', 'Bombero', 'Conductor', 'Cocinero', 'Mesero', 'Panadero', 'Cartero',
+          'Mecánico', 'Ingeniero', 'Abogado', 'Enfermero', 'Veterinario', 'Piloto', 'Peluquero', 'Barbero', 'Actor', 'Cantante',
+          'Bailarín', 'Personal de limpieza', 'Guardia de seguridad', 'Agricultor', 'Pescador', 'Electricista', 'Albañil', 'Pintor', 'Jardinero',
+          'Taxista', 'Repartidor', 'Vendedor', 'Cajero', 'Secretaria', 'Recepcionista', 'Entrenador', 'Entrenador personal', 'Niñera',
+          'Cuidador', 'Conserje', 'Basurero', 'Gasolinero', 'Conductor de autobús', 'Conductor de camión', 'Guía turístico', 'Fotógrafo',
+          'Reportero', 'Locutor', 'Operador de caja', 'Instructor'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.easy.celebrities]
       },
       normal: {
-        objects: ['Computadora', 'Camara', 'Mochila'],
-        actions: ['Cocinar', 'Conducir', 'Pintar'],
-        animals: ['Aguila', 'Tiburon', 'Panda'],
-        movies: ['Origen', 'Interestelar', 'Joker'],
-        professions: ['Disenador', 'Chef', 'Abogado'],
-        celebrities: ['Zendaya', 'Keanu Reeves', 'Dua Lipa']
+        objects: [
+          'Computadora', 'Teclado', 'Radio', 'Lavadora', 'Aspiradora', 'Licuadora', 'Batidora', 'Cafetera', 'Sofá', 'Estantería',
+          'Ventilador', 'Aire acondicionado', 'Microondas', 'Horno', 'Fregadero', 'Bañera', 'Ducha', 'Maleta', 'Linterna', 'Binoculares',
+          'Cámara', 'Reloj', 'Calculadora', 'Termómetro', 'Báscula', 'Brújula', 'Guitarra', 'Piano', 'Tambor', 'Flauta',
+          'Acordeón', 'Trompeta', 'Violín', 'Armónica', 'Xilófono', 'Raqueta', 'Patineta', 'Patines', 'Guante de boxeo', 'Casco',
+          'Chaleco', 'Cinturón', 'Corbata', 'Bolsa', 'Paraguas', 'Bastón', 'Muleta', 'Silla de ruedas', 'Gafas de sol', 'Gorra'
+        ],
+        actions: [
+          'Cocinar', 'Conducir', 'Andar en bicicleta', 'Pescar', 'Bucear', 'Escalar', 'Acampar', 'Hacer yoga', 'Meditar', 'Fotografiar',
+          'Filmar', 'Pintar un cuadro', 'Esculpir', 'Tejer', 'Coser', 'Bordar', 'Hacer jardinería', 'Regar plantas', 'Podar un árbol', 'Barrer',
+          'Limpiar una ventana', 'Planchar ropa', 'Doblar ropa', 'Hacer la cama', 'Lavar los platos', 'Secar los platos', 'Pelar fruta', 'Rallar queso',
+          'Amasar pan', 'Remar', 'Surfear', 'Esquiar', 'Patinar', 'Driblar', 'Lanzar', 'Atajar un gol', 'Sacar en tenis',
+          'Hacer ejercicio', 'Aplaudir', 'Dar un discurso', 'Entrevistar', 'Escalar un muro', 'Hacer magia', 'Equilibrarse', 'Hacer malabares',
+          'Teclear', 'Llamar por teléfono', 'Tomarse una selfie', 'Pagar una cuenta', 'Hacer fila'
+        ],
+        animals: [
+          'Águila', 'Halcón', 'Búho', 'Murciélago', 'Camello', 'Llama', 'Alpaca', 'Bisonte', 'Alce', 'Coyote',
+          'Guepardo', 'Leopardo', 'Jaguar', 'Puma', 'Rinoceronte', 'Anaconda', 'Ornitorrinco', 'Dingo', 'Cacatúa', 'Emú',
+          'Orca', 'Tiburón', 'Raya', 'Calamar', 'Caballito de mar', 'Erizo de mar', 'Guacamayo', 'Pavo real', 'Avestruz', 'Casuario',
+          'Albatros', 'Cigüeña', 'Pelícano', 'Ibis', 'Garza', 'Nutria', 'Foca', 'Morsa', 'León marino', 'Dugongo',
+          'Cabra montés', 'Íbice', 'Antílope', 'Ñu', 'Búfalo', 'Jabalí', 'Tejón', 'Mapache', 'Hurón', 'Musaraña'
+        ],
+        movies: [
+          'Interestelar', 'Origen', 'Duna', 'El club de la pelea', 'Pulp Fiction', 'El lobo de Wall Street', 'Joker', 'Parásitos',
+          'El gran Gatsby', 'Django sin cadenas', 'Bastardos sin gloria', 'Whiplash', 'La La Land', 'El cisne negro', 'El resplandor',
+          'Doctor Strange', 'Guardianes de la Galaxia', 'Capitana Marvel', 'Logan', 'John Wick', 'Matrix recargado', 'Matrix revoluciones',
+          'El renacido', 'Gravedad', 'Mad Max: Furia en el camino', 'Blade Runner 2049', 'Terminator', 'Volver al futuro',
+          'El sexto sentido', 'El show de Truman', 'La momia', 'El código Da Vinci', 'Ángeles y demonios', 'Los juegos del hambre', 'Crepúsculo',
+          'It', 'El conjuro', 'Annabelle', 'La monja', 'Saw', '¡Huye!', 'Nosotros', 'Fragmentado', 'Glass',
+          'Rápidos y furiosos', 'Top Gun', 'Misión: Imposible - Repercusión', 'Kingsman', 'Sherlock Holmes', 'El hombre de acero'
+        ],
+        professions: [
+          'Programador', 'Diseñador', 'Arquitecto', 'Nutricionista', 'Psicólogo', 'Psiquiatra', 'Fisioterapeuta', 'Farmacéutico',
+          'Biólogo', 'Químico', 'Físico', 'Geólogo', 'Astrónomo', 'Traductor', 'Intérprete', 'Editor de video', 'Director de cine',
+          'Productor musical', 'DJ', 'Youtuber', 'Influencer', 'Streamer', 'Publicista', 'Redactor', 'Analista de sistemas',
+          'Administrador', 'Contador', 'Economista', 'Agente inmobiliario', 'Corredor de seguros', 'Investigador', 'Detective',
+          'Perito criminal', 'Auditor', 'Consultor', 'Coach', 'Entrenador deportivo', 'Atleta profesional', 'Surfista',
+          'Futbolista', 'Luchador', 'Coreógrafo', 'Maquillador', 'Esteticista', 'Tatuador', 'Ilustrador', 'Animador',
+          'Diseñador de videojuegos', 'Guionista', 'Actor de doblaje'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.normal.celebrities]
       },
       hard: {
-        objects: ['Microscopio', 'Brujula', 'Telescopio'],
-        actions: ['Malabarear', 'Paracaidismo', 'Meditar'],
-        animals: ['Ajolote', 'Narval', 'Tarantula'],
-        movies: ['Memento', 'Parasitos', 'Whiplash'],
-        professions: ['Neurocirujano', 'Astronomo', 'Arquitecto'],
-        celebrities: ['Cillian Murphy', 'Pedro Almodovar', 'Fei-Fei Li']
+        objects: [
+          'Estetoscopio', 'Bisturí', 'Microscopio', 'Telescopio', 'Sextante', 'Astrolabio', 'Cronómetro', 'Metrónomo', 'Afinador', 'Desfibrilador',
+          'Catapulta', 'Periscopio', 'Destilador', 'Centrífuga', 'Incubadora', 'Autoclave', 'Espectrómetro', 'Cromatógrafo', 'Calorímetro', 'Potenciómetro',
+          'Tirachinas', 'Arpón', 'Bumerán', 'Arco y flecha', 'Ballesta', 'Lanza', 'Maza', 'Hacha', 'Hoz', 'Tridente',
+          'Sandwichera', 'Deshidratador', 'Fermentador', 'Olla de cocción lenta', 'Wok', 'Tajín', 'Fondue', 'Parrilla', 'Ahumador', 'Alambique',
+          'Teodolito', 'Altímetro', 'Barómetro', 'Higrómetro', 'Anemómetro', 'Pluviómetro', 'Sismógrafo', 'Generador', 'Transformador', 'Osciloscopio'
+        ],
+        actions: [
+          'Equilibrarse en la cuerda floja', 'Tragar fuego', 'Escapar de una camisa de fuerza', 'Romper ladrillos con la mano',
+          'Caminar sobre brasas', 'Leer braille', 'Hacer señales de buceo', 'Comunicarse en lengua de señas', 'Usar código morse', 'Tocar un instrumento con los pies',
+          'Sacar un diente', 'Hacer cirugía', 'Reanimar', 'Inmovilizar una fractura', 'Aplicar un torniquete',
+          'Hacer esgrima', 'Practicar tai chi', 'Dar un golpe de karate', 'Lanzamiento de martillo', 'Lanzamiento olímpico de jabalina',
+          'Arar la tierra', 'Ordeñar una vaca', 'Esquilar una oveja', 'Herrar un caballo', 'Domar un buey',
+          'Tejer en telar', 'Soplar vidrio', 'Forjar metal', 'Moldear cerámica en torno', 'Restaurar una pintura',
+          'Despegar un avión', 'Aterrizar un helicóptero', 'Navegar un velero', 'Operar una grúa', 'Conducir un tren',
+          'Hacer rápel', 'Escalar roca', 'Tirolesa', 'Escalada libre', 'Hacer slackline',
+          'Desactivar una bomba', 'Negociar rehenes', 'Hacer paracaidismo', 'Carrera de obstáculos', 'Levantamiento de pesas olímpico'
+        ],
+        animals: [
+          'Ajolote', 'Tarsero', 'Fosa', 'Quokka', 'Numbat', 'Kakapo', 'Tuátara', 'Okapi', 'Takin', 'Saiga',
+          'Dugongo', 'Manatí', 'Narval', 'Beluga', 'Cachalote', 'Rorcual', 'Ballena jorobada', 'Delfín de río', 'Marsopa', 'Franciscana',
+          'Escorpión', 'Tarántula', 'Mamba negra', 'Taipán', 'Serpiente coral', 'Víbora', 'Cascabel', 'Boomslang', 'Calamar gigante', 'Pulpo de anillos azules',
+          'Pez globo', 'Pez piedra', 'Pez león', 'Caracol cono', 'Medusa de caja', 'Avispón asiático', 'Escarabajo bombardero', 'Mosquito tigre', 'Hormiga bala', 'Oruga de fuego',
+          'Pangolín', 'Aye-aye', 'Loris lento', 'Armadillo de tres bandas', 'Armadillo gigante', 'Oso hormiguero gigante', 'Perezoso de tres dedos', 'Erizo pigmeo', 'Musaraña elefante', 'Marta'
+        ],
+        movies: [
+          'El faro', 'Hereditary', 'Midsommar', 'La bruja', 'El sacrificio del ciervo sagrado', 'La langosta', 'Dogville', 'Anticristo',
+          'Melancolía', 'El árbol de la vida', 'Sinécdoque, Nueva York', 'Donnie Darko', 'El doble', 'Enemy', 'Ex Machina', 'Aniquilación',
+          'Coherence', 'Primer', 'La llegada', 'Moon', 'Solaris', 'Stalker', 'El espejo', 'Persona', 'El séptimo sello', 'Memento',
+          'Mulholland Drive', 'Terciopelo azul', 'Eraserhead', 'La fuente de la vida', 'El pozo', 'La plataforma', 'Climax', 'Irreversible',
+          'Enter the Void', 'El huésped', 'Oldboy', 'Memorias de un asesino', 'La doncella', 'Drive', 'Only God Forgives', 'The Master',
+          'Magnolia', 'Pozos de ambición', 'La cacería', 'Sonidos de barrio', 'Bacurau', 'El lobo detrás de la puerta', 'Una segunda madre'
+        ],
+        professions: [
+          'Neurocirujano', 'Oncólogo', 'Anestesista', 'Cardiólogo', 'Ortopedista', 'Endocrinólogo', 'Ginecólogo', 'Urólogo',
+          'Radiólogo', 'Patólogo', 'Epidemiólogo', 'Bioinformático', 'Ingeniero de datos', 'Científico de datos', 'Ingeniero aeroespacial',
+          'Ingeniero nuclear', 'Ingeniero petrolero', 'Especialista en ciberseguridad', 'Arquitecto de software', 'Ingeniero DevOps', 'Gerente de producto',
+          'Scrum Master', 'Investigador UX', 'Diseñador UX', 'Diseñador UI', 'Especialista en SEO', 'Trader', 'Analista financiero',
+          'Gestor de inversiones', 'Actuario', 'Diplomático', 'Cónsul', 'Embajador', 'Curador de museo', 'Restaurador de arte', 'Arqueólogo',
+          'Paleontólogo', 'Oceanógrafo', 'Meteorólogo', 'Piloto de combate', 'Controlador aéreo', 'Capitán de barco', 'Sommelier',
+          'Maestro cervecero', 'Chef ejecutivo', 'Perfumista', 'Diseñador automotriz', 'Ingeniero robótico', 'Especialista en IA'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.hard.celebrities]
       }
     };
 
@@ -952,8 +1161,8 @@
         enabled: true,
         words: {
           pt: clone(DEFAULT_WORDS_PT),
-          en: clone(SAMPLE_WORDS_EN),
-          es: clone(SAMPLE_WORDS_ES)
+          en: clone(DEFAULT_WORDS_EN),
+          es: clone(DEFAULT_WORDS_ES)
         },
         challenges: {
           pt: clone(CHALLENGES_PT),
@@ -983,6 +1192,50 @@
       };
     }
 
+    function mergeUniqueStrings(primary = [], secondary = []) {
+      return [...new Set([...(primary || []), ...(secondary || [])].map(item => String(item).trim()).filter(Boolean))];
+    }
+
+    function mergeWordBanks(baseBank = {}, savedBank = {}) {
+      const normalizedBase = normalizeWordBank(baseBank);
+      const normalizedSaved = normalizeWordBank(savedBank);
+      const merged = createEmptyWordBank();
+
+      DIFFICULTY_KEYS.forEach(diff => {
+        CATEGORY_KEYS.forEach(cat => {
+          merged[diff][cat] = mergeUniqueStrings(normalizedBase[diff][cat], normalizedSaved[diff][cat]);
+        });
+      });
+
+      return merged;
+    }
+
+    function mergeCorePack(savedPack = {}) {
+      const defaultCore = normalizePack(createCorePack());
+      const merged = {
+        ...defaultCore,
+        ...savedPack,
+        id: CORE_PACK_ID,
+        source: 'builtin',
+        editable: savedPack?.editable !== false,
+        enabled: savedPack?.enabled !== false,
+        words: {},
+        challenges: {}
+      };
+
+      const locales = new Set([
+        ...Object.keys(defaultCore.words || {}),
+        ...Object.keys(savedPack.words || {})
+      ]);
+
+      locales.forEach(locale => {
+        merged.words[locale] = mergeWordBanks(defaultCore.words?.[locale], savedPack.words?.[locale]);
+        merged.challenges[locale] = mergeUniqueStrings(defaultCore.challenges?.[locale], savedPack.challenges?.[locale]);
+      });
+
+      return normalizePack(merged);
+    }
+
     function createDefaultContentModel() {
       return {
         version: 1,
@@ -994,9 +1247,15 @@
       try {
         const saved = JSON.parse(localStorage.getItem(CONTENT_KEY) || 'null');
         if (saved?.packs?.length) {
+          const normalizedPacks = saved.packs.map(pack => (
+            pack?.id === CORE_PACK_ID ? mergeCorePack(pack) : normalizePack(pack)
+          ));
+          if (!normalizedPacks.some(pack => pack.id === CORE_PACK_ID)) {
+            normalizedPacks.unshift(normalizePack(createCorePack()));
+          }
           return {
             version: 1,
-            packs: saved.packs.map(normalizePack)
+            packs: normalizedPacks
           };
         }
       } catch (e) { }
@@ -1271,15 +1530,141 @@
       return Boolean(url) && !/your-page/i.test(url);
     }
 
+    function openExternalUrl(url) {
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function loadExternalScript(src, scriptId) {
+      return new Promise((resolve, reject) => {
+        const existingScript = document.getElementById(scriptId);
+        if (existingScript) {
+          if (existingScript.dataset.loaded === 'true') {
+            resolve();
+            return;
+          }
+          existingScript.addEventListener('load', () => resolve(), { once: true });
+          existingScript.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true });
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = src;
+        script.async = true;
+        script.onload = () => {
+          script.dataset.loaded = 'true';
+          resolve();
+        };
+        script.onerror = () => reject(new Error(`Failed to load ${src}`));
+        document.body.appendChild(script);
+      });
+    }
+
+    function openBuyMeACoffeeDonation() {
+      const donationUrl = getDonationUrl('buyMeCoffee');
+      if (isDonationUrlConfigured(donationUrl)) {
+        openExternalUrl(donationUrl);
+        return;
+      }
+
+      showNotif(t('notifications.donationLinkUnavailable'), 'var(--accent2)', 'var(--text)');
+    }
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function getKoFiWidgetTrigger() {
+      const selectors = [
+        'div[class*="kofi"] button',
+        'div[class*="kofi"] a',
+        'button[aria-label*="Support me"]',
+        'button[title*="Support me"]',
+        'a[aria-label*="Ko-fi"]',
+        'a[href*="ko-fi.com"]'
+      ];
+
+      for (const selector of selectors) {
+        const candidate = document.querySelector(selector);
+        if (candidate) return candidate;
+      }
+
+      return Array.from(document.querySelectorAll('button, a')).find(el => {
+        const text = (el.textContent || '').trim();
+        const href = (el.getAttribute('href') || '').trim();
+        const className = typeof el.className === 'string' ? el.className : '';
+        return /support me/i.test(text) || /ko-?fi/i.test(text) || /ko-?fi/i.test(href) || /kofi/i.test(className);
+      }) || null;
+    }
+
+    async function ensureKoFiWidgetReady() {
+      await loadExternalScript(KO_FI_WIDGET_SCRIPT_URL, 'kofi-widget-script');
+      if (!window.kofiWidgetOverlay?.draw) throw new Error('Ko-fi widget API unavailable');
+
+      if (!window.__mmKoFiWidgetInitialized) {
+        window.kofiWidgetOverlay.draw(KO_FI_SLUG, {
+          type: 'floating-chat',
+          'floating-chat.donateButton.text': 'Support me',
+          'floating-chat.donateButton.background-color': '#323842',
+          'floating-chat.donateButton.text-color': '#fff'
+        });
+        window.__mmKoFiWidgetInitialized = true;
+      }
+    }
+
+    async function triggerKoFiWidget() {
+      for (let attempt = 0; attempt < 10; attempt += 1) {
+        const trigger = getKoFiWidgetTrigger();
+        if (trigger) {
+          trigger.click();
+          return true;
+        }
+        await wait(120);
+      }
+      return false;
+    }
+
+    async function openKoFiDonation() {
+      try {
+        await ensureKoFiWidgetReady();
+        if (await triggerKoFiWidget()) return;
+      } catch (error) {
+        console.warn('Ko-fi widget could not be initialized.', error);
+      }
+
+      const fallbackUrl = getDonationUrl('koFi');
+      if (isDonationUrlConfigured(fallbackUrl)) {
+        openExternalUrl(fallbackUrl);
+        return;
+      }
+
+      showNotif(t('notifications.donationLinkUnavailable'), 'var(--accent2)', 'var(--text)');
+    }
+
     function openDonationLink(platform) {
+      if (platform === 'buyMeCoffee') {
+        openBuyMeACoffeeDonation();
+        return;
+      }
+      if (platform === 'koFi') {
+        openKoFiDonation();
+        return;
+      }
+
       const url = getDonationUrl(platform);
       if (!isDonationUrlConfigured(url)) {
         showNotif(t('notifications.donationLinkUnavailable'), 'var(--accent2)', 'var(--text)');
         return;
       }
 
-      const openedWindow = window.open(url, '_blank', 'noopener,noreferrer');
-      if (!openedWindow) window.location.href = url;
+      openExternalUrl(url);
     }
 
     function applyTheme(theme = 'cosmic') {
