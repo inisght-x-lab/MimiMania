@@ -54,7 +54,7 @@
               <span data-i18n="home.quickGame">⚡ Jogo Rápido</span>
               <span class="btn-quick-game-summary" id="quick-game-summary">Free for All | 4 players | Objects, Actions, Animals | 3 rounds</span>
             </button>
-            <button class="btn btn-ghost btn-lg btn-block" data-nav="wordbank" data-i18n="home.wordBank">📝 Banco de Palavras</button>
+            <button class="btn btn-ghost btn-lg btn-block" data-nav="wordbank" data-i18n="home.wordBank">🧩 Conteúdo e Expansões</button>
             <button class="btn btn-ghost btn-lg btn-block" data-nav="donate" data-i18n="home.donate">❤️ Donate</button>
             <button class="btn btn-ghost btn-lg btn-block" data-nav="settings" data-i18n="home.settings">⚙️ Configurações</button>
           </div>
@@ -369,7 +369,7 @@
     <div class="page-shell">
       <header class="page-header page-header-tight">
         <button class="btn btn-ghost btn-sm" data-nav="home" data-i18n="common.back">← Voltar</button>
-        <h1 class="page-title" data-i18n="wordbank.title">Banco de Palavras</h1>
+        <h1 class="page-title" data-i18n="wordbank.title">Conteúdo e Expansões</h1>
       </header>
       <div class="wordbank-layout">
         <div class="wordbank-sidebar">
@@ -434,6 +434,27 @@
             <button class="btn btn-ghost btn-sm" data-action="reset-words" data-i18n="wordbank.resetButton">↺ Restaurar</button>
           </div>
           <div class="words-container" id="words-list"></div>
+        </div>
+
+        <!-- ADD CORE CHALLENGE -->
+        <div class="card wordbank-challenge-add-card">
+          <h2 class="card-title card-title-sm" data-i18n="wordbank.addChallengeTitle">🎯 Adicionar Desafio</h2>
+          <div class="flex-col">
+            <input class="inp" id="inp-new-challenge" placeholder="Digite o desafio..." data-enter-submit="add-challenge"
+              data-i18n-placeholder="wordbank.newChallengePlaceholder">
+            <button class="btn btn-secondary btn-block" data-action="add-challenge" data-i18n="wordbank.addChallengeButton">➕ Adicionar Desafio</button>
+          </div>
+        </div>
+
+        <!-- CORE CHALLENGES -->
+        <div class="card wordbank-challenges-card">
+          <div class="action-row action-row-between mb">
+            <h2 class="card-title card-title-sm card-title-inline">
+              <span data-i18n="wordbank.challengesTitle">🎯 Desafios Core</span> (<span id="challenge-count">0</span>)
+            </h2>
+            <button class="btn btn-ghost btn-sm" data-action="reset-challenges" data-i18n="wordbank.resetButton">↺ Restaurar</button>
+          </div>
+          <div class="words-container challenges-container" id="challenges-list"></div>
         </div>
 
         <!-- INSTALL WORD PACK -->
@@ -572,6 +593,13 @@
               <option value="liquid-glass" data-i18n="theme.liquid-glass">Outono</option>
               <option value="material3" data-i18n="theme.material3">Primavera</option>
             </select>
+          </div>
+        </div>
+        <div class="card settings-reset-card">
+          <h2 class="card-title" data-i18n="settings.resetAllTitle">🧹 Restaurar aplicação</h2>
+          <div class="flex-col">
+            <p class="text-sm text-muted" data-i18n="settings.resetAllSub">Remove configurações, jogadores salvos, packs instalados e o user_id deste dispositivo.</p>
+            <button class="btn btn-danger btn-block" data-action="reset-app-defaults" data-i18n="settings.resetAllButton">Restaurar tudo</button>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@
     const LEGACY_WORDS_KEY = 'mm_words_v2';
     const QUICK_GAME_KEY = 'mm_quick_game_v1';
     const USER_ID_KEY = 'mm_user_id_v1';
+    const APP_STORAGE_PREFIX = 'mm_';
     const AVAILABLE_THEMES = ['cosmic', 'liquid-glass', 'material3'];
     const SUPPORTED_LANGUAGES = ['pt', 'en', 'es'];
     const LANGUAGE_HTML_MAP = { pt: 'pt-BR', en: 'en', es: 'es' };
@@ -97,7 +98,7 @@
           subtitle: '🎭 O jogo da mímica',
           newGame: '🎮 Nova Partida',
           quickGame: '⚡ Jogo Rápido',
-          wordBank: '📝 Banco de Palavras',
+          wordBank: '🧩 Conteúdo e Expansões',
           donate: '❤️ Doar',
           settings: '⚙️ Configurações',
           howToTitle: '🏆 Como jogar',
@@ -188,13 +189,17 @@
           tie: 'EMPATE!'
         },
         wordbank: {
-          title: 'Banco de Palavras',
+          title: 'Conteúdo e Expansões',
           addTitle: '➕ Adicionar Palavra',
           newWordPlaceholder: 'Digite a palavra...',
           addToDifficulty: 'Será adicionada à dificuldade:',
           addButton: '➕ Adicionar Palavra',
           listTitle: '📋 Palavras',
           resetButton: '↺ Restaurar',
+          challengesTitle: '🎯 Desafios Core',
+          addChallengeTitle: '🎯 Adicionar Desafio',
+          newChallengePlaceholder: 'Digite o desafio...',
+          addChallengeButton: '➕ Adicionar Desafio',
           installPackTitle: '📦 Instalar pack',
           installPackSub: 'Envie o arquivo .json comprado para liberar novas palavras neste dispositivo.',
           selectPackFile: '📁 Escolher arquivo',
@@ -234,7 +239,10 @@
           shuffleWordsSub: 'Ordem aleatória a cada jogo',
           appearanceTitle: '🎨 Aparência',
           themeLabel: 'Tema visual',
-          themeSub: 'Troque cores, transparências e tipografia da interface'
+          themeSub: 'Troque cores, transparências e tipografia da interface',
+          resetAllTitle: '🧹 Restaurar aplicação',
+          resetAllSub: 'Remove configurações, jogadores salvos, packs instalados e o user_id deste dispositivo.',
+          resetAllButton: 'Restaurar tudo'
         },
         donate: {
           title: 'Apoie o MimiMania',
@@ -282,11 +290,15 @@
           playerAdded: ({ name }) => `✅ ${name} entrou!`,
           packInstalled: ({ name }) => `✅ Pack "${name}" instalado!`,
           packWordsSummary: ({ count }) => `${count} palavra${count !== 1 ? 's' : ''}`,
-          packVersion: ({ version }) => `v${version}`
+          packVersion: ({ version }) => `v${version}`,
+          challengeAdded: ({ challenge }) => `✅ Desafio "${challenge}" adicionado!`
         },
         notifications: {
           duplicateWord: '⚠️ Palavra já existe!',
+          duplicateChallenge: '⚠️ Desafio já existe!',
           bankRestored: '✅ Banco restaurado!',
+          challengeRemoved: 'Desafio removido.',
+          challengesRestored: '✅ Desafios restaurados!',
           userIdCopied: '🪪 user_id copiado!',
           packInstallReading: 'Lendo arquivo...',
           packInstallSuccess: '✅ Pack instalado e ativado!',
@@ -306,6 +318,8 @@
         },
         confirmations: {
           resetWords: 'Restaurar o banco de palavras padrão? Palavras customizadas serão perdidas.',
+          resetChallenges: 'Restaurar os desafios padrão? Desafios customizados serão perdidos.',
+          resetAppDefaults: 'Restaurar toda a aplicação para o padrão? Configurações, jogadores salvos, packs instalados e user_id serão apagados.',
           restartGame: 'Reiniciar o jogo? Todo o progresso será perdido.',
           replacePack: ({ packName }) => `Já existe um pack instalado com este ID (${packName}). Substituir?`,
           removePack: ({ packName }) => `Remover o pack "${packName}" deste dispositivo?`
@@ -358,7 +372,7 @@
           subtitle: '🎭 The charades game',
           newGame: '🎮 New Game',
           quickGame: '⚡ Quick Game',
-          wordBank: '📝 Word Bank',
+          wordBank: '🧩 Content & Expansions',
           donate: '❤️ Donate',
           settings: '⚙️ Settings',
           howToTitle: '🏆 How to play',
@@ -449,13 +463,17 @@
           tie: 'TIE!'
         },
         wordbank: {
-          title: 'Word Bank',
+          title: 'Content & Expansions',
           addTitle: '➕ Add Word',
           newWordPlaceholder: 'Type the word...',
           addToDifficulty: 'It will be added to difficulty:',
           addButton: '➕ Add Word',
           listTitle: '📋 Words',
           resetButton: '↺ Restore',
+          challengesTitle: '🎯 Core Challenges',
+          addChallengeTitle: '🎯 Add Challenge',
+          newChallengePlaceholder: 'Type the challenge...',
+          addChallengeButton: '➕ Add Challenge',
           installPackTitle: '📦 Install pack',
           installPackSub: 'Upload the purchased .json file to unlock new words on this device.',
           selectPackFile: '📁 Choose file',
@@ -495,7 +513,10 @@
           shuffleWordsSub: 'Random order every game',
           appearanceTitle: '🎨 Appearance',
           themeLabel: 'Visual theme',
-          themeSub: 'Change colors, transparencies, and interface typography'
+          themeSub: 'Change colors, transparencies, and interface typography',
+          resetAllTitle: '🧹 Reset application',
+          resetAllSub: 'Removes settings, saved players, installed packs, and this device user_id.',
+          resetAllButton: 'Reset everything'
         },
         donate: {
           title: 'Support MimiMania',
@@ -543,11 +564,15 @@
           playerAdded: ({ name }) => `✅ ${name} joined!`,
           packInstalled: ({ name }) => `✅ Pack "${name}" installed!`,
           packWordsSummary: ({ count }) => `${count} word${count !== 1 ? 's' : ''}`,
-          packVersion: ({ version }) => `v${version}`
+          packVersion: ({ version }) => `v${version}`,
+          challengeAdded: ({ challenge }) => `✅ Challenge "${challenge}" added!`
         },
         notifications: {
           duplicateWord: '⚠️ Word already exists!',
+          duplicateChallenge: '⚠️ Challenge already exists!',
           bankRestored: '✅ Word bank restored!',
+          challengeRemoved: 'Challenge removed.',
+          challengesRestored: '✅ Challenges restored!',
           userIdCopied: '🪪 user_id copied!',
           packInstallReading: 'Reading file...',
           packInstallSuccess: '✅ Pack installed and enabled!',
@@ -567,6 +592,8 @@
         },
         confirmations: {
           resetWords: 'Restore the default word bank? Custom words will be lost.',
+          resetChallenges: 'Restore the default challenges? Custom challenges will be lost.',
+          resetAppDefaults: 'Reset the entire application to defaults? Settings, saved players, installed packs, and user_id will be erased.',
           restartGame: 'Restart the game? All progress will be lost.',
           replacePack: ({ packName }) => `A pack with this ID is already installed (${packName}). Replace it?`,
           removePack: ({ packName }) => `Remove the pack "${packName}" from this device?`
@@ -619,7 +646,7 @@
           subtitle: '🎭 El juego de la mímica',
           newGame: '🎮 Nueva Partida',
           quickGame: '⚡ Juego Rápido',
-          wordBank: '📝 Banco de Palabras',
+          wordBank: '🧩 Contenido y Expansiones',
           donate: '❤️ Donar',
           settings: '⚙️ Configuración',
           howToTitle: '🏆 Cómo jugar',
@@ -710,13 +737,17 @@
           tie: '¡EMPATE!'
         },
         wordbank: {
-          title: 'Banco de Palabras',
+          title: 'Contenido y Expansiones',
           addTitle: '➕ Añadir Palabra',
           newWordPlaceholder: 'Escribe la palabra...',
           addToDifficulty: 'Se añadirá a la dificultad:',
           addButton: '➕ Añadir Palabra',
           listTitle: '📋 Palabras',
           resetButton: '↺ Restaurar',
+          challengesTitle: '🎯 Desafíos Core',
+          addChallengeTitle: '🎯 Añadir Desafío',
+          newChallengePlaceholder: 'Escribe el desafío...',
+          addChallengeButton: '➕ Añadir Desafío',
           installPackTitle: '📦 Instalar pack',
           installPackSub: 'Sube el archivo .json comprado para desbloquear nuevas palabras en este dispositivo.',
           selectPackFile: '📁 Elegir archivo',
@@ -756,7 +787,10 @@
           shuffleWordsSub: 'Orden aleatorio en cada partida',
           appearanceTitle: '🎨 Apariencia',
           themeLabel: 'Tema visual',
-          themeSub: 'Cambia colores, transparencias y tipografía de la interfaz'
+          themeSub: 'Cambia colores, transparencias y tipografía de la interfaz',
+          resetAllTitle: '🧹 Restaurar aplicación',
+          resetAllSub: 'Elimina configuración, jugadores guardados, packs instalados y el user_id de este dispositivo.',
+          resetAllButton: 'Restaurar todo'
         },
         donate: {
           title: 'Apoya a MimiMania',
@@ -804,11 +838,15 @@
           playerAdded: ({ name }) => `✅ ${name} se unió!`,
           packInstalled: ({ name }) => `✅ Pack "${name}" instalado!`,
           packWordsSummary: ({ count }) => `${count} palabra${count !== 1 ? 's' : ''}`,
-          packVersion: ({ version }) => `v${version}`
+          packVersion: ({ version }) => `v${version}`,
+          challengeAdded: ({ challenge }) => `✅ Desafío "${challenge}" añadido!`
         },
         notifications: {
           duplicateWord: '⚠️ ¡La palabra ya existe!',
+          duplicateChallenge: '⚠️ ¡El desafío ya existe!',
           bankRestored: '✅ ¡Banco restaurado!',
+          challengeRemoved: 'Desafío eliminado.',
+          challengesRestored: '✅ ¡Desafíos restaurados!',
           userIdCopied: '🪪 ¡user_id copiado!',
           packInstallReading: 'Leyendo archivo...',
           packInstallSuccess: '✅ ¡Pack instalado y activado!',
@@ -828,6 +866,8 @@
         },
         confirmations: {
           resetWords: '¿Restaurar el banco de palabras predeterminado? Las palabras personalizadas se perderán.',
+          resetChallenges: '¿Restaurar los desafíos predeterminados? Los desafíos personalizados se perderán.',
+          resetAppDefaults: '¿Restaurar toda la aplicación a los valores predeterminados? Se eliminarán configuración, jugadores guardados, packs instalados y user_id.',
           restartGame: '¿Reiniciar el juego? Todo el progreso se perderá.',
           replacePack: ({ packName }) => `Ya existe un pack instalado con este ID (${packName}). ¿Reemplazarlo?`,
           removePack: ({ packName }) => `¿Eliminar el pack "${packName}" de este dispositivo?`
@@ -1419,6 +1459,7 @@
         enabled: pack?.enabled !== false,
         installedAt: pack?.installedAt || '',
         license: pack?.license || null,
+        challengeOverrides: (pack?.challengeOverrides && typeof pack.challengeOverrides === 'object') ? pack.challengeOverrides : {},
         words: normalizedWords,
         challenges: normalizedChallenges
       };
@@ -1538,12 +1579,16 @@
 
       const locales = new Set([
         ...Object.keys(defaultCore.words || {}),
-        ...Object.keys(savedPack.words || {})
+        ...Object.keys(savedPack.words || {}),
+        ...Object.keys(defaultCore.challenges || {}),
+        ...Object.keys(savedPack.challenges || {})
       ]);
 
       locales.forEach(locale => {
         merged.words[locale] = mergeWordBanks(defaultCore.words?.[locale], savedPack.words?.[locale]);
-        merged.challenges[locale] = mergeUniqueStrings(defaultCore.challenges?.[locale], savedPack.challenges?.[locale]);
+        merged.challenges[locale] = savedPack.challengeOverrides?.[locale]
+          ? normalizeChallenges(savedPack.challenges?.[locale] || [])
+          : mergeUniqueStrings(defaultCore.challenges?.[locale], savedPack.challenges?.[locale]);
       });
 
       return normalizePack(merged);
@@ -1644,8 +1689,12 @@
     }
 
     function getLocalizedChallenges(locale = currentLanguage) {
-      let list = [];
-      getEnabledPacks().forEach(pack => {
+      const corePack = getCorePack();
+      let list = normalizeChallenges(corePack.challenges?.[locale] || []);
+      if (!list.length && !corePack.challengeOverrides?.[locale]) {
+        list = normalizeChallenges(createCorePack().challenges?.[locale] || []);
+      }
+      getPremiumPacks().forEach(pack => {
         list = ensureUniqueWords([...list, ...normalizeChallenges(pack.challenges?.[locale] || [])]);
       });
       return list;
@@ -1746,6 +1795,10 @@
     function getDifficultyLabel(diff, withIcon = false) {
       const label = t(`difficulty.${diff}`);
       return withIcon ? `${DIFFICULTY_ICONS[diff] || ''} ${label}`.trim() : label;
+    }
+
+    function getDefaultCoreChallenges(locale = currentLanguage) {
+      return normalizeChallenges(createCorePack().challenges?.[locale] || []);
     }
 
     function getCoreWordsForCategory(category, diff = 'easy', locale = currentLanguage) {
@@ -1902,6 +1955,7 @@
       syncWBDiffUI();
       syncWBCatUI();
       renderWordBank();
+      renderChallengeBank();
       renderInstalledPacks();
       renderPackPreview();
       renderUserId();
@@ -1935,6 +1989,7 @@
         syncWBDiffUI();
         syncWBCatUI();
         renderWordBank();
+        renderChallengeBank();
         renderInstalledPacks();
         renderPackPreview();
       }
@@ -3400,6 +3455,43 @@
       document.getElementById('word-count').textContent = entries.length;
     }
 
+    function getCoreChallengeList(locale = currentLanguage) {
+      const pack = getCorePack();
+      ensurePackLocale(pack, locale);
+      const list = normalizeChallenges(pack.challenges?.[locale] || []);
+      return list.length || pack.challengeOverrides?.[locale] ? list : getDefaultCoreChallenges(locale);
+    }
+
+    function setCoreChallengeList(list, locale = currentLanguage) {
+      const pack = getCorePack();
+      ensurePackLocale(pack, locale);
+      pack.challenges[locale] = ensureUniqueWords(normalizeChallenges(list));
+      pack.challengeOverrides = pack.challengeOverrides || {};
+      pack.challengeOverrides[locale] = true;
+      saveContentModel();
+    }
+
+    function renderChallengeBank() {
+      const cont = document.getElementById('challenges-list');
+      const countEl = document.getElementById('challenge-count');
+      if (!cont || !countEl) return;
+      const challenges = getCoreChallengeList();
+      cont.innerHTML = '';
+      challenges.forEach((challenge, index) => {
+        const tag = document.createElement('span');
+        tag.className = 'word-tag';
+        const text = document.createTextNode(`🎯 ${challenge} `);
+        const removeBtn = document.createElement('span');
+        removeBtn.className = 'del-btn';
+        removeBtn.dataset.action = 'remove-challenge';
+        removeBtn.dataset.index = String(index);
+        removeBtn.textContent = '✕';
+        tag.append(text, removeBtn);
+        cont.appendChild(tag);
+      });
+      countEl.textContent = challenges.length;
+    }
+
     function addWord() {
       const inp = document.getElementById('inp-new-word');
       const category = document.getElementById('inp-word-cat').value;
@@ -3422,6 +3514,22 @@
       showNotif(t('dynamic.wordAdded', { word, difficulty: getDifficultyLabel(wbDiff, true) }));
     }
 
+    function addChallenge() {
+      const inp = document.getElementById('inp-new-challenge');
+      const challenge = inp.value.trim();
+      if (!challenge) return;
+      const challenges = getCoreChallengeList();
+      if (challenges.includes(challenge)) {
+        showNotif(t('notifications.duplicateChallenge'), 'var(--accent2)', 'var(--text)');
+        return;
+      }
+
+      setCoreChallengeList([...challenges, challenge]);
+      inp.value = '';
+      renderChallengeBank();
+      showNotif(t('dynamic.challengeAdded', { challenge }));
+    }
+
     function removeWord(category, diff, packId, idx) {
       const pack = contentModel.packs.find(item => item.id === packId);
       if (!pack || pack.editable === false) return;
@@ -3430,6 +3538,28 @@
       saveContentModel();
       renderWordBank();
       updateDiffWordCount();
+    }
+
+    function removeChallenge(idx) {
+      const challenges = getCoreChallengeList();
+      if (idx < 0 || idx >= challenges.length) return;
+      challenges.splice(idx, 1);
+      setCoreChallengeList(challenges);
+      renderChallengeBank();
+      showNotif(t('notifications.challengeRemoved'));
+    }
+
+    function resetChallenges() {
+      if (confirm(t('confirmations.resetChallenges'))) {
+        const pack = getCorePack();
+        ensurePackLocale(pack, currentLanguage);
+        pack.challenges[currentLanguage] = getDefaultCoreChallenges();
+        pack.challengeOverrides = pack.challengeOverrides || {};
+        delete pack.challengeOverrides[currentLanguage];
+        saveContentModel();
+        renderChallengeBank();
+        showNotif(t('notifications.challengesRestored'));
+      }
     }
 
     function resetWords() {
@@ -3442,9 +3572,27 @@
         };
         saveContentModel();
         renderWordBank();
+        renderChallengeBank();
         updateDiffWordCount();
         showNotif(t('notifications.bankRestored'));
       }
+    }
+
+    function clearAppStorage(storage) {
+      if (!storage) return;
+      const keys = [];
+      for (let i = 0; i < storage.length; i += 1) {
+        const key = storage.key(i);
+        if (key?.startsWith(APP_STORAGE_PREFIX)) keys.push(key);
+      }
+      keys.forEach(key => storage.removeItem(key));
+    }
+
+    function resetAppDefaults() {
+      if (!confirm(t('confirmations.resetAppDefaults'))) return;
+      clearAppStorage(localStorage);
+      clearAppStorage(sessionStorage);
+      window.location.reload();
     }
 
     // ============================================================
@@ -3520,6 +3668,7 @@
       if (key === 'team-B') addTeamPlayer('B');
       if (key === 'ffa') addFFAPlayer();
       if (key === 'add-word') addWord();
+      if (key === 'add-challenge') addChallenge();
     }
 
     function applyLayoutPreview(mode = 'auto') {
@@ -3583,12 +3732,16 @@
       }
       if (action === 'continue-game') return continueGame();
       if (action === 'add-word') return addWord();
+      if (action === 'add-challenge') return addChallenge();
       if (action === 'reset-words') return resetWords();
+      if (action === 'reset-challenges') return resetChallenges();
+      if (action === 'reset-app-defaults') return resetAppDefaults();
       if (action === 'select-pack-file') return selectPackFile();
       if (action === 'toggle-installed-pack') return toggleInstalledPack(packId);
       if (action === 'remove-installed-pack') return removeInstalledPack(packId);
       if (action === 'copy-user-id') return copyUserId();
       if (action === 'remove-word') return removeWord(wordCategory, wordDiff, wordPack, Number(index));
+      if (action === 'remove-challenge') return removeChallenge(Number(index));
       if (action === 'remove-team-player') return removeTeamPlayer(team, Number(index));
       if (action === 'remove-ffa-player') return removeFFAPlayer(Number(index));
     }

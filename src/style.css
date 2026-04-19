@@ -175,6 +175,8 @@
 
     .wordbank-filter-card,
     .wordbank-list-card,
+    .wordbank-challenge-add-card,
+    .wordbank-challenges-card,
     .wordbank-install-card,
     .wordbank-pack-preview-card,
     .wordbank-add-card,
@@ -192,6 +194,10 @@
 
     .settings-grid > .card {
       height: 100%;
+    }
+
+    .settings-reset-card {
+      border-color: color-mix(in srgb, var(--accent2) 45%, var(--card-border));
     }
 
     .setup-cta {
@@ -1177,6 +1183,10 @@
       padding: 4px 0;
     }
 
+    .challenges-container {
+      max-height: 260px;
+    }
+
     .pack-install-status {
       min-height: 18px;
       font-size: 0.78rem;
@@ -1813,6 +1823,26 @@
         grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
       }
 
+      .wordbank-list-card {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .wordbank-challenge-add-card,
+      .wordbank-install-card {
+        grid-column: 1;
+      }
+
+      .wordbank-challenges-card {
+        grid-column: 2;
+        grid-row: 2;
+      }
+
+      .wordbank-pack-preview-card {
+        grid-column: 2;
+        grid-row: 3;
+      }
+
       .settings-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -1931,6 +1961,15 @@
       grid-row: auto;
     }
 
+    body[data-preview-mode="mobile"] .wordbank-list-card,
+    body[data-preview-mode="mobile"] .wordbank-challenge-add-card,
+    body[data-preview-mode="mobile"] .wordbank-challenges-card,
+    body[data-preview-mode="mobile"] .wordbank-install-card,
+    body[data-preview-mode="mobile"] .wordbank-pack-preview-card {
+      grid-column: auto;
+      grid-row: auto;
+    }
+
     body[data-preview-mode="mobile"] .game-play-side {
       position: static;
     }
@@ -1996,6 +2035,31 @@
     body[data-preview-mode="tablet"] .wordbank-layout,
     body[data-preview-mode="desktop"] .wordbank-layout {
       grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+    }
+
+    body[data-preview-mode="tablet"] .wordbank-list-card,
+    body[data-preview-mode="desktop"] .wordbank-list-card {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    body[data-preview-mode="tablet"] .wordbank-challenge-add-card,
+    body[data-preview-mode="tablet"] .wordbank-install-card,
+    body[data-preview-mode="desktop"] .wordbank-challenge-add-card,
+    body[data-preview-mode="desktop"] .wordbank-install-card {
+      grid-column: 1;
+    }
+
+    body[data-preview-mode="tablet"] .wordbank-challenges-card,
+    body[data-preview-mode="desktop"] .wordbank-challenges-card {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    body[data-preview-mode="tablet"] .wordbank-pack-preview-card,
+    body[data-preview-mode="desktop"] .wordbank-pack-preview-card {
+      grid-column: 2;
+      grid-row: 3;
     }
 
     body[data-preview-mode="tablet"] .settings-grid,
