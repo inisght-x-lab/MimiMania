@@ -348,7 +348,13 @@
     }
 
     .home-actions > .btn {
-      min-height: 76px;
+      min-height: 64px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    .home-actions {
+      gap: 10px;
     }
 
     .btn-quick-game {
@@ -356,12 +362,12 @@
       gap: 3px;
       text-align: center;
       justify-content: center;
-      height: 76px;
-      max-height: 76px;
+      height: 64px;
+      max-height: 64px;
       min-width: 0;
       overflow: hidden;
-      padding-top: 12px;
-      padding-bottom: 12px;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
 
     .btn-quick-game > span {
@@ -1264,6 +1270,164 @@
       margin-top: 10px;
     }
 
+    .multidevice-grid,
+    .guest-watch-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .multidevice-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+    }
+
+    .multidevice-join-main,
+    .multidevice-join-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .multidevice-choice-card {
+      width: 100%;
+      max-width: none;
+    }
+
+    .multidevice-choice-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .multidevice-change-btn {
+      align-self: flex-start;
+      margin-bottom: 2px;
+    }
+
+    .multidevice-session {
+      display: grid;
+      gap: 12px;
+      margin-top: 4px;
+      min-width: 0;
+    }
+
+    .qr-frame {
+      width: 190px;
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+      margin: 4px auto;
+      background: #ffffff;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--card-border);
+      overflow: hidden;
+    }
+
+    .qr-frame img,
+    .qr-frame canvas {
+      width: 168px !important;
+      height: 168px !important;
+      display: block;
+    }
+
+    @media (max-width: 767px) {
+      .multidevice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #multidevice-host-card,
+      #multidevice-host-panel,
+      #multidevice-join-card {
+        grid-column: auto;
+        min-height: auto;
+      }
+
+      #multidevice-join-card {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .multidevice-session {
+        margin-top: 0;
+      }
+
+      .copy-row {
+        grid-template-columns: 1fr;
+      }
+
+      .qr-frame {
+        width: min(190px, 100%);
+      }
+    }
+
+    .guest-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .guest-header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .guest-connection-pill {
+      flex-shrink: 0;
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-pill);
+      background: var(--surface-bg);
+      color: var(--text2);
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .guest-timer-card {
+      min-height: min(72vh, 640px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .guest-timer-wrap {
+      --timer-size: min(58vw, 360px);
+      --timer-number-size: clamp(4rem, 12vw, 7rem);
+      --timer-label-size: 0.9rem;
+      --timer-label-bottom: 44px;
+      margin-bottom: 18px;
+    }
+
+    .guest-hint {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .guest-canvas-shell {
+      min-height: min(58vh, 520px);
+      aspect-ratio: 16 / 10;
+    }
+
+    #guest-drawing-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+    }
+
     .score-mini-row {
       display: flex;
       gap: 8px;
@@ -1860,6 +2024,16 @@
       font-size: 0.78rem;
     }
 
+    @media (max-width: 767px) {
+      .copy-row {
+        grid-template-columns: 1fr;
+      }
+
+      .copy-row .btn {
+        width: 100%;
+      }
+    }
+
     .footer-share {
       position: relative;
       z-index: 1;
@@ -2039,6 +2213,41 @@
 
       .home-grid {
         grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+      }
+
+      .multidevice-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      #multidevice-join-card {
+        display: grid;
+        grid-column: 1 / -1;
+        grid-template-columns: minmax(0, 0.85fr) minmax(360px, 1.15fr);
+        gap: 28px;
+        align-items: start;
+      }
+
+      #multidevice-host-card.hidden,
+      #multidevice-host-panel.hidden,
+      #multidevice-join-card.hidden {
+        display: none !important;
+      }
+
+      #multidevice-host-card,
+      #multidevice-host-panel {
+        min-height: 100%;
+      }
+
+      .multidevice-choice-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .guest-watch-layout {
+        grid-template-columns: minmax(340px, 0.8fr) minmax(0, 1.2fr);
+      }
+
+      .guest-watch-layout:has(.guest-drawing-card.hidden) .guest-timer-card {
+        grid-column: 1 / -1;
       }
 
       .setup-grid {
@@ -2222,6 +2431,39 @@
       grid-template-columns: 1fr;
     }
 
+    body[data-preview-mode="mobile"] .multidevice-grid {
+      grid-template-columns: 1fr;
+    }
+
+    body[data-preview-mode="mobile"] #multidevice-host-card,
+    body[data-preview-mode="mobile"] #multidevice-host-panel,
+    body[data-preview-mode="mobile"] #multidevice-join-card {
+      grid-column: auto;
+      min-height: auto;
+    }
+
+    body[data-preview-mode="mobile"] #multidevice-join-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    body[data-preview-mode="mobile"] .multidevice-session {
+      margin-top: 0;
+    }
+
+    body[data-preview-mode="mobile"] .copy-row {
+      grid-template-columns: 1fr;
+    }
+
+    body[data-preview-mode="mobile"] .copy-row .btn {
+      width: 100%;
+    }
+
+    body[data-preview-mode="mobile"] .qr-frame {
+      width: min(190px, 100%);
+    }
+
     body[data-preview-mode="mobile"] .range-wrap-fixed {
       width: 100%;
     }
@@ -2316,6 +2558,51 @@
     body[data-preview-mode="tablet"] .home-grid,
     body[data-preview-mode="desktop"] .home-grid {
       grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+    }
+
+    body[data-preview-mode="tablet"] .multidevice-grid,
+    body[data-preview-mode="desktop"] .multidevice-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    body[data-preview-mode="tablet"] #multidevice-join-card,
+    body[data-preview-mode="desktop"] #multidevice-join-card {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 0.85fr) minmax(360px, 1.15fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    body[data-preview-mode="tablet"] #multidevice-host-card.hidden,
+    body[data-preview-mode="tablet"] #multidevice-host-panel.hidden,
+    body[data-preview-mode="tablet"] #multidevice-join-card.hidden,
+    body[data-preview-mode="desktop"] #multidevice-host-panel.hidden,
+    body[data-preview-mode="desktop"] #multidevice-join-card.hidden,
+    body[data-preview-mode="desktop"] #multidevice-host-card.hidden {
+      display: none !important;
+    }
+
+    body[data-preview-mode="tablet"] #multidevice-host-card,
+    body[data-preview-mode="tablet"] #multidevice-host-panel,
+    body[data-preview-mode="desktop"] #multidevice-host-card,
+    body[data-preview-mode="desktop"] #multidevice-host-panel {
+      min-height: 100%;
+    }
+
+    body[data-preview-mode="tablet"] .multidevice-choice-actions,
+    body[data-preview-mode="desktop"] .multidevice-choice-actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body[data-preview-mode="tablet"] .guest-watch-layout,
+    body[data-preview-mode="desktop"] .guest-watch-layout {
+      grid-template-columns: minmax(340px, 0.8fr) minmax(0, 1.2fr);
+    }
+
+    body[data-preview-mode="tablet"] .guest-watch-layout:has(.guest-drawing-card.hidden) .guest-timer-card,
+    body[data-preview-mode="desktop"] .guest-watch-layout:has(.guest-drawing-card.hidden) .guest-timer-card {
+      grid-column: 1 / -1;
     }
 
     body[data-preview-mode="tablet"] .setup-grid,

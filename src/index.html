@@ -35,7 +35,6 @@
       </button>
       <h1 class="logo">MimiMania</h1>
       <p class="logo-sub" data-i18n="home.subtitle">🎭 Mímica e desenho em família</p>
-      <!--
       <div class="dev-preview-panel mb">
         <div class="dev-preview-copy">
           <div class="eyebrow eyebrow-accent" data-i18n="dev.mode">Modo de desenvolvimento</div>
@@ -51,11 +50,11 @@
           </select>
         </div>
       </div>
-      -->
       <div class="home-grid">
         <div class="card home-card">
           <div class="flex-col home-actions">
             <button class="btn btn-primary btn-lg btn-block" data-nav="setup" data-i18n="home.newGame">🎮 Nova Partida</button>
+            <button class="btn btn-secondary btn-lg btn-block" data-nav="multidevice" data-i18n="home.multiDeviceGame">📡 Nova Partida Multi Device</button>
             <button class="btn btn-secondary btn-lg btn-block btn-quick-game" data-action="quick-game">
               <span data-i18n="home.quickGame">⚡ Jogo Rápido</span>
               <span class="btn-quick-game-summary" id="quick-game-summary">🎭 | 🏆 | 👥4 | 🌱 | 🧸 🏃 🐾 | 🔁3</span>
@@ -96,6 +95,103 @@
                 <div class="text-sm" data-i18n="home.howTo.winDesc">Cada acerto vale 10 pontos. No fim das rodadas, o placar decide o vencedor.</div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MULTI DEVICE ========== -->
+  <div class="screen" id="screen-multidevice">
+    <div class="page-shell">
+      <header class="page-header">
+        <button class="btn btn-ghost btn-sm" data-nav="home" data-i18n="common.back">← Voltar</button>
+        <h1 class="page-title" data-i18n="multiDevice.title">Partida Multi Device</h1>
+      </header>
+      <div class="card multidevice-choice-card" id="multidevice-choice-card">
+        <h2 class="card-title" data-i18n="multiDevice.chooseTitle">O que você quer fazer?</h2>
+        <p class="text-sm mb" data-i18n="multiDevice.chooseDesc">Abra uma sessão para controlar a partida ou conecte este device como tela auxiliar.</p>
+        <div class="multidevice-choice-actions">
+          <button class="btn btn-primary btn-lg btn-block" data-action="select-multidevice-host" data-i18n="multiDevice.chooseHost">📡 Abrir uma sessão</button>
+          <button class="btn btn-secondary btn-lg btn-block" data-action="select-multidevice-join" data-i18n="multiDevice.chooseJoin">🔗 Conectar em uma sessão</button>
+        </div>
+      </div>
+      <div class="multidevice-grid">
+        <div class="card multidevice-card hidden" id="multidevice-host-card">
+          <button class="btn btn-ghost btn-sm btn-nowrap multidevice-change-btn" data-action="reset-multidevice-choice" data-i18n="multiDevice.changeChoice">Trocar opção</button>
+          <h2 class="card-title" data-i18n="multiDevice.hostTitle">📡 Abrir sessão</h2>
+          <p class="text-sm mb" data-i18n="multiDevice.hostDesc">Este dispositivo controla a partida. Os outros entram para ver timer, dicas e desenho.</p>
+          <button class="btn btn-primary btn-lg btn-block" data-action="create-multidevice-host" data-i18n="multiDevice.openSession">Abrir sessão</button>
+        </div>
+        <div class="card multidevice-card multidevice-session hidden" id="multidevice-host-panel">
+          <div class="text-strong text-sm-title" id="multidevice-host-status" data-i18n="multiDevice.hostCreating">Criando sessão...</div>
+          <div class="qr-frame" id="multidevice-qr"></div>
+          <div class="copy-row">
+            <input class="inp mono-input" id="multidevice-link" readonly value="">
+            <button class="btn btn-ghost btn-sm btn-nowrap" data-action="copy-multidevice-link" data-i18n="common.copy">Copiar</button>
+          </div>
+          <div class="helper-box">
+            <span data-i18n="multiDevice.sessionCode">Código da sessão:</span>
+            <strong id="multidevice-session-code">---</strong>
+          </div>
+          <div class="text-meta" id="multidevice-guest-count">0 devices conectados</div>
+          <button class="btn btn-secondary btn-block" data-action="continue-multidevice-setup" data-i18n="multiDevice.continueSetup">Continuar configuração</button>
+        </div>
+
+        <div class="card multidevice-card hidden" id="multidevice-join-card">
+          <div class="multidevice-join-main">
+            <button class="btn btn-ghost btn-sm btn-nowrap multidevice-change-btn" data-action="reset-multidevice-choice" data-i18n="multiDevice.changeChoice">Trocar opção</button>
+            <h2 class="card-title" data-i18n="multiDevice.joinTitle">🔗 Conectar</h2>
+            <p class="text-sm mb" data-i18n="multiDevice.joinDesc">Entre como tela auxiliar para acompanhar a partida do host.</p>
+          </div>
+          <div class="multidevice-join-form">
+            <label class="toggle-label" for="multidevice-join-code" data-i18n="multiDevice.joinCodeLabel">Código ou link da sessão</label>
+            <input class="inp mt-xs mb-sm" id="multidevice-join-code" placeholder="Cole o código ou link" data-i18n-placeholder="multiDevice.joinCodePlaceholder">
+            <button class="btn btn-primary btn-lg btn-block" data-action="join-multidevice-session" data-i18n="multiDevice.joinSession">Conectar na sessão</button>
+            <div class="helper-box mt" id="multidevice-join-status" data-i18n="multiDevice.joinHelp">Você também pode escanear o QR Code exibido no host.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== GUEST WATCH ========== -->
+  <div class="screen" id="screen-guest">
+    <div class="page-shell page-shell-game guest-shell">
+      <div class="guest-header">
+        <div>
+          <div class="eyebrow eyebrow-accent" data-i18n="multiDevice.guestLabel">Tela auxiliar</div>
+          <h1 class="page-title" id="guest-round-title" data-i18n="multiDevice.waitingTitle">Aguardando dados da partida</h1>
+        </div>
+        <div class="guest-header-actions">
+          <div class="guest-connection-pill" id="guest-connection-status" data-i18n="multiDevice.connecting">Conectando...</div>
+          <button class="btn btn-ghost btn-sm btn-nowrap" data-action="disconnect-multidevice-guest" data-i18n="multiDevice.disconnect">Desconectar</button>
+        </div>
+      </div>
+      <div class="guest-watch-layout">
+        <div class="card guest-timer-card center">
+          <div class="current-player mb-sm">
+            <div class="cp-label" id="guest-current-player-label" data-i18n="multiDevice.guestWaiting">Aguardando o host iniciar a partida.</div>
+            <div class="cp-name" id="guest-current-player-name">--</div>
+          </div>
+          <div class="timer-wrap guest-timer-wrap">
+            <svg class="timer-svg" viewBox="0 0 160 160">
+              <circle class="timer-track" cx="80" cy="80" r="68" />
+              <circle class="timer-prog" id="guest-timer-circle" cx="80" cy="80" r="68" stroke="#ffd93d" stroke-dasharray="427.3"
+                stroke-dashoffset="0" />
+            </svg>
+            <div class="timer-num" id="guest-timer-num">--</div>
+            <div class="timer-label" data-i18n="game.secondsLabel">SEGUNDOS</div>
+          </div>
+          <div class="hint-banner guest-hint hidden" id="guest-hint-banner">
+            <div class="eyebrow eyebrow-hint mb-xxs" data-i18n="game.hintTitle">💡 Dica</div>
+            <div class="hint-text" id="guest-hint-text">---</div>
+          </div>
+        </div>
+        <div class="card guest-drawing-card hidden" id="guest-drawing-card">
+          <h2 class="card-title card-title-sm" data-i18n="multiDevice.liveDrawing">✏️ Desenho ao vivo</h2>
+          <div class="drawing-canvas-shell guest-canvas-shell">
+            <canvas id="guest-drawing-canvas" aria-label="Desenho ao vivo" data-i18n-aria-label="multiDevice.liveDrawing"></canvas>
           </div>
         </div>
       </div>
@@ -765,6 +861,8 @@
       data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff"></script>
   </div>
 
+  <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="script.js"></script>
 </body>
 
