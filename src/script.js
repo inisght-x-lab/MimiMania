@@ -97,6 +97,8 @@
         },
         home: {
           subtitle: '🎭 Mímica e desenho em família',
+          enterFullscreen: 'Tela cheia',
+          exitFullscreen: 'Sair da tela cheia',
           newGame: '🎮 Nova Partida',
           quickGame: '⚡ Jogo Rápido',
           wordBank: '🧩 Conteúdo e Expansões',
@@ -337,7 +339,8 @@
           shareUnavailable: '🔗 Link copiado para compartilhar.',
           shareCopyFailed: '⚠️ Não foi possível copiar o link.',
           shareInstagramFallback: '🔗 Link copiado. Cole no Instagram.',
-          shareTikTokFallback: '🔗 Link copiado. Cole no TikTok.'
+          shareTikTokFallback: '🔗 Link copiado. Cole no TikTok.',
+          fullscreenUnavailable: '⚠️ Tela cheia indisponível neste navegador.'
         },
         confirmations: {
           resetWords: 'Restaurar o banco de palavras padrão? Palavras customizadas serão perdidas.',
@@ -393,6 +396,8 @@
         },
         home: {
           subtitle: '🎭 Mime and drawing party game',
+          enterFullscreen: 'Full screen',
+          exitFullscreen: 'Exit full screen',
           newGame: '🎮 New Game',
           quickGame: '⚡ Quick Game',
           wordBank: '🧩 Content & Expansions',
@@ -633,7 +638,8 @@
           shareUnavailable: '🔗 Link copied for sharing.',
           shareCopyFailed: '⚠️ Could not copy the link.',
           shareInstagramFallback: '🔗 Link copied. Paste it into Instagram.',
-          shareTikTokFallback: '🔗 Link copied. Paste it into TikTok.'
+          shareTikTokFallback: '🔗 Link copied. Paste it into TikTok.',
+          fullscreenUnavailable: '⚠️ Full screen is unavailable in this browser.'
         },
         confirmations: {
           resetWords: 'Restore the default word bank? Custom words will be lost.',
@@ -689,6 +695,8 @@
         },
         home: {
           subtitle: '🎭 Mímica y dibujo en familia',
+          enterFullscreen: 'Pantalla completa',
+          exitFullscreen: 'Salir de pantalla completa',
           newGame: '🎮 Nueva Partida',
           quickGame: '⚡ Juego Rápido',
           wordBank: '🧩 Contenido y Expansiones',
@@ -929,7 +937,8 @@
           shareUnavailable: '🔗 Enlace copiado para compartir.',
           shareCopyFailed: '⚠️ No se pudo copiar el enlace.',
           shareInstagramFallback: '🔗 Enlace copiado. Pégalo en Instagram.',
-          shareTikTokFallback: '🔗 Enlace copiado. Pégalo en TikTok.'
+          shareTikTokFallback: '🔗 Enlace copiado. Pégalo en TikTok.',
+          fullscreenUnavailable: '⚠️ La pantalla completa no está disponible en este navegador.'
         },
         confirmations: {
           resetWords: '¿Restaurar el banco de palabras predeterminado? Las palabras personalizadas se perderán.',
@@ -2080,6 +2089,7 @@
       refreshFinalScreenCopy();
       renderScoreMini();
       updateTimerLabel(document.getElementById('timer-slider').value);
+      updateFullscreenButton();
     }
 
     function setLanguage(language, options = {}) {
@@ -2095,9 +2105,28 @@
     // ============================================================
     // NAVIGATION
     // ============================================================
+    function resetViewportToTop(screenEl) {
+      if (screenEl) screenEl.scrollTop = 0;
+      const scrollingElement = document.scrollingElement || document.documentElement;
+      if (scrollingElement) {
+        scrollingElement.scrollTop = 0;
+        scrollingElement.scrollLeft = 0;
+      }
+      window.scrollTo(0, 0);
+      requestAnimationFrame(() => {
+        if (screenEl) screenEl.scrollTop = 0;
+        if (scrollingElement) {
+          scrollingElement.scrollTop = 0;
+          scrollingElement.scrollLeft = 0;
+        }
+        window.scrollTo(0, 0);
+      });
+    }
+
     function goTo(screen) {
+      const nextScreen = document.getElementById('screen-' + screen);
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById('screen-' + screen).classList.add('active');
+      nextScreen.classList.add('active');
       document.body.dataset.activeScreen = screen;
       if (screen === 'wordbank') {
         wbDiff = 'easy';
@@ -2114,6 +2143,51 @@
         renderSetupPlayers();
         updateDiffWordCount();
         renderCategorySelection();
+      }
+      resetViewportToTop(nextScreen);
+    }
+
+    function getFullscreenElement() {
+      return document.fullscreenElement || document.webkitFullscreenElement || null;
+    }
+
+    function isFullscreenSupported() {
+      const root = document.documentElement;
+      const canRequest = Boolean(root.requestFullscreen || root.webkitRequestFullscreen);
+      const canExit = Boolean(document.exitFullscreen || document.webkitExitFullscreen);
+      const isEnabled = document.fullscreenEnabled !== false && document.webkitFullscreenEnabled !== false;
+      return Boolean(canRequest && canExit && isEnabled);
+    }
+
+    function updateFullscreenButton() {
+      const button = document.getElementById('fullscreen-toggle');
+      if (!button) return;
+      button.hidden = !isFullscreenSupported();
+      const labelKey = getFullscreenElement() ? 'home.exitFullscreen' : 'home.enterFullscreen';
+      const label = t(labelKey);
+      button.title = label;
+      button.setAttribute('aria-label', label);
+    }
+
+    async function toggleFullscreen() {
+      if (!isFullscreenSupported()) {
+        showNotif(t('notifications.fullscreenUnavailable'), 'var(--accent2)', 'var(--text)');
+        return;
+      }
+
+      try {
+        if (getFullscreenElement()) {
+          const exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen;
+          await exitFullscreen.call(document);
+        } else {
+          const root = document.documentElement;
+          const requestFullscreen = root.requestFullscreen || root.webkitRequestFullscreen;
+          await requestFullscreen.call(root);
+        }
+      } catch (error) {
+        showNotif(t('notifications.fullscreenUnavailable'), 'var(--accent2)', 'var(--text)');
+      } finally {
+        updateFullscreenButton();
       }
     }
 
@@ -4003,6 +4077,10 @@
         animateButtonClick(button);
         return startQuickGame();
       }
+      if (action === 'toggle-fullscreen') {
+        animateButtonClick(button);
+        return toggleFullscreen();
+      }
       if (action === 'donate-bmc') {
         animateButtonClick(button);
         return openDonationLink('buyMeCoffee');
@@ -4140,6 +4218,8 @@
         applyTheme(event.target.value);
         saveSettings();
       });
+      document.addEventListener('fullscreenchange', updateFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
 
       const packFileInput = document.getElementById('pack-file-input');
       if (packFileInput) {
