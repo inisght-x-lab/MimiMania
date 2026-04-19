@@ -5,7 +5,7 @@
     const QUICK_GAME_KEY = 'mm_quick_game_v1';
     const USER_ID_KEY = 'mm_user_id_v1';
     const APP_STORAGE_PREFIX = 'mm_';
-    const AVAILABLE_THEMES = ['cosmic', 'liquid-glass', 'material3'];
+    const AVAILABLE_THEMES = ['cosmic', 'liquid-glass', 'material3', 'light-mode', 'dark-mode', 'high-contrast'];
     const SUPPORTED_LANGUAGES = ['pt', 'en', 'es'];
     const LANGUAGE_HTML_MAP = { pt: 'pt-BR', en: 'en', es: 'es' };
     const GAME_TYPES = ['mime', 'drawing'];
@@ -70,6 +70,7 @@
         common: {
           back: '← Voltar',
           add: '+ Adicionar',
+          copy: 'Copiar',
           continue: '▶️ Continuar',
           restart: '🔄 Reiniciar',
           home: '🏠 Início',
@@ -97,7 +98,10 @@
         },
         home: {
           subtitle: '🎭 Mímica e desenho em família',
+          enterFullscreen: 'Tela cheia',
+          exitFullscreen: 'Sair da tela cheia',
           newGame: '🎮 Nova Partida',
+          multiDeviceGame: '📡 Nova Partida Multi Device',
           quickGame: '⚡ Jogo Rápido',
           wordBank: '🧩 Conteúdo e Expansões',
           donate: '❤️ Doar',
@@ -113,6 +117,46 @@
             winTitle: 'Marque pontos e vença',
             winDesc: 'Cada acerto vale 10 pontos. No fim das rodadas, o placar decide o vencedor.'
           }
+        },
+        multiDevice: {
+          title: 'Partida Multi Device',
+          chooseTitle: 'O que você quer fazer?',
+          chooseDesc: 'Abra uma sessão para controlar a partida ou conecte este device como tela auxiliar.',
+          chooseHost: '📡 Abrir uma sessão',
+          chooseJoin: '🔗 Conectar em uma sessão',
+          changeChoice: 'Trocar opção',
+          hostTitle: '📡 Abrir sessão',
+          hostDesc: 'Este dispositivo controla a partida. Os outros entram para ver timer, dicas e desenho.',
+          openSession: 'Abrir sessão',
+          hostCreating: 'Criando sessão...',
+          hostReady: 'Sessão aberta. Escaneie o QR Code nos outros devices.',
+          hostError: 'Não foi possível abrir a sessão.',
+          sessionCode: 'Código da sessão:',
+          guestsConnected: ({ count }) => `${count} device${count !== 1 ? 's' : ''} conectado${count !== 1 ? 's' : ''}`,
+          continueSetup: 'Continuar configuração',
+          joinTitle: '🔗 Conectar',
+          joinDesc: 'Entre como tela auxiliar para acompanhar a partida do host.',
+          joinCodeLabel: 'Código ou link da sessão',
+          joinCodePlaceholder: 'Cole o código ou link',
+          joinSession: 'Conectar na sessão',
+          joinHelp: 'Você também pode escanear o QR Code exibido no host.',
+          waitingTitle: 'Aguardando dados da partida',
+          guestLabel: 'Tela auxiliar',
+          connecting: 'Conectando...',
+          connected: 'Conectado',
+          disconnected: 'Desconectado',
+          guestWaiting: 'Aguardando o host iniciar a partida.',
+          guestPreparing: 'Aguardando a palavra ser revelada.',
+          guestMemorizing: 'A rodada vai começar.',
+          guestPlaying: 'Adivinhem!',
+          guestScore: 'Aguardando o próximo turno.',
+          guestFinal: 'Partida finalizada.',
+          liveDrawing: '✏️ Desenho ao vivo',
+          disconnect: 'Desconectar',
+          linkCopied: '🔗 Link da sessão copiado!',
+          missingSession: 'Informe o código da sessão.',
+          peerUnavailable: 'PeerJS não carregou. Verifique a conexão e tente novamente.',
+          qrUnavailable: 'QR Code indisponível. Use o link ou código da sessão.'
         },
         setup: {
           title: 'Nova Partida',
@@ -283,7 +327,10 @@
         theme: {
           cosmic: 'Cósmico',
           'liquid-glass': 'Outono',
-          material3: 'Primavera'
+          material3: 'Primavera',
+          'light-mode': 'Modo Claro',
+          'dark-mode': 'Modo Escuro',
+          'high-contrast': 'Alto Contraste'
         },
         footer: {
           copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Publicado no ',
@@ -334,7 +381,8 @@
           shareUnavailable: '🔗 Link copiado para compartilhar.',
           shareCopyFailed: '⚠️ Não foi possível copiar o link.',
           shareInstagramFallback: '🔗 Link copiado. Cole no Instagram.',
-          shareTikTokFallback: '🔗 Link copiado. Cole no TikTok.'
+          shareTikTokFallback: '🔗 Link copiado. Cole no TikTok.',
+          fullscreenUnavailable: '⚠️ Tela cheia indisponível neste navegador.'
         },
         confirmations: {
           resetWords: 'Restaurar o banco de palavras padrão? Palavras customizadas serão perdidas.',
@@ -363,6 +411,7 @@
         common: {
           back: '← Back',
           add: '+ Add',
+          copy: 'Copy',
           continue: '▶️ Continue',
           restart: '🔄 Restart',
           home: '🏠 Home',
@@ -390,7 +439,10 @@
         },
         home: {
           subtitle: '🎭 Mime and drawing party game',
+          enterFullscreen: 'Full screen',
+          exitFullscreen: 'Exit full screen',
           newGame: '🎮 New Game',
+          multiDeviceGame: '📡 New Multi Device Game',
           quickGame: '⚡ Quick Game',
           wordBank: '🧩 Content & Expansions',
           donate: '❤️ Donate',
@@ -406,6 +458,46 @@
             winTitle: 'Score and win',
             winDesc: 'Each correct answer is worth 10 points. At the end of the rounds, the scoreboard decides the winner.'
           }
+        },
+        multiDevice: {
+          title: 'Multi Device Game',
+          chooseTitle: 'What do you want to do?',
+          chooseDesc: 'Open a session to control the game or connect this device as a companion screen.',
+          chooseHost: '📡 Open a session',
+          chooseJoin: '🔗 Join a session',
+          changeChoice: 'Change option',
+          hostTitle: '📡 Open session',
+          hostDesc: 'This device controls the game. Other devices join to see the timer, hints, and drawing.',
+          openSession: 'Open session',
+          hostCreating: 'Creating session...',
+          hostReady: 'Session open. Scan the QR Code on the other devices.',
+          hostError: 'Could not open the session.',
+          sessionCode: 'Session code:',
+          guestsConnected: ({ count }) => `${count} device${count !== 1 ? 's' : ''} connected`,
+          continueSetup: 'Continue setup',
+          joinTitle: '🔗 Join',
+          joinDesc: 'Join as a companion screen to follow the host game.',
+          joinCodeLabel: 'Session code or link',
+          joinCodePlaceholder: 'Paste the code or link',
+          joinSession: 'Join session',
+          joinHelp: 'You can also scan the QR Code shown on the host.',
+          waitingTitle: 'Waiting for game data',
+          guestLabel: 'Companion screen',
+          connecting: 'Connecting...',
+          connected: 'Connected',
+          disconnected: 'Disconnected',
+          guestWaiting: 'Waiting for the host to start the game.',
+          guestPreparing: 'Waiting for the word to be revealed.',
+          guestMemorizing: 'The round is about to start.',
+          guestPlaying: 'Guess!',
+          guestScore: 'Waiting for the next turn.',
+          guestFinal: 'Game finished.',
+          liveDrawing: '✏️ Live drawing',
+          disconnect: 'Disconnect',
+          linkCopied: '🔗 Session link copied!',
+          missingSession: 'Enter the session code.',
+          peerUnavailable: 'PeerJS did not load. Check the connection and try again.',
+          qrUnavailable: 'QR Code unavailable. Use the session link or code.'
         },
         setup: {
           title: 'New Game',
@@ -576,7 +668,10 @@
         theme: {
           cosmic: 'Cosmic',
           'liquid-glass': 'Autumn',
-          material3: 'Spring'
+          material3: 'Spring',
+          'light-mode': 'Light Mode',
+          'dark-mode': 'Dark Mode',
+          'high-contrast': 'High Contrast'
         },
         footer: {
           copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Published on ',
@@ -627,7 +722,8 @@
           shareUnavailable: '🔗 Link copied for sharing.',
           shareCopyFailed: '⚠️ Could not copy the link.',
           shareInstagramFallback: '🔗 Link copied. Paste it into Instagram.',
-          shareTikTokFallback: '🔗 Link copied. Paste it into TikTok.'
+          shareTikTokFallback: '🔗 Link copied. Paste it into TikTok.',
+          fullscreenUnavailable: '⚠️ Full screen is unavailable in this browser.'
         },
         confirmations: {
           resetWords: 'Restore the default word bank? Custom words will be lost.',
@@ -656,6 +752,7 @@
         common: {
           back: '← Volver',
           add: '+ Añadir',
+          copy: 'Copiar',
           continue: '▶️ Continuar',
           restart: '🔄 Reiniciar',
           home: '🏠 Inicio',
@@ -683,7 +780,10 @@
         },
         home: {
           subtitle: '🎭 Mímica y dibujo en familia',
+          enterFullscreen: 'Pantalla completa',
+          exitFullscreen: 'Salir de pantalla completa',
           newGame: '🎮 Nueva Partida',
+          multiDeviceGame: '📡 Nueva Partida Multi Device',
           quickGame: '⚡ Juego Rápido',
           wordBank: '🧩 Contenido y Expansiones',
           donate: '❤️ Donar',
@@ -699,6 +799,46 @@
             winTitle: 'Suma puntos y gana',
             winDesc: 'Cada acierto vale 10 puntos. Al final de las rondas, el marcador define al ganador.'
           }
+        },
+        multiDevice: {
+          title: 'Partida Multi Device',
+          chooseTitle: '¿Qué quieres hacer?',
+          chooseDesc: 'Abre una sesión para controlar la partida o conecta este dispositivo como pantalla auxiliar.',
+          chooseHost: '📡 Abrir una sesión',
+          chooseJoin: '🔗 Conectar a una sesión',
+          changeChoice: 'Cambiar opción',
+          hostTitle: '📡 Abrir sesión',
+          hostDesc: 'Este dispositivo controla la partida. Los demás entran para ver temporizador, pistas y dibujo.',
+          openSession: 'Abrir sesión',
+          hostCreating: 'Creando sesión...',
+          hostReady: 'Sesión abierta. Escanea el QR Code en los otros dispositivos.',
+          hostError: 'No se pudo abrir la sesión.',
+          sessionCode: 'Código de sesión:',
+          guestsConnected: ({ count }) => `${count} dispositivo${count !== 1 ? 's' : ''} conectado${count !== 1 ? 's' : ''}`,
+          continueSetup: 'Continuar configuración',
+          joinTitle: '🔗 Conectar',
+          joinDesc: 'Entra como pantalla auxiliar para seguir la partida del host.',
+          joinCodeLabel: 'Código o enlace de sesión',
+          joinCodePlaceholder: 'Pega el código o enlace',
+          joinSession: 'Conectar a la sesión',
+          joinHelp: 'También puedes escanear el QR Code mostrado en el host.',
+          waitingTitle: 'Esperando datos de la partida',
+          guestLabel: 'Pantalla auxiliar',
+          connecting: 'Conectando...',
+          connected: 'Conectado',
+          disconnected: 'Desconectado',
+          guestWaiting: 'Esperando que el host inicie la partida.',
+          guestPreparing: 'Esperando que se revele la palabra.',
+          guestMemorizing: 'La ronda va a empezar.',
+          guestPlaying: '¡Adivinen!',
+          guestScore: 'Esperando el próximo turno.',
+          guestFinal: 'Partida finalizada.',
+          liveDrawing: '✏️ Dibujo en vivo',
+          disconnect: 'Desconectar',
+          linkCopied: '🔗 ¡Enlace de sesión copiado!',
+          missingSession: 'Introduce el código de sesión.',
+          peerUnavailable: 'PeerJS no cargó. Revisa la conexión e inténtalo de nuevo.',
+          qrUnavailable: 'QR Code no disponible. Usa el enlace o código de sesión.'
         },
         setup: {
           title: 'Nueva Partida',
@@ -869,7 +1009,10 @@
         theme: {
           cosmic: 'Cósmico',
           'liquid-glass': 'Otoño',
-          material3: 'Primavera'
+          material3: 'Primavera',
+          'light-mode': 'Modo Claro',
+          'dark-mode': 'Modo Oscuro',
+          'high-contrast': 'Alto Contraste'
         },
         footer: {
           copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Publicado en ',
@@ -920,7 +1063,8 @@
           shareUnavailable: '🔗 Enlace copiado para compartir.',
           shareCopyFailed: '⚠️ No se pudo copiar el enlace.',
           shareInstagramFallback: '🔗 Enlace copiado. Pégalo en Instagram.',
-          shareTikTokFallback: '🔗 Enlace copiado. Pégalo en TikTok.'
+          shareTikTokFallback: '🔗 Enlace copiado. Pégalo en TikTok.',
+          fullscreenUnavailable: '⚠️ La pantalla completa no está disponible en este navegador.'
         },
         confirmations: {
           resetWords: '¿Restaurar el banco de palabras predeterminado? Las palabras personalizadas se perderán.',
@@ -2006,6 +2150,21 @@
       lastY: 0
     };
 
+    const guestDrawingState = {
+      canvas: null,
+      ctx: null
+    };
+
+    const multiDeviceState = {
+      role: 'single',
+      peer: null,
+      peerId: '',
+      hostConnection: null,
+      connections: [],
+      sessionUrl: '',
+      lastPayload: null
+    };
+
     let wbDiff = 'easy';
     let wbCat = 'objects';
     let wbPreviewPackId = '';
@@ -2071,6 +2230,7 @@
       refreshFinalScreenCopy();
       renderScoreMini();
       updateTimerLabel(document.getElementById('timer-slider').value);
+      updateFullscreenButton();
     }
 
     function setLanguage(language, options = {}) {
@@ -2086,9 +2246,28 @@
     // ============================================================
     // NAVIGATION
     // ============================================================
+    function resetViewportToTop(screenEl) {
+      if (screenEl) screenEl.scrollTop = 0;
+      const scrollingElement = document.scrollingElement || document.documentElement;
+      if (scrollingElement) {
+        scrollingElement.scrollTop = 0;
+        scrollingElement.scrollLeft = 0;
+      }
+      window.scrollTo(0, 0);
+      requestAnimationFrame(() => {
+        if (screenEl) screenEl.scrollTop = 0;
+        if (scrollingElement) {
+          scrollingElement.scrollTop = 0;
+          scrollingElement.scrollLeft = 0;
+        }
+        window.scrollTo(0, 0);
+      });
+    }
+
     function goTo(screen) {
+      const nextScreen = document.getElementById('screen-' + screen);
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById('screen-' + screen).classList.add('active');
+      nextScreen.classList.add('active');
       document.body.dataset.activeScreen = screen;
       if (screen === 'wordbank') {
         wbDiff = 'easy';
@@ -2106,6 +2285,485 @@
         updateDiffWordCount();
         renderCategorySelection();
       }
+      if (screen === 'multidevice') {
+        resetMultiDeviceChoice();
+      }
+      resetViewportToTop(nextScreen);
+    }
+
+    function getFullscreenElement() {
+      return document.fullscreenElement || document.webkitFullscreenElement || null;
+    }
+
+    function isFullscreenSupported() {
+      const root = document.documentElement;
+      const canRequest = Boolean(root.requestFullscreen || root.webkitRequestFullscreen);
+      const canExit = Boolean(document.exitFullscreen || document.webkitExitFullscreen);
+      const isEnabled = document.fullscreenEnabled !== false && document.webkitFullscreenEnabled !== false;
+      return Boolean(canRequest && canExit && isEnabled);
+    }
+
+    function updateFullscreenButton() {
+      const button = document.getElementById('fullscreen-toggle');
+      if (!button) return;
+      button.hidden = !isFullscreenSupported();
+      const labelKey = getFullscreenElement() ? 'home.exitFullscreen' : 'home.enterFullscreen';
+      const label = t(labelKey);
+      button.title = label;
+      button.setAttribute('aria-label', label);
+    }
+
+    async function toggleFullscreen() {
+      if (!isFullscreenSupported()) {
+        showNotif(t('notifications.fullscreenUnavailable'), 'var(--accent2)', 'var(--text)');
+        return;
+      }
+
+      try {
+        if (getFullscreenElement()) {
+          const exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen;
+          await exitFullscreen.call(document);
+        } else {
+          const root = document.documentElement;
+          const requestFullscreen = root.requestFullscreen || root.webkitRequestFullscreen;
+          await requestFullscreen.call(root);
+        }
+      } catch (error) {
+        showNotif(t('notifications.fullscreenUnavailable'), 'var(--accent2)', 'var(--text)');
+      } finally {
+        updateFullscreenButton();
+      }
+    }
+
+    // ============================================================
+    // MULTI DEVICE
+    // ============================================================
+    function isPeerAvailable() {
+      return typeof window.Peer === 'function';
+    }
+
+    function setJoinStatus(keyOrText) {
+      const el = document.getElementById('multidevice-join-status');
+      if (!el) return;
+      el.textContent = keyOrText.includes('.') ? t(keyOrText) : keyOrText;
+    }
+
+    function setHostStatus(keyOrText) {
+      const el = document.getElementById('multidevice-host-status');
+      if (!el) return;
+      el.textContent = keyOrText.includes('.') ? t(keyOrText) : keyOrText;
+    }
+
+    function getSessionUrl(peerId) {
+      const url = new URL(window.location.href);
+      url.search = '';
+      url.hash = '';
+      url.searchParams.set('join', peerId);
+      return url.toString();
+    }
+
+    function extractSessionCode(value = '') {
+      const raw = String(value).trim();
+      if (!raw) return '';
+      try {
+        const url = new URL(raw, window.location.href);
+        const join = url.searchParams.get('join');
+        if (join) return join.trim();
+      } catch (e) { }
+      return raw.replace(/^#?join=/i, '').trim();
+    }
+
+    function renderSessionQRCode(url) {
+      const host = document.getElementById('multidevice-qr');
+      if (!host) return;
+      host.innerHTML = '';
+      if (typeof window.QRCode !== 'function') {
+        host.textContent = t('multiDevice.qrUnavailable');
+        return;
+      }
+      new window.QRCode(host, {
+        text: url,
+        width: 168,
+        height: 168,
+        colorDark: '#111827',
+        colorLight: '#ffffff',
+        correctLevel: window.QRCode.CorrectLevel?.M
+      });
+    }
+
+    function updateHostGuestCount() {
+      const count = multiDeviceState.connections.filter(conn => conn.open).length;
+      const el = document.getElementById('multidevice-guest-count');
+      if (el) el.textContent = t('multiDevice.guestsConnected', { count });
+    }
+
+    function closeCurrentPeer() {
+      try {
+        multiDeviceState.connections.forEach(conn => conn.close?.());
+        multiDeviceState.hostConnection?.close?.();
+        multiDeviceState.peer?.destroy?.();
+      } catch (e) { }
+      multiDeviceState.peer = null;
+      multiDeviceState.hostConnection = null;
+      multiDeviceState.connections = [];
+      multiDeviceState.peerId = '';
+      multiDeviceState.sessionUrl = '';
+      multiDeviceState.lastPayload = null;
+    }
+
+    function resetMultiDeviceChoice() {
+      document.getElementById('multidevice-choice-card')?.classList.remove('hidden');
+      document.getElementById('multidevice-host-card')?.classList.add('hidden');
+      document.getElementById('multidevice-host-panel')?.classList.add('hidden');
+      document.getElementById('multidevice-join-card')?.classList.add('hidden');
+    }
+
+    function selectMultiDeviceMode(mode) {
+      document.getElementById('multidevice-choice-card')?.classList.add('hidden');
+      document.getElementById('multidevice-host-card')?.classList.toggle('hidden', mode !== 'host');
+      document.getElementById('multidevice-host-panel')?.classList.add('hidden');
+      document.getElementById('multidevice-join-card')?.classList.toggle('hidden', mode !== 'join');
+      if (mode === 'join') {
+        requestAnimationFrame(() => document.getElementById('multidevice-join-code')?.focus());
+      }
+    }
+
+    function disconnectGuestSession() {
+      closeCurrentPeer();
+      multiDeviceState.role = 'single';
+      document.getElementById('guest-connection-status').textContent = t('multiDevice.disconnected');
+      document.getElementById('guest-round-title').textContent = t('multiDevice.waitingTitle');
+      document.getElementById('guest-current-player-label').textContent = t('multiDevice.guestWaiting');
+      document.getElementById('guest-current-player-name').textContent = '--';
+      document.getElementById('guest-hint-banner')?.classList.add('hidden');
+      document.getElementById('guest-drawing-card')?.classList.add('hidden');
+      updateGuestTimerDisplay(NaN, 1);
+      goTo('home');
+    }
+
+    function sendToGuest(conn, message) {
+      if (!conn?.open) return;
+      try {
+        conn.send(message);
+      } catch (e) { }
+    }
+
+    function broadcastMultiDeviceMessage(message) {
+      if (multiDeviceState.role !== 'host') return;
+      multiDeviceState.connections = multiDeviceState.connections.filter(conn => conn.open);
+      multiDeviceState.connections.forEach(conn => sendToGuest(conn, message));
+      updateHostGuestCount();
+    }
+
+    function getCurrentPlayerForGuest() {
+      const player = gameState.players[gameState.currentPlayerIdx];
+      if (!player) return { name: '--', teamLabel: '' };
+      return {
+        name: player.name || player,
+        teamLabel: player.team ? (gameState.teamNames[player.team] || getDefaultTeamName(player.team)) : ''
+      };
+    }
+
+    function getDrawingSnapshot() {
+      const canvas = drawingState.canvas;
+      if (!canvas || !canvas.width || !canvas.height) return '';
+      try {
+        return canvas.toDataURL('image/png');
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function buildHostGamePayload(options = {}) {
+      const { includeDrawingSnapshot = false } = options;
+      const hasStarted = Boolean(gameState.players.length && gameState.totalTurns);
+      const phase = hasStarted ? gameState.phase : 'waiting';
+      const currentPlayer = getCurrentPlayerForGuest();
+      const isPlaying = phase === 'playing';
+      const isMime = gameState.gameType === 'mime';
+      const hintText = gameState.currentWord
+        ? getCategoryLabel(gameState.currentWord.cat, { singular: true, withIcon: true })
+        : '';
+      const payload = {
+        phase,
+        gameType: gameState.gameType,
+        timerLeft: isPlaying ? gameState.timerLeft : gameState.timerDur,
+        timerDur: gameState.timerDur,
+        roundText: hasStarted
+          ? t('dynamic.roundDisplay', { current: gameState.currentRound, total: gameState.totalRounds })
+          : t('multiDevice.waitingTitle'),
+        currentPlayerLabel: t(gameState.gameType === 'drawing' ? 'game.currentPlayerDrawingLabel' : 'game.currentPlayerLabel'),
+        currentPlayerName: currentPlayer.name,
+        teamLabel: currentPlayer.teamLabel,
+        hintVisible: Boolean(isMime && isPlaying && gameState.hintShown && hintText),
+        hintText,
+        statusText: t(`multiDevice.${phase === 'preparing'
+          ? 'guestPreparing'
+          : phase === 'memorizing'
+            ? 'guestMemorizing'
+            : phase === 'playing'
+              ? 'guestPlaying'
+              : phase === 'score'
+                ? 'guestScore'
+                : phase === 'final'
+                  ? 'guestFinal'
+                  : 'guestWaiting'}`)
+      };
+      if (includeDrawingSnapshot && gameState.gameType === 'drawing' && phase === 'playing') {
+        payload.drawingSnapshot = getDrawingSnapshot();
+      }
+      return payload;
+    }
+
+    function broadcastHostGameState(options = {}) {
+      if (multiDeviceState.role !== 'host') return;
+      const payload = buildHostGamePayload(options);
+      multiDeviceState.lastPayload = payload;
+      broadcastMultiDeviceMessage({ type: 'session-state', payload });
+    }
+
+    function attachHostConnection(conn) {
+      multiDeviceState.connections.push(conn);
+      const syncGuest = () => {
+        updateHostGuestCount();
+        sendToGuest(conn, { type: 'session-state', payload: buildHostGamePayload({ includeDrawingSnapshot: true }) });
+      };
+      conn.on('open', syncGuest);
+      conn.on('close', updateHostGuestCount);
+      conn.on('error', updateHostGuestCount);
+      conn.on('data', data => {
+        if (data?.type === 'guest-ready') syncGuest();
+      });
+      setTimeout(syncGuest, 200);
+    }
+
+    function createMultiDeviceHost() {
+      if (!isPeerAvailable()) {
+        showNotif(t('multiDevice.peerUnavailable'), 'var(--accent1)', 'var(--btn-danger-text)');
+        return;
+      }
+
+      closeCurrentPeer();
+      multiDeviceState.role = 'host';
+      document.getElementById('multidevice-host-panel')?.classList.remove('hidden');
+      setHostStatus('multiDevice.hostCreating');
+      updateHostGuestCount();
+
+      const peer = new window.Peer();
+      multiDeviceState.peer = peer;
+      peer.on('open', id => {
+        multiDeviceState.peerId = id;
+        multiDeviceState.sessionUrl = getSessionUrl(id);
+        document.getElementById('multidevice-session-code').textContent = id;
+        document.getElementById('multidevice-link').value = multiDeviceState.sessionUrl;
+        renderSessionQRCode(multiDeviceState.sessionUrl);
+        setHostStatus('multiDevice.hostReady');
+        broadcastHostGameState();
+      });
+      peer.on('connection', attachHostConnection);
+      peer.on('error', () => {
+        setHostStatus('multiDevice.hostError');
+        showNotif(t('multiDevice.hostError'), 'var(--accent1)', 'var(--btn-danger-text)');
+      });
+    }
+
+    function connectToMultiDeviceHost(rawCode) {
+      const hostId = extractSessionCode(rawCode);
+      if (!hostId) {
+        setJoinStatus('multiDevice.missingSession');
+        return;
+      }
+      if (!isPeerAvailable()) {
+        setJoinStatus('multiDevice.peerUnavailable');
+        showNotif(t('multiDevice.peerUnavailable'), 'var(--accent1)', 'var(--btn-danger-text)');
+        return;
+      }
+
+      closeCurrentPeer();
+      multiDeviceState.role = 'guest';
+      setJoinStatus('multiDevice.connecting');
+      document.getElementById('guest-connection-status').textContent = t('multiDevice.connecting');
+      goTo('guest');
+
+      const peer = new window.Peer();
+      multiDeviceState.peer = peer;
+      peer.on('open', () => {
+        const conn = peer.connect(hostId, { reliable: true });
+        multiDeviceState.hostConnection = conn;
+        attachGuestConnection(conn);
+      });
+      peer.on('error', () => {
+        document.getElementById('guest-connection-status').textContent = t('multiDevice.disconnected');
+        setJoinStatus('multiDevice.hostError');
+      });
+    }
+
+    function attachGuestConnection(conn) {
+      conn.on('open', () => {
+        document.getElementById('guest-connection-status').textContent = t('multiDevice.connected');
+        setJoinStatus('multiDevice.connected');
+        sendToGuest(conn, { type: 'guest-ready' });
+      });
+      conn.on('data', handleGuestMessage);
+      conn.on('close', () => {
+        document.getElementById('guest-connection-status').textContent = t('multiDevice.disconnected');
+      });
+      conn.on('error', () => {
+        document.getElementById('guest-connection-status').textContent = t('multiDevice.disconnected');
+      });
+    }
+
+    function handleGuestMessage(message) {
+      if (message?.type === 'session-state') {
+        renderGuestSessionState(message.payload || {});
+      }
+      if (message?.type === 'drawing-clear') {
+        clearGuestDrawingCanvas();
+      }
+      if (message?.type === 'drawing-stroke') {
+        drawGuestStroke(message.stroke);
+      }
+    }
+
+    function updateGuestTimerDisplay(left, total) {
+      const num = document.getElementById('guest-timer-num');
+      const circle = document.getElementById('guest-timer-circle');
+      if (!num || !circle) return;
+      const safeTotal = Math.max(1, Number(total) || 1);
+      const safeLeft = Math.max(0, Number(left) || 0);
+      num.textContent = Number.isFinite(Number(left)) ? safeLeft : '--';
+      circle.style.strokeDashoffset = 427.3 - (safeLeft / safeTotal) * 427.3;
+      circle.style.stroke = safeLeft > safeTotal * 0.5
+        ? getThemeVar('--timer-color-safe')
+        : safeLeft > safeTotal * 0.25
+          ? getThemeVar('--timer-color-warning')
+          : getThemeVar('--timer-color-danger');
+    }
+
+    function renderGuestSessionState(payload) {
+      multiDeviceState.lastPayload = payload;
+      if (!document.getElementById('screen-guest').classList.contains('active')) goTo('guest');
+      document.getElementById('guest-round-title').textContent = payload.roundText || t('multiDevice.waitingTitle');
+      document.getElementById('guest-current-player-label').textContent = payload.statusText || t('multiDevice.guestWaiting');
+      document.getElementById('guest-current-player-name').textContent = payload.phase === 'waiting' ? '--' : (payload.currentPlayerName || '--');
+      updateGuestTimerDisplay(payload.timerLeft, payload.timerDur);
+
+      const hint = document.getElementById('guest-hint-banner');
+      const hintText = document.getElementById('guest-hint-text');
+      if (payload.hintVisible && payload.hintText) {
+        hintText.textContent = payload.hintText;
+        hint.classList.remove('hidden');
+      } else {
+        hint.classList.add('hidden');
+      }
+
+      const drawingCard = document.getElementById('guest-drawing-card');
+      const shouldShowDrawing = payload.gameType === 'drawing' && payload.phase === 'playing';
+      drawingCard.classList.toggle('hidden', !shouldShowDrawing);
+      if (shouldShowDrawing) {
+        requestAnimationFrame(() => resizeGuestDrawingCanvas({ preserve: true }));
+        if (payload.drawingSnapshot) applyGuestDrawingSnapshot(payload.drawingSnapshot);
+      }
+    }
+
+    function resizeGuestDrawingCanvas(options = {}) {
+      const { preserve = true } = options;
+      const canvas = guestDrawingState.canvas || document.getElementById('guest-drawing-canvas');
+      if (!canvas) return;
+      guestDrawingState.canvas = canvas;
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const previous = preserve && canvas.width && canvas.height ? document.createElement('canvas') : null;
+      if (previous) {
+        previous.width = canvas.width;
+        previous.height = canvas.height;
+        previous.getContext('2d').drawImage(canvas, 0, 0);
+      }
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.round(rect.width * dpr));
+      canvas.height = Math.max(1, Math.round(rect.height * dpr));
+      const ctx = canvas.getContext('2d');
+      guestDrawingState.ctx = ctx;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, rect.width, rect.height);
+      if (previous) {
+        ctx.drawImage(previous, 0, 0, previous.width, previous.height, 0, 0, rect.width, rect.height);
+      }
+    }
+
+    function clearGuestDrawingCanvas() {
+      resizeGuestDrawingCanvas({ preserve: false });
+    }
+
+    function drawGuestStroke(stroke) {
+      if (!stroke) return;
+      const canvas = guestDrawingState.canvas || document.getElementById('guest-drawing-canvas');
+      if (!canvas) return;
+      if (!guestDrawingState.ctx) resizeGuestDrawingCanvas();
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const tool = DRAWING_TOOL_CONFIG[stroke.tool] || DRAWING_TOOL_CONFIG['pen-thick'];
+      const ctx = guestDrawingState.ctx;
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = tool.color;
+      ctx.lineWidth = tool.width;
+      ctx.beginPath();
+      ctx.moveTo(stroke.from.x * rect.width, stroke.from.y * rect.height);
+      ctx.lineTo(stroke.to.x * rect.width, stroke.to.y * rect.height);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function applyGuestDrawingSnapshot(dataUrl) {
+      const canvas = guestDrawingState.canvas || document.getElementById('guest-drawing-canvas');
+      if (!canvas || !dataUrl) return;
+      resizeGuestDrawingCanvas({ preserve: false });
+      const rect = canvas.getBoundingClientRect();
+      const img = new Image();
+      img.onload = () => {
+        guestDrawingState.ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      };
+      img.src = dataUrl;
+    }
+
+    function broadcastDrawingClear() {
+      broadcastMultiDeviceMessage({ type: 'drawing-clear' });
+    }
+
+    function broadcastDrawingStroke(from, to, tool) {
+      if (multiDeviceState.role !== 'host' || gameState.gameType !== 'drawing') return;
+      const rect = drawingState.canvas?.getBoundingClientRect();
+      if (!rect?.width || !rect?.height) return;
+      broadcastMultiDeviceMessage({
+        type: 'drawing-stroke',
+        stroke: {
+          from: { x: from.x / rect.width, y: from.y / rect.height },
+          to: { x: to.x / rect.width, y: to.y / rect.height },
+          tool
+        }
+      });
+    }
+
+    async function copyMultiDeviceLink() {
+      if (!multiDeviceState.sessionUrl) return;
+      try {
+        await copyTextToClipboard(multiDeviceState.sessionUrl);
+        showNotif(t('multiDevice.linkCopied'));
+      } catch (e) {
+        showNotif(t('notifications.shareCopyFailed'), 'var(--accent2)', 'var(--text)');
+      }
+    }
+
+    function initializeMultiDeviceJoinFromUrl() {
+      const code = new URL(window.location.href).searchParams.get('join');
+      if (!code) return;
+      const input = document.getElementById('multidevice-join-code');
+      if (input) input.value = code;
+      selectMultiDeviceMode('join');
+      connectToMultiDeviceHost(code);
     }
 
     function getThemeVar(name) {
@@ -2655,7 +3313,10 @@
       if (!board) return;
       const shouldShow = gameState.gameType === 'drawing' && gameState.phase === 'playing';
       board.classList.toggle('hidden', !shouldShow);
-      if (shouldShow) requestAnimationFrame(() => resizeDrawingCanvas({ preserve: !reset }));
+      if (shouldShow) {
+        requestAnimationFrame(() => resizeDrawingCanvas({ preserve: !reset }));
+        if (reset) broadcastDrawingClear();
+      }
     }
 
     function refreshGameTypeUI() {
@@ -2677,7 +3338,7 @@
       if (challengeWrap) challengeWrap.classList.toggle('is-disabled', isDrawing);
       if (challengeSub) challengeSub.textContent = t(isDrawing ? 'setup.randomChallengeDisabledSub' : 'setup.randomChallengeSub');
 
-      const currentLabel = document.querySelector('.current-player .cp-label');
+      const currentLabel = document.querySelector('#screen-game .current-player .cp-label');
       if (currentLabel) currentLabel.textContent = t(isDrawing ? 'game.currentPlayerDrawingLabel' : 'game.currentPlayerLabel');
       const readyEmoji = document.getElementById('game-ready-emoji');
       if (readyEmoji) readyEmoji.textContent = isDrawing ? '✏️' : '🎭';
@@ -3056,6 +3717,7 @@
       refreshGameTypeUI();
       syncDrawingBoardVisibility();
       renderScoreMini();
+      broadcastHostGameState();
     }
 
     // ============================================================
@@ -3085,6 +3747,7 @@
       document.getElementById('preparing-state').classList.add('hidden');
       document.getElementById('memorize-state').classList.remove('hidden');
       document.getElementById('playing-state').classList.add('hidden');
+      broadcastHostGameState();
 
       let memLeft = 5;
       const mc = document.getElementById('memCircle');
@@ -3103,6 +3766,7 @@
           document.getElementById('playing-state').classList.remove('hidden');
           gameState.phase = 'playing';
           syncDrawingBoardVisibility({ reset: true });
+          broadcastHostGameState({ includeDrawingSnapshot: true });
           playAlertBeep(880);
           startTimer();
         }
@@ -3223,6 +3887,9 @@
         circ.style.strokeDashoffset = strokeOffset;
         circ.style.stroke = strokeColor;
       });
+      if (multiDeviceState.role === 'host' && gameState.players.length) {
+        broadcastHostGameState();
+      }
     }
 
     function updateTimerLabel(val) {
@@ -3271,6 +3938,7 @@
 
     function clearDrawingCanvas() {
       resizeDrawingCanvas({ preserve: false });
+      broadcastDrawingClear();
     }
 
     function selectDrawingTool(tool) {
@@ -3295,6 +3963,7 @@
       ctx.lineTo(to.x, to.y);
       ctx.stroke();
       ctx.restore();
+      broadcastDrawingStroke(from, to, drawingState.activeTool);
     }
 
     function startDrawing(event) {
@@ -3475,6 +4144,9 @@
         title.style.color = 'var(--accent1)';
       }
 
+      gameState.phase = 'score';
+      syncDrawingBoardVisibility();
+      broadcastHostGameState();
       document.getElementById('resultOverlay').classList.add('show');
     }
 
@@ -3561,6 +4233,8 @@
     }
 
     function showMidScore() {
+      gameState.phase = 'score';
+      broadcastHostGameState();
       goTo('score');
       renderFullScoreboard(false);
       refreshScoreScreenCopy();
@@ -3596,6 +4270,8 @@
     }
 
     function showFinalScore() {
+      gameState.phase = 'final';
+      broadcastHostGameState();
       goTo('final');
       renderFullScoreboard(true);
       refreshFinalScreenCopy();
@@ -3994,6 +4670,42 @@
         animateButtonClick(button);
         return startQuickGame();
       }
+      if (action === 'toggle-fullscreen') {
+        animateButtonClick(button);
+        return toggleFullscreen();
+      }
+      if (action === 'select-multidevice-host') {
+        animateButtonClick(button);
+        return selectMultiDeviceMode('host');
+      }
+      if (action === 'select-multidevice-join') {
+        animateButtonClick(button);
+        return selectMultiDeviceMode('join');
+      }
+      if (action === 'reset-multidevice-choice') {
+        animateButtonClick(button);
+        return resetMultiDeviceChoice();
+      }
+      if (action === 'create-multidevice-host') {
+        animateButtonClick(button);
+        return createMultiDeviceHost();
+      }
+      if (action === 'join-multidevice-session') {
+        animateButtonClick(button);
+        return connectToMultiDeviceHost(document.getElementById('multidevice-join-code')?.value || '');
+      }
+      if (action === 'continue-multidevice-setup') {
+        animateButtonClick(button);
+        return goTo('setup');
+      }
+      if (action === 'copy-multidevice-link') {
+        animateButtonClick(button);
+        return copyMultiDeviceLink();
+      }
+      if (action === 'disconnect-multidevice-guest') {
+        animateButtonClick(button);
+        return disconnectGuestSession();
+      }
       if (action === 'donate-bmc') {
         animateButtonClick(button);
         return openDonationLink('buyMeCoffee');
@@ -4107,6 +4819,10 @@
         });
       });
 
+      document.getElementById('multidevice-join-code')?.addEventListener('keydown', event => {
+        if (event.key === 'Enter') connectToMultiDeviceHost(event.target.value);
+      });
+
       document.getElementById('rounds-slider').addEventListener('input', event => {
         document.getElementById('rounds-val').textContent = event.target.value;
       });
@@ -4131,6 +4847,8 @@
         applyTheme(event.target.value);
         saveSettings();
       });
+      document.addEventListener('fullscreenchange', updateFullscreenButton);
+      document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
 
       const packFileInput = document.getElementById('pack-file-input');
       if (packFileInput) {
@@ -4159,3 +4877,4 @@
     selectGameType('mime');
     selectMode('teams');
     selectDifficulty('easy');
+    initializeMultiDeviceJoinFromUrl();
