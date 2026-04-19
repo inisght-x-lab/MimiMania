@@ -3,16 +3,36 @@
     const CONTENT_KEY = 'mm_content_v1';
     const LEGACY_WORDS_KEY = 'mm_words_v2';
     const QUICK_GAME_KEY = 'mm_quick_game_v1';
+    const USER_ID_KEY = 'mm_user_id_v1';
+    const APP_STORAGE_PREFIX = 'mm_';
     const AVAILABLE_THEMES = ['cosmic', 'liquid-glass', 'material3'];
     const SUPPORTED_LANGUAGES = ['pt', 'en', 'es'];
     const LANGUAGE_HTML_MAP = { pt: 'pt-BR', en: 'en', es: 'es' };
+    const GAME_TYPES = ['mime', 'drawing'];
     const DIFFICULTY_KEYS = ['easy', 'normal', 'hard'];
     const CATEGORY_KEYS = ['objects', 'actions', 'animals', 'movies', 'professions', 'celebrities'];
     const CATEGORY_ICONS = { objects: '🧸', actions: '🏃', animals: '🐾', movies: '🎬', professions: '👔', celebrities: '⭐' };
     const DIFFICULTY_ICONS = { easy: '🌱', normal: '⚡', hard: '🔥' };
     const CORE_PACK_ID = 'core-default';
+    const WORD_PACK_SCHEMA = 'mimimania.wordpack.v1';
+    const PACK_SIGNATURE_ALGORITHM = 'ECDSA_P256_SHA256';
+    const PACK_SIGNATURE_CONTEXT = 'mimimania-word-pack:v1';
+    // The app validates purchased packs with a public key only. Keep the
+    // matching private key outside this repository and use it only internally.
+    const PACK_SIGNING_PUBLIC_KEY = {
+      kty: 'EC',
+      crv: 'P-256',
+      x: 'FJe_7l8WYaFoxOoUr6pQcUkCJtq0yF10kDEqIyLHbqg',
+      y: 'u9aaOBq0dS-14a_64f5LDo_NNIL9CwNYzSH9xlKkTX0',
+      ext: true
+    };
     const KO_FI_WIDGET_SCRIPT_URL = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
     const KO_FI_SLUG = 'insightxlabgamestudio';
+    const APP_PUBLIC_URL = 'https://insight-x-lab-technologies.github.io/MimiMania/';
+    const SOCIAL_WEB_FALLBACKS = {
+      instagram: 'https://www.instagram.com/',
+      tiktok: 'https://www.tiktok.com/'
+    };
     const DONATION_LINKS = {
       buyMeCoffee: 'https://buymeacoffee.com/insight.x.lab.game.studio',
       koFi: `https://ko-fi.com/${KO_FI_SLUG}`
@@ -22,6 +42,23 @@
     function clone(value) {
       return JSON.parse(JSON.stringify(value));
     }
+
+    function generateUserId() {
+      if (crypto?.randomUUID) return `mmu_${crypto.randomUUID()}`;
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      return `mmu_${Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('')}`;
+    }
+
+    function getOrCreateUserId() {
+      const saved = localStorage.getItem(USER_ID_KEY);
+      if (saved) return saved;
+      const nextUserId = generateUserId();
+      localStorage.setItem(USER_ID_KEY, nextUserId);
+      return nextUserId;
+    }
+
+    const appUserId = getOrCreateUserId();
 
     function getNestedValue(obj, path) {
       return path.split('.').reduce((acc, key) => acc && acc[key], obj);
@@ -59,10 +96,10 @@
           }
         },
         home: {
-          subtitle: '🎭 O jogo da mímica',
+          subtitle: '🎭 Mímica e desenho em família',
           newGame: '🎮 Nova Partida',
           quickGame: '⚡ Jogo Rápido',
-          wordBank: '📝 Banco de Palavras',
+          wordBank: '🧩 Conteúdo e Expansões',
           donate: '❤️ Doar',
           settings: '⚙️ Configurações',
           howToTitle: '🏆 Como jogar',
@@ -70,7 +107,7 @@
             setupTitle: 'Monte a partida',
             setupDesc: 'Escolha entre times ou todos contra todos, defina rodadas, dificuldade e categorias.',
             turnTitle: 'Veja e atue',
-            turnDesc: 'Um jogador vê a palavra, memoriza e faz a mímica sem falar enquanto o resto tenta adivinhar.',
+            turnDesc: 'Um jogador vê a palavra, memoriza e faz mímica ou desenha enquanto o resto tenta adivinhar.',
             timerTitle: 'Corra contra o tempo',
             timerDesc: 'O cronômetro, as dicas e os sons de alerta ajudam a manter cada turno rápido e divertido.',
             winTitle: 'Marque pontos e vença',
@@ -79,7 +116,12 @@
         },
         setup: {
           title: 'Nova Partida',
-          modeTitle: '1️⃣ Modo de Jogo',
+          gameTypeTitle: 'Tipo do Jogo',
+          gameTypeMimeName: 'Mímica',
+          gameTypeMimeDesc: 'Atue sem falar',
+          gameTypeDrawingName: 'Desenho',
+          gameTypeDrawingDesc: 'Desenhe a palavra',
+          modeTitle: 'Modo de Jogo',
           modeTeamsName: 'Dois Times',
           modeTeamsDesc: 'Equipes competem',
           modeFfaName: 'Cada um por si',
@@ -98,7 +140,10 @@
           optionsTitle: '4️⃣ Opções de Jogo',
           randomChallengeLabel: 'Desafio Aleatório',
           randomChallengeSub: 'Adiciona modificadores à mímica',
+          randomChallengeDisabledSub: 'Indisponível no modo desenho',
           categoriesLabel: 'Categorias Disponíveis',
+          coreCategoriesLabel: 'Categorias Core',
+          premiumCategoriesLabel: 'Categorias Premium',
           matchTitle: '5️⃣ Configurar Partida',
           roundsLabel: 'Número de Rodadas',
           roundsSub: 'Quantas rodadas por jogador',
@@ -119,12 +164,16 @@
         },
         game: {
           currentPlayerLabel: 'Vez de fazer a mímica:',
+          currentPlayerDrawingLabel: 'Vez de desenhar:',
           readyTitle: 'Prontos para ver a palavra?',
+          readyDrawingTitle: 'Prontos para ver o que desenhar?',
           readySub: 'Só o mimo deve ver! Os outros fechem os olhos! 👀',
+          readyDrawingSub: 'Só quem vai desenhar deve ver! Os outros fechem os olhos! 👀',
           revealWord: '🎲 Revelar Palavra',
           memorizeTitle: '⚡ Memorize a palavra!',
           startsIn: 'O jogo começa em...',
           onlyMimeCanSee: 'Só o mimo pode ver!',
+          onlyDrawerCanSee: 'Só quem desenha pode ver!',
           secondsLabel: 'SEGUNDOS',
           hiddenWord: 'Palavra oculta',
           hintTitle: '💡 Dica',
@@ -133,6 +182,15 @@
           correct: '✅ Acertou!',
           wrong: '❌ Errou / Skip',
           challengePrefix: '🎯 Desafio:'
+        },
+        drawing: {
+          canvasLabel: 'Área de desenho',
+          toolbarLabel: 'Ferramentas de desenho',
+          penThick: 'Linha grossa',
+          penThin: 'Linha fina',
+          eraserThick: 'Borracha grossa',
+          eraserThin: 'Borracha fina',
+          clear: 'Limpar canvas'
         },
         result: {
           correctTitle: 'Acertou!',
@@ -151,13 +209,32 @@
           tie: 'EMPATE!'
         },
         wordbank: {
-          title: 'Banco de Palavras',
+          title: 'Conteúdo e Expansões',
           addTitle: '➕ Adicionar Palavra',
           newWordPlaceholder: 'Digite a palavra...',
           addToDifficulty: 'Será adicionada à dificuldade:',
           addButton: '➕ Adicionar Palavra',
           listTitle: '📋 Palavras',
-          resetButton: '↺ Restaurar'
+          resetButton: '↺ Restaurar',
+          challengesTitle: '🎯 Desafios Core',
+          addChallengeTitle: '🎯 Adicionar Desafio',
+          newChallengePlaceholder: 'Digite o desafio...',
+          addChallengeButton: '➕ Adicionar Desafio',
+          installPackTitle: '📦 Instalar pack',
+          installPackSub: 'Envie o arquivo .json comprado para liberar novas palavras neste dispositivo.',
+          selectPackFile: '📁 Escolher arquivo',
+          installedPacksTitle: 'Packs instalados',
+          noInstalledPacks: 'Nenhum pack extra instalado ainda.',
+          packEnabled: 'Ativo',
+          packDisabled: 'Inativo',
+          removePack: 'Remover',
+          packPreviewTitle: '⭐ Conteúdo do pack',
+          packPreviewPrompt: 'Clique em um pack instalado para ver palavras e desafios.',
+          packPreviewWordsTitle: 'Palavras do pack',
+          packPreviewChallengesTitle: 'Challenges do pack',
+          packPreviewNoWords: 'Nenhuma palavra neste idioma e dificuldade.',
+          packPreviewNoChallenges: 'Nenhum challenge neste idioma.',
+          packPreviewSelected: ({ name }) => `Exibindo: ${name}`
         },
         settings: {
           title: 'Configurações',
@@ -173,12 +250,19 @@
           alertSoundSub: 'Beep nos últimos 10 segundos',
           navigationSoundLabel: 'Som de Navegação',
           navigationSoundSub: 'Som ao clicar nos botões da interface',
+          userIdTitle: '🪪 ID de compra',
+          userIdLabel: 'Seu user_id',
+          userIdSub: 'Use este código na compra de packs para que o arquivo seja emitido para este dispositivo.',
+          copyUserId: 'Copiar',
           wordsTitle: '🎲 Palavras',
           shuffleWordsLabel: 'Embaralhar Palavras',
           shuffleWordsSub: 'Ordem aleatória a cada jogo',
           appearanceTitle: '🎨 Aparência',
           themeLabel: 'Tema visual',
-          themeSub: 'Troque cores, transparências e tipografia da interface'
+          themeSub: 'Troque cores, transparências e tipografia da interface',
+          resetAllTitle: '🧹 Restaurar aplicação',
+          resetAllSub: 'Remove configurações, jogadores salvos, packs instalados e o user_id deste dispositivo.',
+          resetAllButton: 'Restaurar tudo'
         },
         donate: {
           title: 'Apoie o MimiMania',
@@ -192,13 +276,17 @@
           whyLanguages: 'Seu apoio ajuda a financiar novos idiomas, packs de conteúdo e futuras expansões do banco de palavras.',
           whyUpdates: 'Também ajuda a manter o MimiMania atualizado com polimento, ajustes de balanceamento e novos recursos.'
         },
+        share: {
+          title: 'MimiMania',
+          text: 'Venha jogar MimiMania comigo!'
+        },
         theme: {
           cosmic: 'Cósmico',
           'liquid-glass': 'Outono',
           material3: 'Primavera'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v3.0 · Insight X Lab Technologies · Publicado no ',
+          copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Publicado no ',
           githubPages: 'GitHub Pages'
         },
         teams: {
@@ -219,20 +307,55 @@
           roundSummary: ({ roundDone, remaining }) => `Fim da Rodada ${roundDone} — ${remaining} rodada${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''}!`,
           wordAdded: ({ word, difficulty }) => `✅ "${word}" adicionada (${difficulty})!`,
           teamAdded: ({ name, teamName }) => `✅ ${name} em ${teamName}!`,
-          playerAdded: ({ name }) => `✅ ${name} entrou!`
+          playerAdded: ({ name }) => `✅ ${name} entrou!`,
+          packInstalled: ({ name }) => `✅ Pack "${name}" instalado!`,
+          packWordsSummary: ({ count }) => `${count} palavra${count !== 1 ? 's' : ''}`,
+          packVersion: ({ version }) => `v${version}`,
+          challengeAdded: ({ challenge }) => `✅ Desafio "${challenge}" adicionado!`
         },
         notifications: {
           duplicateWord: '⚠️ Palavra já existe!',
+          duplicateChallenge: '⚠️ Desafio já existe!',
           bankRestored: '✅ Banco restaurado!',
+          challengeRemoved: 'Desafio removido.',
+          challengesRestored: '✅ Desafios restaurados!',
+          userIdCopied: '🪪 user_id copiado!',
+          packInstallReading: 'Lendo arquivo...',
+          packInstallSuccess: '✅ Pack instalado e ativado!',
+          packInstallCancelled: 'Instalação cancelada.',
+          packRemoved: 'Pack removido.',
+          packToggled: 'Status do pack atualizado.',
           maxPlayers: '❌ Máximo 6 jogadores!',
           maxTeamPlayers: '❌ Máximo 3 por time!',
           minTeamPlayers: '❌ Mínimo 1 por time!',
           minFfaPlayers: '❌ Mínimo 3 jogadores!',
-          donationLinkUnavailable: '⚠️ Configure o link de doação deste parceiro para ativá-lo.'
+          donationLinkUnavailable: '⚠️ Configure o link de doação deste parceiro para ativá-lo.',
+          shareCopied: '🔗 Link copiado!',
+          shareUnavailable: '🔗 Link copiado para compartilhar.',
+          shareCopyFailed: '⚠️ Não foi possível copiar o link.',
+          shareInstagramFallback: '🔗 Link copiado. Cole no Instagram.',
+          shareTikTokFallback: '🔗 Link copiado. Cole no TikTok.'
         },
         confirmations: {
           resetWords: 'Restaurar o banco de palavras padrão? Palavras customizadas serão perdidas.',
-          restartGame: 'Reiniciar o jogo? Todo o progresso será perdido.'
+          resetChallenges: 'Restaurar os desafios padrão? Desafios customizados serão perdidos.',
+          resetAppDefaults: 'Restaurar toda a aplicação para o padrão? Configurações, jogadores salvos, packs instalados e user_id serão apagados.',
+          restartGame: 'Reiniciar o jogo? Todo o progresso será perdido.',
+          replacePack: ({ packName }) => `Já existe um pack instalado com este ID (${packName}). Substituir?`,
+          removePack: ({ packName }) => `Remover o pack "${packName}" deste dispositivo?`
+        },
+        packErrors: {
+          fileRequired: 'Selecione um arquivo de pack.',
+          invalidJson: 'Arquivo inválido. Envie um JSON de pack.',
+          invalidSchema: 'Schema do pack inválido.',
+          invalidUser: 'Este pack foi emitido para outro user_id.',
+          invalidPackId: 'pack_id ausente ou inválido.',
+          invalidAlgorithm: 'Algoritmo de assinatura inválido.',
+          invalidSignature: 'Assinatura inválida. O pack não foi instalado.',
+          invalidContentHash: 'Hash do conteúdo inválido.',
+          emptyPack: 'O pack não possui palavras ou desafios válidos.',
+          cryptoUnavailable: 'Este navegador não suporta validação segura de packs.',
+          reservedPackId: 'Este pack_id é reservado pelo jogo.'
         }
       },
       en: {
@@ -266,10 +389,10 @@
           }
         },
         home: {
-          subtitle: '🎭 The charades game',
+          subtitle: '🎭 Mime and drawing party game',
           newGame: '🎮 New Game',
           quickGame: '⚡ Quick Game',
-          wordBank: '📝 Word Bank',
+          wordBank: '🧩 Content & Expansions',
           donate: '❤️ Donate',
           settings: '⚙️ Settings',
           howToTitle: '🏆 How to play',
@@ -277,7 +400,7 @@
             setupTitle: 'Set up the match',
             setupDesc: 'Choose teams or free for all, then set rounds, difficulty, and categories.',
             turnTitle: 'See it and act it out',
-            turnDesc: 'One player sees the word, memorizes it, and acts it out without speaking while everyone else guesses.',
+            turnDesc: 'One player sees the word, memorizes it, then acts or draws while everyone else guesses.',
             timerTitle: 'Race against the clock',
             timerDesc: 'The timer, hints, and alert sounds keep every turn fast, clear, and fun.',
             winTitle: 'Score and win',
@@ -286,7 +409,12 @@
         },
         setup: {
           title: 'New Game',
-          modeTitle: '1️⃣ Game Mode',
+          gameTypeTitle: 'Game Type',
+          gameTypeMimeName: 'Mime',
+          gameTypeMimeDesc: 'Act without speaking',
+          gameTypeDrawingName: 'Drawing',
+          gameTypeDrawingDesc: 'Draw the word',
+          modeTitle: 'Game Mode',
           modeTeamsName: 'Two Teams',
           modeTeamsDesc: 'Teams compete',
           modeFfaName: 'Free for All',
@@ -305,7 +433,10 @@
           optionsTitle: '4️⃣ Game Options',
           randomChallengeLabel: 'Random Challenge',
           randomChallengeSub: 'Adds modifiers to the mime',
+          randomChallengeDisabledSub: 'Unavailable in drawing mode',
           categoriesLabel: 'Available Categories',
+          coreCategoriesLabel: 'Core Categories',
+          premiumCategoriesLabel: 'Premium Categories',
           matchTitle: '5️⃣ Match Setup',
           roundsLabel: 'Number of Rounds',
           roundsSub: 'How many rounds per player',
@@ -326,12 +457,16 @@
         },
         game: {
           currentPlayerLabel: 'Current mime player:',
+          currentPlayerDrawingLabel: 'Current drawing player:',
           readyTitle: 'Ready to see the word?',
+          readyDrawingTitle: 'Ready to see what to draw?',
           readySub: 'Only the mime should look! Everyone else close your eyes! 👀',
+          readyDrawingSub: 'Only the drawing player should look! Everyone else close your eyes! 👀',
           revealWord: '🎲 Reveal Word',
           memorizeTitle: '⚡ Memorize the word!',
           startsIn: 'The game starts in...',
           onlyMimeCanSee: 'Only the mime can see it!',
+          onlyDrawerCanSee: 'Only the drawing player can see it!',
           secondsLabel: 'SECONDS',
           hiddenWord: 'Hidden word',
           hintTitle: '💡 Hint',
@@ -340,6 +475,15 @@
           correct: '✅ Correct!',
           wrong: '❌ Wrong / Skip',
           challengePrefix: '🎯 Challenge:'
+        },
+        drawing: {
+          canvasLabel: 'Drawing area',
+          toolbarLabel: 'Drawing tools',
+          penThick: 'Thick line',
+          penThin: 'Thin line',
+          eraserThick: 'Thick eraser',
+          eraserThin: 'Thin eraser',
+          clear: 'Clear canvas'
         },
         result: {
           correctTitle: 'Correct!',
@@ -358,13 +502,32 @@
           tie: 'TIE!'
         },
         wordbank: {
-          title: 'Word Bank',
+          title: 'Content & Expansions',
           addTitle: '➕ Add Word',
           newWordPlaceholder: 'Type the word...',
           addToDifficulty: 'It will be added to difficulty:',
           addButton: '➕ Add Word',
           listTitle: '📋 Words',
-          resetButton: '↺ Restore'
+          resetButton: '↺ Restore',
+          challengesTitle: '🎯 Core Challenges',
+          addChallengeTitle: '🎯 Add Challenge',
+          newChallengePlaceholder: 'Type the challenge...',
+          addChallengeButton: '➕ Add Challenge',
+          installPackTitle: '📦 Install pack',
+          installPackSub: 'Upload the purchased .json file to unlock new words on this device.',
+          selectPackFile: '📁 Choose file',
+          installedPacksTitle: 'Installed packs',
+          noInstalledPacks: 'No extra packs installed yet.',
+          packEnabled: 'Enabled',
+          packDisabled: 'Disabled',
+          removePack: 'Remove',
+          packPreviewTitle: '⭐ Pack content',
+          packPreviewPrompt: 'Click an installed pack to see words and challenges.',
+          packPreviewWordsTitle: 'Pack words',
+          packPreviewChallengesTitle: 'Pack challenges',
+          packPreviewNoWords: 'No words in this language and difficulty.',
+          packPreviewNoChallenges: 'No challenges in this language.',
+          packPreviewSelected: ({ name }) => `Showing: ${name}`
         },
         settings: {
           title: 'Settings',
@@ -380,12 +543,19 @@
           alertSoundSub: 'Beep during the last 10 seconds',
           navigationSoundLabel: 'Navigation Sound',
           navigationSoundSub: 'Sound when clicking interface buttons',
+          userIdTitle: '🪪 Purchase ID',
+          userIdLabel: 'Your user_id',
+          userIdSub: 'Use this code when buying packs so the file is issued to this device.',
+          copyUserId: 'Copy',
           wordsTitle: '🎲 Words',
           shuffleWordsLabel: 'Shuffle Words',
           shuffleWordsSub: 'Random order every game',
           appearanceTitle: '🎨 Appearance',
           themeLabel: 'Visual theme',
-          themeSub: 'Change colors, transparencies, and interface typography'
+          themeSub: 'Change colors, transparencies, and interface typography',
+          resetAllTitle: '🧹 Reset application',
+          resetAllSub: 'Removes settings, saved players, installed packs, and this device user_id.',
+          resetAllButton: 'Reset everything'
         },
         donate: {
           title: 'Support MimiMania',
@@ -399,13 +569,17 @@
           whyLanguages: 'Your support helps fund new languages, content packs, and future word bank expansions.',
           whyUpdates: 'It also helps keep MimiMania maintained with polish, balance tweaks, and new features.'
         },
+        share: {
+          title: 'MimiMania',
+          text: 'Come play MimiMania with me!'
+        },
         theme: {
           cosmic: 'Cosmic',
           'liquid-glass': 'Autumn',
           material3: 'Spring'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v3.0 · Insight X Lab Technologies · Published on ',
+          copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Published on ',
           githubPages: 'GitHub Pages'
         },
         teams: {
@@ -426,20 +600,55 @@
           roundSummary: ({ roundDone, remaining }) => `End of Round ${roundDone} — ${remaining} round${remaining !== 1 ? 's' : ''} remaining!`,
           wordAdded: ({ word, difficulty }) => `✅ "${word}" added (${difficulty})!`,
           teamAdded: ({ name, teamName }) => `✅ ${name} joined ${teamName}!`,
-          playerAdded: ({ name }) => `✅ ${name} joined!`
+          playerAdded: ({ name }) => `✅ ${name} joined!`,
+          packInstalled: ({ name }) => `✅ Pack "${name}" installed!`,
+          packWordsSummary: ({ count }) => `${count} word${count !== 1 ? 's' : ''}`,
+          packVersion: ({ version }) => `v${version}`,
+          challengeAdded: ({ challenge }) => `✅ Challenge "${challenge}" added!`
         },
         notifications: {
           duplicateWord: '⚠️ Word already exists!',
+          duplicateChallenge: '⚠️ Challenge already exists!',
           bankRestored: '✅ Word bank restored!',
+          challengeRemoved: 'Challenge removed.',
+          challengesRestored: '✅ Challenges restored!',
+          userIdCopied: '🪪 user_id copied!',
+          packInstallReading: 'Reading file...',
+          packInstallSuccess: '✅ Pack installed and enabled!',
+          packInstallCancelled: 'Installation cancelled.',
+          packRemoved: 'Pack removed.',
+          packToggled: 'Pack status updated.',
           maxPlayers: '❌ Maximum 6 players!',
           maxTeamPlayers: '❌ Maximum 3 per team!',
           minTeamPlayers: '❌ At least 1 per team!',
           minFfaPlayers: '❌ At least 3 players!',
-          donationLinkUnavailable: '⚠️ Configure this partner donation link to enable it.'
+          donationLinkUnavailable: '⚠️ Configure this partner donation link to enable it.',
+          shareCopied: '🔗 Link copied!',
+          shareUnavailable: '🔗 Link copied for sharing.',
+          shareCopyFailed: '⚠️ Could not copy the link.',
+          shareInstagramFallback: '🔗 Link copied. Paste it into Instagram.',
+          shareTikTokFallback: '🔗 Link copied. Paste it into TikTok.'
         },
         confirmations: {
           resetWords: 'Restore the default word bank? Custom words will be lost.',
-          restartGame: 'Restart the game? All progress will be lost.'
+          resetChallenges: 'Restore the default challenges? Custom challenges will be lost.',
+          resetAppDefaults: 'Reset the entire application to defaults? Settings, saved players, installed packs, and user_id will be erased.',
+          restartGame: 'Restart the game? All progress will be lost.',
+          replacePack: ({ packName }) => `A pack with this ID is already installed (${packName}). Replace it?`,
+          removePack: ({ packName }) => `Remove the pack "${packName}" from this device?`
+        },
+        packErrors: {
+          fileRequired: 'Select a pack file.',
+          invalidJson: 'Invalid file. Upload a pack JSON.',
+          invalidSchema: 'Invalid pack schema.',
+          invalidUser: 'This pack was issued to another user_id.',
+          invalidPackId: 'Missing or invalid pack_id.',
+          invalidAlgorithm: 'Invalid signature algorithm.',
+          invalidSignature: 'Invalid signature. The pack was not installed.',
+          invalidContentHash: 'Invalid content hash.',
+          emptyPack: 'The pack has no valid words or challenges.',
+          cryptoUnavailable: 'This browser does not support secure pack validation.',
+          reservedPackId: 'This pack_id is reserved by the game.'
         }
       },
       es: {
@@ -473,10 +682,10 @@
           }
         },
         home: {
-          subtitle: '🎭 El juego de la mímica',
+          subtitle: '🎭 Mímica y dibujo en familia',
           newGame: '🎮 Nueva Partida',
           quickGame: '⚡ Juego Rápido',
-          wordBank: '📝 Banco de Palabras',
+          wordBank: '🧩 Contenido y Expansiones',
           donate: '❤️ Donar',
           settings: '⚙️ Configuración',
           howToTitle: '🏆 Cómo jugar',
@@ -484,7 +693,7 @@
             setupTitle: 'Prepara la partida',
             setupDesc: 'Elige entre equipos o todos contra todos y define rondas, dificultad y categorías.',
             turnTitle: 'Mira y representa',
-            turnDesc: 'Un jugador ve la palabra, la memoriza y hace la mímica sin hablar mientras los demás intentan adivinar.',
+            turnDesc: 'Un jugador ve la palabra, la memoriza y hace mímica o dibuja mientras los demás intentan adivinar.',
             timerTitle: 'Corre contra el tiempo',
             timerDesc: 'El temporizador, las pistas y los sonidos de alerta hacen que cada turno sea rápido y divertido.',
             winTitle: 'Suma puntos y gana',
@@ -493,7 +702,12 @@
         },
         setup: {
           title: 'Nueva Partida',
-          modeTitle: '1️⃣ Modo de Juego',
+          gameTypeTitle: 'Tipo de Juego',
+          gameTypeMimeName: 'Mímica',
+          gameTypeMimeDesc: 'Actúa sin hablar',
+          gameTypeDrawingName: 'Dibujo',
+          gameTypeDrawingDesc: 'Dibuja la palabra',
+          modeTitle: 'Modo de Juego',
           modeTeamsName: 'Dos Equipos',
           modeTeamsDesc: 'Compiten por equipos',
           modeFfaName: 'Todos contra todos',
@@ -512,7 +726,10 @@
           optionsTitle: '4️⃣ Opciones de Juego',
           randomChallengeLabel: 'Desafío Aleatorio',
           randomChallengeSub: 'Añade modificadores a la mímica',
+          randomChallengeDisabledSub: 'No disponible en modo dibujo',
           categoriesLabel: 'Categorías Disponibles',
+          coreCategoriesLabel: 'Categorías Core',
+          premiumCategoriesLabel: 'Categorías Premium',
           matchTitle: '5️⃣ Configurar Partida',
           roundsLabel: 'Número de Rondas',
           roundsSub: 'Cuántas rondas por jugador',
@@ -533,12 +750,16 @@
         },
         game: {
           currentPlayerLabel: 'Turno de hacer la mímica:',
+          currentPlayerDrawingLabel: 'Turno de dibujar:',
           readyTitle: '¿Listos para ver la palabra?',
+          readyDrawingTitle: '¿Listos para ver qué dibujar?',
           readySub: '¡Solo el mimo debe mirar! ¡Los demás cierren los ojos! 👀',
+          readyDrawingSub: '¡Solo quien va a dibujar debe mirar! ¡Los demás cierren los ojos! 👀',
           revealWord: '🎲 Mostrar Palabra',
           memorizeTitle: '⚡ ¡Memoriza la palabra!',
           startsIn: 'El juego empieza en...',
           onlyMimeCanSee: '¡Solo el mimo puede verla!',
+          onlyDrawerCanSee: '¡Solo quien dibuja puede verla!',
           secondsLabel: 'SEGUNDOS',
           hiddenWord: 'Palabra oculta',
           hintTitle: '💡 Pista',
@@ -547,6 +768,15 @@
           correct: '✅ ¡Acertó!',
           wrong: '❌ Error / Skip',
           challengePrefix: '🎯 Desafío:'
+        },
+        drawing: {
+          canvasLabel: 'Área de dibujo',
+          toolbarLabel: 'Herramientas de dibujo',
+          penThick: 'Línea gruesa',
+          penThin: 'Línea fina',
+          eraserThick: 'Borrador grueso',
+          eraserThin: 'Borrador fino',
+          clear: 'Limpiar canvas'
         },
         result: {
           correctTitle: '¡Acertó!',
@@ -565,13 +795,32 @@
           tie: '¡EMPATE!'
         },
         wordbank: {
-          title: 'Banco de Palabras',
+          title: 'Contenido y Expansiones',
           addTitle: '➕ Añadir Palabra',
           newWordPlaceholder: 'Escribe la palabra...',
           addToDifficulty: 'Se añadirá a la dificultad:',
           addButton: '➕ Añadir Palabra',
           listTitle: '📋 Palabras',
-          resetButton: '↺ Restaurar'
+          resetButton: '↺ Restaurar',
+          challengesTitle: '🎯 Desafíos Core',
+          addChallengeTitle: '🎯 Añadir Desafío',
+          newChallengePlaceholder: 'Escribe el desafío...',
+          addChallengeButton: '➕ Añadir Desafío',
+          installPackTitle: '📦 Instalar pack',
+          installPackSub: 'Sube el archivo .json comprado para desbloquear nuevas palabras en este dispositivo.',
+          selectPackFile: '📁 Elegir archivo',
+          installedPacksTitle: 'Packs instalados',
+          noInstalledPacks: 'Aún no hay packs extra instalados.',
+          packEnabled: 'Activo',
+          packDisabled: 'Inactivo',
+          removePack: 'Eliminar',
+          packPreviewTitle: '⭐ Contenido del pack',
+          packPreviewPrompt: 'Haz clic en un pack instalado para ver palabras y desafíos.',
+          packPreviewWordsTitle: 'Palabras del pack',
+          packPreviewChallengesTitle: 'Challenges del pack',
+          packPreviewNoWords: 'No hay palabras en este idioma y dificultad.',
+          packPreviewNoChallenges: 'No hay challenges en este idioma.',
+          packPreviewSelected: ({ name }) => `Mostrando: ${name}`
         },
         settings: {
           title: 'Configuración',
@@ -587,12 +836,19 @@
           alertSoundSub: 'Beep en los últimos 10 segundos',
           navigationSoundLabel: 'Sonido de Navegación',
           navigationSoundSub: 'Sonido al hacer clic en los botones',
+          userIdTitle: '🪪 ID de compra',
+          userIdLabel: 'Tu user_id',
+          userIdSub: 'Usa este código al comprar packs para que el archivo se emita para este dispositivo.',
+          copyUserId: 'Copiar',
           wordsTitle: '🎲 Palabras',
           shuffleWordsLabel: 'Mezclar Palabras',
           shuffleWordsSub: 'Orden aleatorio en cada partida',
           appearanceTitle: '🎨 Apariencia',
           themeLabel: 'Tema visual',
-          themeSub: 'Cambia colores, transparencias y tipografía de la interfaz'
+          themeSub: 'Cambia colores, transparencias y tipografía de la interfaz',
+          resetAllTitle: '🧹 Restaurar aplicación',
+          resetAllSub: 'Elimina configuración, jugadores guardados, packs instalados y el user_id de este dispositivo.',
+          resetAllButton: 'Restaurar todo'
         },
         donate: {
           title: 'Apoya a MimiMania',
@@ -606,13 +862,17 @@
           whyLanguages: 'Tu apoyo ayuda a financiar nuevos idiomas, packs de contenido y futuras expansiones del banco de palabras.',
           whyUpdates: 'También ayuda a mantener MimiMania con más pulido, ajustes de balance y nuevas funciones.'
         },
+        share: {
+          title: 'MimiMania',
+          text: '¡Ven a jugar MimiMania conmigo!'
+        },
         theme: {
           cosmic: 'Cósmico',
           'liquid-glass': 'Otoño',
           material3: 'Primavera'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v3.0 · Insight X Lab Technologies · Publicado en ',
+          copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Publicado en ',
           githubPages: 'GitHub Pages'
         },
         teams: {
@@ -633,20 +893,55 @@
           roundSummary: ({ roundDone, remaining }) => `Fin de la Ronda ${roundDone} — ${remaining} ronda${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''}!`,
           wordAdded: ({ word, difficulty }) => `✅ "${word}" añadida (${difficulty})!`,
           teamAdded: ({ name, teamName }) => `✅ ${name} entró en ${teamName}!`,
-          playerAdded: ({ name }) => `✅ ${name} se unió!`
+          playerAdded: ({ name }) => `✅ ${name} se unió!`,
+          packInstalled: ({ name }) => `✅ Pack "${name}" instalado!`,
+          packWordsSummary: ({ count }) => `${count} palabra${count !== 1 ? 's' : ''}`,
+          packVersion: ({ version }) => `v${version}`,
+          challengeAdded: ({ challenge }) => `✅ Desafío "${challenge}" añadido!`
         },
         notifications: {
           duplicateWord: '⚠️ ¡La palabra ya existe!',
+          duplicateChallenge: '⚠️ ¡El desafío ya existe!',
           bankRestored: '✅ ¡Banco restaurado!',
+          challengeRemoved: 'Desafío eliminado.',
+          challengesRestored: '✅ ¡Desafíos restaurados!',
+          userIdCopied: '🪪 ¡user_id copiado!',
+          packInstallReading: 'Leyendo archivo...',
+          packInstallSuccess: '✅ ¡Pack instalado y activado!',
+          packInstallCancelled: 'Instalación cancelada.',
+          packRemoved: 'Pack eliminado.',
+          packToggled: 'Estado del pack actualizado.',
           maxPlayers: '❌ ¡Máximo 6 jugadores!',
           maxTeamPlayers: '❌ ¡Máximo 3 por equipo!',
           minTeamPlayers: '❌ ¡Mínimo 1 por equipo!',
           minFfaPlayers: '❌ ¡Mínimo 3 jugadores!',
-          donationLinkUnavailable: '⚠️ Configura el enlace de donación de este socio para activarlo.'
+          donationLinkUnavailable: '⚠️ Configura el enlace de donación de este socio para activarlo.',
+          shareCopied: '🔗 ¡Enlace copiado!',
+          shareUnavailable: '🔗 Enlace copiado para compartir.',
+          shareCopyFailed: '⚠️ No se pudo copiar el enlace.',
+          shareInstagramFallback: '🔗 Enlace copiado. Pégalo en Instagram.',
+          shareTikTokFallback: '🔗 Enlace copiado. Pégalo en TikTok.'
         },
         confirmations: {
           resetWords: '¿Restaurar el banco de palabras predeterminado? Las palabras personalizadas se perderán.',
-          restartGame: '¿Reiniciar el juego? Todo el progreso se perderá.'
+          resetChallenges: '¿Restaurar los desafíos predeterminados? Los desafíos personalizados se perderán.',
+          resetAppDefaults: '¿Restaurar toda la aplicación a los valores predeterminados? Se eliminarán configuración, jugadores guardados, packs instalados y user_id.',
+          restartGame: '¿Reiniciar el juego? Todo el progreso se perderá.',
+          replacePack: ({ packName }) => `Ya existe un pack instalado con este ID (${packName}). ¿Reemplazarlo?`,
+          removePack: ({ packName }) => `¿Eliminar el pack "${packName}" de este dispositivo?`
+        },
+        packErrors: {
+          fileRequired: 'Selecciona un archivo de pack.',
+          invalidJson: 'Archivo inválido. Sube un JSON de pack.',
+          invalidSchema: 'Schema del pack inválido.',
+          invalidUser: 'Este pack fue emitido para otro user_id.',
+          invalidPackId: 'pack_id ausente o inválido.',
+          invalidAlgorithm: 'Algoritmo de firma inválido.',
+          invalidSignature: 'Firma inválida. El pack no fue instalado.',
+          invalidContentHash: 'Hash de contenido inválido.',
+          emptyPack: 'El pack no tiene palabras o desafíos válidos.',
+          cryptoUnavailable: 'Este navegador no soporta validación segura de packs.',
+          reservedPackId: 'Este pack_id está reservado por el juego.'
         }
       }
     };
@@ -1130,16 +1425,46 @@
       }
     };
 
-    const SAMPLE_CHALLENGES_EN = [
-      'Act it out while sitting down',
-      'Act it out using only one hand',
-      'Act it out in slow motion'
+    const CHALLENGES_EN = [
+      'Act it out while sitting down', 'Act it out while crouching', 'Act it out while jumping', 'Act it out while walking in place',
+      'Act it out with one hand behind your back', 'Act it out using only one hand', 'Act it out with your arms stretched out',
+      'Act it out while spinning slowly', 'Act it out as if you were in slow motion', 'Act it out as if you were sped up (super fast)',
+      'Act it out exaggerating A LOT', 'Act it out barely moving', 'Act it out as if you were scared',
+      'Act it out as if you were very happy', 'Act it out as if you were angry', 'Act it out as if you were tired',
+      'Act it out as if you were confused', 'Act it out as if you were panicking', 'Act it out like a robot',
+      'Act it out like a cartoon character', 'Act it out like an elderly person', 'Act it out like a child',
+      'Act it out like a superhero', 'Act it out like a villain', 'Act it out like an animal',
+      'Act it out as if you were on the moon (low gravity)', 'Act it out as if you were underwater', 'Act it out as if you were invisible',
+      'Act it out as if you were giant', 'Act it out as if you were very tiny', 'You cannot use your hands',
+      'You cannot use your arms', 'You cannot move from your spot', 'You cannot repeat the same gesture', 'You cannot point at anything',
+      'You cannot use your face (no facial expressions)', 'You can only use your face (no body)', 'You must start from the end of the action',
+      'You must do everything backwards (from end to beginning)', 'You must freeze completely every 3 seconds',
+      'Act it out as if you were in an action movie', 'Act it out as if it were a comedy',
+      'Act it out as if you were in dramatic slow motion', 'Act it out as if you were in a dream',
+      'Act it out as if you were very cold', 'Act it out as if you were very hot',
+      'Act it out as if you were in the dark', 'Act it out as if you were on a stage',
+      'Act it out as if a huge audience were watching you', 'Act it out as if it were your last chance to win the game'
     ];
 
-    const SAMPLE_CHALLENGES_ES = [
-      'Haz la mímica sentado',
-      'Haz la mímica usando solo una mano',
-      'Haz la mímica en cámara lenta'
+    const CHALLENGES_ES = [
+      'Haz la mímica sentado', 'Haz la mímica agachado', 'Haz la mímica saltando', 'Haz la mímica caminando en el lugar',
+      'Haz la mímica con una mano detrás de la espalda', 'Haz la mímica usando solo una mano', 'Haz la mímica con los brazos estirados',
+      'Haz la mímica girando lentamente', 'Haz la mímica como si estuvieras en cámara lenta', 'Haz la mímica como si estuvieras acelerado (super rápido)',
+      'Haz la mímica exagerando MUCHO', 'Haz la mímica casi sin moverte', 'Haz la mímica como si tuvieras miedo',
+      'Haz la mímica como si estuvieras muy feliz', 'Haz la mímica como si estuvieras enojado', 'Haz la mímica como si estuvieras cansado',
+      'Haz la mímica como si estuvieras confundido', 'Haz la mímica como si estuvieras en pánico', 'Haz la mímica como un robot',
+      'Haz la mímica como un personaje de caricatura', 'Haz la mímica como una persona mayor', 'Haz la mímica como un niño',
+      'Haz la mímica como un superhéroe', 'Haz la mímica como un villano', 'Haz la mímica como un animal',
+      'Haz la mímica como si estuvieras en la luna (baja gravedad)', 'Haz la mímica como si estuvieras bajo el agua', 'Haz la mímica como si fueras invisible',
+      'Haz la mímica como si fueras gigante', 'Haz la mímica como si fueras muy pequeño', 'No puedes usar las manos',
+      'No puedes usar los brazos', 'No puedes moverte del lugar', 'No puedes repetir el mismo gesto', 'No puedes señalar nada',
+      'No puedes usar la cara (sin expresiones faciales)', 'Solo puedes usar la cara (sin cuerpo)', 'Tienes que empezar por el final de la acción',
+      'Tienes que hacer todo al revés (de atrás hacia adelante)', 'Tienes que detenerte por completo cada 3 segundos',
+      'Haz la mímica como si estuvieras en una película de acción', 'Haz la mímica como si fuera una comedia',
+      'Haz la mímica como si estuvieras en cámara lenta dramática', 'Haz la mímica como si estuvieras en un sueño',
+      'Haz la mímica como si tuvieras mucho frío', 'Haz la mímica como si tuvieras mucho calor',
+      'Haz la mímica como si estuvieras en la oscuridad', 'Haz la mímica como si estuvieras en un escenario',
+      'Haz la mímica como si te estuviera mirando un público enorme', 'Haz la mímica como si fuera la última oportunidad de ganar el juego'
     ];
 
     // Content pack schema used by the app and by future downloadable packs:
@@ -1166,8 +1491,8 @@
         },
         challenges: {
           pt: clone(CHALLENGES_PT),
-          en: clone(SAMPLE_CHALLENGES_EN),
-          es: clone(SAMPLE_CHALLENGES_ES)
+          en: clone(CHALLENGES_EN),
+          es: clone(CHALLENGES_ES)
         }
       };
     }
@@ -1184,12 +1509,99 @@
       return {
         id: pack?.id || `pack-${Date.now()}`,
         name: pack?.name || 'Pack',
+        description: pack?.description || '',
+        version: pack?.version || '',
+        author: pack?.author || '',
         source: pack?.source || 'local',
         editable: pack?.editable !== false,
         enabled: pack?.enabled !== false,
+        installedAt: pack?.installedAt || '',
+        license: pack?.license || null,
+        challengeOverrides: (pack?.challengeOverrides && typeof pack.challengeOverrides === 'object') ? pack.challengeOverrides : {},
         words: normalizedWords,
         challenges: normalizedChallenges
       };
+    }
+
+    function getLocalizedText(value, fallback = '') {
+      if (!value) return fallback;
+      if (typeof value === 'string') return value;
+      return value[currentLanguage] || value[DEFAULT_LANGUAGE] || value.pt || Object.values(value)[0] || fallback;
+    }
+
+    function getPackDisplayName(pack) {
+      return getLocalizedText(pack?.name, 'Pack');
+    }
+
+    function getPackWordCount(pack, locale = currentLanguage) {
+      const bank = normalizeWordBank(pack?.words?.[locale] || {});
+      let count = 0;
+      DIFFICULTY_KEYS.forEach(diff => {
+        CATEGORY_KEYS.forEach(cat => {
+          count += bank[diff][cat].length;
+        });
+      });
+      return count;
+    }
+
+    function getPackTotalContentCount(pack) {
+      const locales = new Set([
+        ...Object.keys(pack?.words || {}),
+        ...Object.keys(pack?.challenges || {})
+      ]);
+      let count = 0;
+      locales.forEach(locale => {
+        count += getPackWordCount(pack, locale);
+        count += normalizeChallenges(pack?.challenges?.[locale] || []).length;
+      });
+      return count;
+    }
+
+    function canonicalize(value) {
+      if (Array.isArray(value)) return `[${value.map(canonicalize).join(',')}]`;
+      if (value && typeof value === 'object') {
+        return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonicalize(value[key])}`).join(',')}}`;
+      }
+      return JSON.stringify(value);
+    }
+
+    function bytesToBase64Url(bytes) {
+      const binary = Array.from(bytes, byte => String.fromCharCode(byte)).join('');
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+
+    function base64UrlToBytes(value) {
+      const normalized = String(value || '').replace(/-/g, '+').replace(/_/g, '/');
+      const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
+      const binary = atob(padded);
+      return Uint8Array.from(binary, char => char.charCodeAt(0));
+    }
+
+    async function sha256Base64Url(value) {
+      if (!crypto?.subtle) throw new Error(t('packErrors.cryptoUnavailable'));
+      const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+      return bytesToBase64Url(new Uint8Array(digest));
+    }
+
+    function buildPackSignedPayload(userId, packId, contentHash) {
+      return `${PACK_SIGNATURE_CONTEXT}\nuser_id=${userId}\npack_id=${packId}\ncontent_sha256=${contentHash}`;
+    }
+
+    async function verifyPackSignature(userId, packId, contentHash, signature) {
+      if (!crypto?.subtle) throw new Error(t('packErrors.cryptoUnavailable'));
+      const publicKey = await crypto.subtle.importKey(
+        'jwk',
+        PACK_SIGNING_PUBLIC_KEY,
+        { name: 'ECDSA', namedCurve: 'P-256' },
+        false,
+        ['verify']
+      );
+      return crypto.subtle.verify(
+        { name: 'ECDSA', hash: 'SHA-256' },
+        publicKey,
+        base64UrlToBytes(signature),
+        new TextEncoder().encode(buildPackSignedPayload(userId, packId, contentHash))
+      );
     }
 
     function mergeUniqueStrings(primary = [], secondary = []) {
@@ -1225,12 +1637,16 @@
 
       const locales = new Set([
         ...Object.keys(defaultCore.words || {}),
-        ...Object.keys(savedPack.words || {})
+        ...Object.keys(savedPack.words || {}),
+        ...Object.keys(defaultCore.challenges || {}),
+        ...Object.keys(savedPack.challenges || {})
       ]);
 
       locales.forEach(locale => {
         merged.words[locale] = mergeWordBanks(defaultCore.words?.[locale], savedPack.words?.[locale]);
-        merged.challenges[locale] = mergeUniqueStrings(defaultCore.challenges?.[locale], savedPack.challenges?.[locale]);
+        merged.challenges[locale] = savedPack.challengeOverrides?.[locale]
+          ? normalizeChallenges(savedPack.challenges?.[locale] || [])
+          : mergeUniqueStrings(defaultCore.challenges?.[locale], savedPack.challenges?.[locale]);
       });
 
       return normalizePack(merged);
@@ -1280,6 +1696,39 @@
       return (contentModel.packs || []).filter(pack => pack.enabled !== false);
     }
 
+    function getCorePack() {
+      return contentModel.packs.find(pack => pack.id === CORE_PACK_ID) || normalizePack(createCorePack());
+    }
+
+    function getPremiumPacks(options = {}) {
+      const { enabledOnly = true } = options;
+      return (contentModel.packs || []).filter(pack => (
+        pack.source === 'downloaded' && (!enabledOnly || pack.enabled !== false)
+      ));
+    }
+
+    function getPremiumCategoryToken(packId) {
+      return `pack:${packId}`;
+    }
+
+    function getPackIdFromCategoryToken(token) {
+      return String(token || '').startsWith('pack:') ? String(token).slice(5) : '';
+    }
+
+    function getPremiumPackByToken(token) {
+      const packId = getPackIdFromCategoryToken(token);
+      if (!packId) return null;
+      return getPremiumPacks().find(pack => pack.id === packId) || null;
+    }
+
+    function isPremiumCategoryToken(token) {
+      return Boolean(getPremiumPackByToken(token));
+    }
+
+    function isValidCategoryToken(token) {
+      return CATEGORY_KEYS.includes(token) || isPremiumCategoryToken(token);
+    }
+
     function ensureUniqueWords(words) {
       return [...new Set(words)];
     }
@@ -1298,8 +1747,12 @@
     }
 
     function getLocalizedChallenges(locale = currentLanguage) {
-      let list = [];
-      getEnabledPacks().forEach(pack => {
+      const corePack = getCorePack();
+      let list = normalizeChallenges(corePack.challenges?.[locale] || []);
+      if (!list.length && !corePack.challengeOverrides?.[locale]) {
+        list = normalizeChallenges(createCorePack().challenges?.[locale] || []);
+      }
+      getPremiumPacks().forEach(pack => {
         list = ensureUniqueWords([...list, ...normalizeChallenges(pack.challenges?.[locale] || [])]);
       });
       return list;
@@ -1335,8 +1788,64 @@
       }
     }
 
+    async function buildInstalledPackFromEnvelope(envelope) {
+      if (!envelope || typeof envelope !== 'object') throw new Error(t('packErrors.invalidJson'));
+      if (envelope.schema !== WORD_PACK_SCHEMA) throw new Error(t('packErrors.invalidSchema'));
+      if (envelope.user_id !== appUserId) throw new Error(t('packErrors.invalidUser'));
+      if (!envelope.pack_id || typeof envelope.pack_id !== 'string') throw new Error(t('packErrors.invalidPackId'));
+      if (envelope.pack_id === CORE_PACK_ID) throw new Error(t('packErrors.reservedPackId'));
+      if (envelope.signature_algorithm !== PACK_SIGNATURE_ALGORITHM) throw new Error(t('packErrors.invalidAlgorithm'));
+      if (!envelope.signature || typeof envelope.signature !== 'string') throw new Error(t('packErrors.invalidSignature'));
+
+      const content = envelope.content || {};
+      const contentHash = await sha256Base64Url(canonicalize(content));
+      if (envelope.content_sha256 && envelope.content_sha256 !== contentHash) {
+        throw new Error(t('packErrors.invalidContentHash'));
+      }
+
+      const isSignatureValid = await verifyPackSignature(envelope.user_id, envelope.pack_id, contentHash, envelope.signature);
+      if (!isSignatureValid) throw new Error(t('packErrors.invalidSignature'));
+
+      const pack = normalizePack({
+        id: envelope.pack_id,
+        name: content.name || envelope.pack_id,
+        description: content.description || '',
+        version: content.version || '',
+        author: content.author || '',
+        source: 'downloaded',
+        editable: false,
+        enabled: true,
+        installedAt: new Date().toISOString(),
+        license: {
+          userId: envelope.user_id,
+          signature: envelope.signature,
+          algorithm: envelope.signature_algorithm,
+          contentSha256: contentHash
+        },
+        words: content.words || {},
+        challenges: content.challenges || {}
+      });
+
+      if (getPackTotalContentCount(pack) === 0) throw new Error(t('packErrors.emptyPack'));
+      return pack;
+    }
+
+    async function parsePackFile(file) {
+      if (!file) throw new Error(t('packErrors.fileRequired'));
+      try {
+        return JSON.parse(await file.text());
+      } catch (e) {
+        throw new Error(t('packErrors.invalidJson'));
+      }
+    }
+
     function getCategoryLabel(category, options = {}) {
       const { singular = false, withIcon = false } = options;
+      const premiumPack = getPremiumPackByToken(category);
+      if (premiumPack) {
+        const premiumLabel = getPackDisplayName(premiumPack);
+        return withIcon ? `⭐ ${premiumLabel}` : premiumLabel;
+      }
       const label = t(`category.${category}.${singular ? 'singular' : 'plural'}`);
       return withIcon ? `${CATEGORY_ICONS[category] || ''} ${label}`.trim() : label;
     }
@@ -1344,6 +1853,40 @@
     function getDifficultyLabel(diff, withIcon = false) {
       const label = t(`difficulty.${diff}`);
       return withIcon ? `${DIFFICULTY_ICONS[diff] || ''} ${label}`.trim() : label;
+    }
+
+    function getDefaultCoreChallenges(locale = currentLanguage) {
+      return normalizeChallenges(createCorePack().challenges?.[locale] || []);
+    }
+
+    function getCoreWordsForCategory(category, diff = 'easy', locale = currentLanguage) {
+      const bank = normalizeWordBank(getCorePack().words?.[locale] || {});
+      return bank[diff]?.[category] || [];
+    }
+
+    function getPremiumWordsForPack(pack, diff = 'easy', locale = currentLanguage) {
+      const bank = normalizeWordBank(pack?.words?.[locale] || {});
+      let words = [];
+      CATEGORY_KEYS.forEach(category => {
+        words = ensureUniqueWords([...words, ...(bank[diff]?.[category] || [])]);
+      });
+      return words;
+    }
+
+    function countWordsForCategoryToken(category, diff = 'easy') {
+      const premiumPack = getPremiumPackByToken(category);
+      if (premiumPack) return getPremiumWordsForPack(premiumPack, diff).length;
+      if (CATEGORY_KEYS.includes(category)) return getCoreWordsForCategory(category, diff).length;
+      return 0;
+    }
+
+    function countWordsForSelectedCategories(categories, diff = 'easy') {
+      return (categories || []).reduce((total, category) => total + countWordsForCategoryToken(category, diff), 0);
+    }
+
+    function normalizeSelectedCategories(categories = []) {
+      const selected = ensureUniqueWords(categories.map(category => String(category))).filter(isValidCategoryToken);
+      return selected.length ? selected : getDefaultSelectedCategories();
     }
 
     function getDefaultTeamName(team, language = currentLanguage) {
@@ -1374,11 +1917,12 @@
 
     function getQuickGameSummary(config) {
       const normalized = normalizeQuickGameConfig(config);
+      const gameTypeLabel = t(`setup.${normalized.gameType === 'drawing' ? 'gameTypeDrawingName' : 'gameTypeMimeName'}`);
       const modeLabel = normalized.mode === 'teams' ? t('setup.modeTeamsName') : t('setup.modeFfaName');
       const playerCountLabel = formatCount(getQuickGamePlayerCount(normalized), 'common.playerSingular', 'common.playerPlural');
       const categoriesLabel = normalized.selectedCategories.map(category => getCategoryLabel(category)).join(', ');
       const roundsLabel = formatCount(normalized.rounds, 'common.roundSingular', 'common.roundPlural');
-      return [modeLabel, playerCountLabel, categoriesLabel, roundsLabel].join(' | ');
+      return [gameTypeLabel, modeLabel, playerCountLabel, categoriesLabel, roundsLabel].join(' | ');
     }
 
     function renderQuickGameSummary() {
@@ -1398,6 +1942,7 @@
     }
 
     let gameState = {
+      gameType: 'mime',
       mode: 'teams',
       difficulty: 'easy',
       teams: { A: [], B: [] },
@@ -1423,8 +1968,25 @@
       selectedCategories: getDefaultSelectedCategories()
     };
 
+    const DRAWING_TOOL_CONFIG = {
+      'pen-thick': { color: '#111827', width: 12 },
+      'pen-thin': { color: '#111827', width: 4 },
+      'eraser-thick': { color: '#ffffff', width: 32 },
+      'eraser-thin': { color: '#ffffff', width: 12 }
+    };
+
+    const drawingState = {
+      canvas: null,
+      ctx: null,
+      activeTool: 'pen-thick',
+      isDrawing: false,
+      lastX: 0,
+      lastY: 0
+    };
+
     let wbDiff = 'easy';
     let wbCat = 'objects';
+    let wbPreviewPackId = '';
 
     // ============================================================
     // STARS
@@ -1455,12 +2017,21 @@
         el.placeholder = t(el.dataset.i18nPlaceholder);
       });
 
+      document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        el.title = t(el.dataset.i18nTitle);
+      });
+
+      document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel));
+      });
+
       const languageSelect = document.getElementById('language-select');
       if (languageSelect) languageSelect.value = currentLanguage;
     }
 
     function refreshLocalizedUI() {
       applyTranslations();
+      refreshGameTypeUI();
       renderQuickGameSummary();
       updateTeamLabels();
       renderCategorySelection();
@@ -1469,6 +2040,10 @@
       syncWBDiffUI();
       syncWBCatUI();
       renderWordBank();
+      renderChallengeBank();
+      renderInstalledPacks();
+      renderPackPreview();
+      renderUserId();
       refreshCurrentTurnCopy();
       refreshScoreScreenCopy();
       refreshFinalScreenCopy();
@@ -1492,14 +2067,19 @@
     function goTo(screen) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById('screen-' + screen).classList.add('active');
+      document.body.dataset.activeScreen = screen;
       if (screen === 'wordbank') {
         wbDiff = 'easy';
         wbCat = 'objects';
         syncWBDiffUI();
         syncWBCatUI();
         renderWordBank();
+        renderChallengeBank();
+        renderInstalledPacks();
+        renderPackPreview();
       }
       if (screen === 'setup') {
+        refreshGameTypeUI();
         renderSetupPlayers();
         updateDiffWordCount();
         renderCategorySelection();
@@ -1522,6 +2102,153 @@
       setTimeout(() => el.classList.remove('show'), 2400);
     }
 
+    function renderUserId() {
+      const input = document.getElementById('user-id-display');
+      if (input) input.value = appUserId;
+    }
+
+    async function copyUserId() {
+      try {
+        await navigator.clipboard.writeText(appUserId);
+        showNotif(t('notifications.userIdCopied'));
+      } catch (e) {
+        const input = document.getElementById('user-id-display');
+        input?.select();
+        document.execCommand?.('copy');
+        showNotif(t('notifications.userIdCopied'));
+      }
+    }
+
+    function setPackInstallStatus(message = '', type = '') {
+      const el = document.getElementById('pack-install-status');
+      if (!el) return;
+      el.textContent = message;
+      el.classList.remove('success', 'error');
+      if (type) el.classList.add(type);
+    }
+
+    function renderInstalledPacks() {
+      const container = document.getElementById('installed-packs-list');
+      if (!container) return;
+      const installedPacks = (contentModel.packs || []).filter(pack => pack.source === 'downloaded');
+      container.innerHTML = '';
+
+      if (!installedPacks.length) {
+        const empty = document.createElement('div');
+        empty.className = 'installed-pack-empty';
+        empty.textContent = t('wordbank.noInstalledPacks');
+        container.appendChild(empty);
+        return;
+      }
+
+      installedPacks.forEach(pack => {
+        const row = document.createElement('div');
+        row.className = 'installed-pack-row';
+        if (pack.id === wbPreviewPackId) row.classList.add('selected');
+        row.dataset.packPreviewId = pack.id;
+        const name = getPackDisplayName(pack);
+        const wordsCount = getPackWordCount(pack);
+        const version = pack.version ? ` · ${t('dynamic.packVersion', { version: pack.version })}` : '';
+        const info = document.createElement('div');
+        const nameEl = document.createElement('div');
+        nameEl.className = 'installed-pack-name';
+        nameEl.textContent = name;
+        const metaEl = document.createElement('div');
+        metaEl.className = 'installed-pack-meta';
+        metaEl.textContent = `${t('dynamic.packWordsSummary', { count: wordsCount })}${version}`;
+        info.append(nameEl, metaEl);
+
+        const actions = document.createElement('div');
+        actions.className = 'installed-pack-actions';
+        const toggleButton = document.createElement('button');
+        toggleButton.className = 'btn btn-ghost btn-sm';
+        toggleButton.dataset.action = 'toggle-installed-pack';
+        toggleButton.dataset.packId = pack.id;
+        toggleButton.textContent = pack.enabled === false ? t('wordbank.packDisabled') : t('wordbank.packEnabled');
+        const removeButton = document.createElement('button');
+        removeButton.className = 'btn btn-ghost btn-sm';
+        removeButton.dataset.action = 'remove-installed-pack';
+        removeButton.dataset.packId = pack.id;
+        removeButton.textContent = t('wordbank.removePack');
+        actions.append(toggleButton, removeButton);
+        row.append(info, actions);
+        container.appendChild(row);
+      });
+    }
+
+    function getInstalledPackById(packId) {
+      return (contentModel.packs || []).find(pack => pack.id === packId && pack.source === 'downloaded') || null;
+    }
+
+    function getPackPreviewWordEntries(pack, diff = wbDiff, locale = currentLanguage) {
+      const bank = normalizeWordBank(pack?.words?.[locale] || {});
+      const entries = [];
+      CATEGORY_KEYS.forEach(category => {
+        (bank[diff]?.[category] || []).forEach(word => {
+          entries.push({ word, category });
+        });
+      });
+      return entries;
+    }
+
+    function renderPreviewItems(container, entries, emptyMessage, formatter) {
+      if (!container) return;
+      container.innerHTML = '';
+      if (!entries.length) {
+        const empty = document.createElement('div');
+        empty.className = 'pack-preview-empty';
+        empty.textContent = emptyMessage;
+        container.appendChild(empty);
+        return;
+      }
+
+      entries.forEach(entry => {
+        const item = document.createElement('span');
+        item.className = 'pack-preview-item';
+        item.textContent = formatter(entry);
+        container.appendChild(item);
+      });
+    }
+
+    function renderPackPreview() {
+      const subtitle = document.getElementById('pack-preview-subtitle');
+      const diffLabel = document.getElementById('pack-preview-diff-label');
+      const wordsContainer = document.getElementById('pack-preview-words');
+      const challengesContainer = document.getElementById('pack-preview-challenges');
+      if (!subtitle || !wordsContainer || !challengesContainer) return;
+
+      if (diffLabel) diffLabel.textContent = getDifficultyLabel(wbDiff, true);
+      const pack = getInstalledPackById(wbPreviewPackId);
+      if (!pack) {
+        subtitle.textContent = t('wordbank.packPreviewPrompt');
+        renderPreviewItems(wordsContainer, [], t('wordbank.packPreviewNoWords'), item => item);
+        renderPreviewItems(challengesContainer, [], t('wordbank.packPreviewNoChallenges'), item => item);
+        return;
+      }
+
+      subtitle.textContent = t('wordbank.packPreviewSelected', { name: getPackDisplayName(pack) });
+      const wordEntries = getPackPreviewWordEntries(pack);
+      const challenges = normalizeChallenges(pack.challenges?.[currentLanguage] || []);
+      renderPreviewItems(
+        wordsContainer,
+        wordEntries,
+        t('wordbank.packPreviewNoWords'),
+        entry => `${CATEGORY_ICONS[entry.category] || ''} ${entry.word}`.trim()
+      );
+      renderPreviewItems(
+        challengesContainer,
+        challenges,
+        t('wordbank.packPreviewNoChallenges'),
+        challenge => `🎯 ${challenge}`
+      );
+    }
+
+    function selectPreviewPack(packId) {
+      wbPreviewPackId = packId;
+      renderInstalledPacks();
+      renderPackPreview();
+    }
+
     function getDonationUrl(platform) {
       return DONATION_LINKS[platform] || '';
     }
@@ -1539,6 +2266,132 @@
       document.body.appendChild(link);
       link.click();
       link.remove();
+    }
+
+    function getShareUrl() {
+      try {
+        const url = new URL(window.location.href);
+        if (url.protocol === 'http:' || url.protocol === 'https:') {
+          if (['localhost', '127.0.0.1', '0.0.0.0'].includes(url.hostname)) return APP_PUBLIC_URL;
+          url.hash = '';
+          return url.href;
+        }
+      } catch (error) {
+        console.warn('Could not read current URL for sharing.', error);
+      }
+
+      return APP_PUBLIC_URL;
+    }
+
+    function getShareData() {
+      return {
+        title: t('share.title'),
+        text: t('share.text'),
+        url: getShareUrl()
+      };
+    }
+
+    function canUseNativeShare(shareData) {
+      if (!navigator.share) return false;
+      if (!navigator.canShare) return true;
+
+      try {
+        return navigator.canShare(shareData);
+      } catch (error) {
+        console.warn('Native share capability check failed.', error);
+        return false;
+      }
+    }
+
+    function createPlatformShareUrl(platform, shareData) {
+      const encodedUrl = encodeURIComponent(shareData.url);
+      const encodedText = encodeURIComponent(shareData.text);
+      const encodedMessage = encodeURIComponent(`${shareData.text} ${shareData.url}`);
+
+      if (platform === 'whatsapp') return `https://wa.me/?text=${encodedMessage}`;
+      if (platform === 'facebook') return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+      if (platform === 'x') return `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+
+      return '';
+    }
+
+    async function copyTextToClipboard(text) {
+      if (navigator.clipboard?.writeText && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      textarea.style.top = '0';
+      document.body.appendChild(textarea);
+
+      const activeElement = document.activeElement;
+      textarea.focus();
+      textarea.select();
+      const copied = document.execCommand('copy');
+      textarea.remove();
+      if (activeElement?.focus) activeElement.focus();
+      if (!copied) throw new Error('Clipboard fallback failed');
+    }
+
+    async function copyShareLink(notificationKey = 'notifications.shareCopied') {
+      try {
+        await copyTextToClipboard(getShareData().url);
+        showNotif(t(notificationKey));
+        return true;
+      } catch (error) {
+        console.warn('Share link could not be copied.', error);
+        showNotif(t('notifications.shareCopyFailed'), 'var(--accent2)', 'var(--text)');
+        return false;
+      }
+    }
+
+    async function nativeShareApp(options = {}) {
+      const { fallbackNotification = 'notifications.shareUnavailable' } = options;
+      const shareData = getShareData();
+
+      if (canUseNativeShare(shareData)) {
+        try {
+          await navigator.share(shareData);
+          return true;
+        } catch (error) {
+          if (error?.name === 'AbortError') return false;
+          console.warn('Native sharing failed; falling back to clipboard.', error);
+        }
+      }
+
+      return copyShareLink(fallbackNotification);
+    }
+
+    async function shareToPlatform(platform) {
+      const shareData = getShareData();
+      const target = platform || '';
+
+      if (target === 'copy') return copyShareLink();
+
+      // Instagram and TikTok do not expose reliable public web share-intent URLs
+      // for arbitrary app links. Use the native share sheet when supported;
+      // otherwise copy the URL and open the platform so users can paste it.
+      if (target === 'instagram' || target === 'tiktok') {
+        const fallbackNotification = target === 'instagram'
+          ? 'notifications.shareInstagramFallback'
+          : 'notifications.shareTikTokFallback';
+        const shared = await nativeShareApp({ fallbackNotification });
+        if (!canUseNativeShare(shareData)) openExternalUrl(SOCIAL_WEB_FALLBACKS[target]);
+        return shared;
+      }
+
+      const platformUrl = createPlatformShareUrl(target, shareData);
+      if (platformUrl) {
+        openExternalUrl(platformUrl);
+        return true;
+      }
+
+      return nativeShareApp();
     }
 
     function loadExternalScript(src, scriptId) {
@@ -1774,10 +2627,54 @@
     // ============================================================
     // SETUP
     // ============================================================
+    function syncDrawingBoardVisibility(options = {}) {
+      const { reset = false } = options;
+      const board = document.getElementById('drawing-board');
+      if (!board) return;
+      const shouldShow = gameState.gameType === 'drawing' && gameState.phase === 'playing';
+      board.classList.toggle('hidden', !shouldShow);
+      if (shouldShow) requestAnimationFrame(() => resizeDrawingCanvas({ preserve: !reset }));
+    }
+
+    function refreshGameTypeUI() {
+      const isDrawing = gameState.gameType === 'drawing';
+      document.body.dataset.gameType = gameState.gameType;
+      GAME_TYPES.forEach(type => {
+        const card = document.getElementById(`game-type-${type}`);
+        if (card) card.classList.toggle('selected', gameState.gameType === type);
+      });
+
+      const challengeToggle = document.getElementById('random-challenge-toggle');
+      const challengeWrap = document.getElementById('random-challenge-wrap');
+      const challengeSub = document.getElementById('random-challenge-sub');
+      if (isDrawing) {
+        gameState.randomChallenge = false;
+        if (challengeToggle) challengeToggle.checked = false;
+      }
+      if (challengeToggle) challengeToggle.disabled = isDrawing;
+      if (challengeWrap) challengeWrap.classList.toggle('is-disabled', isDrawing);
+      if (challengeSub) challengeSub.textContent = t(isDrawing ? 'setup.randomChallengeDisabledSub' : 'setup.randomChallengeSub');
+
+      const currentLabel = document.querySelector('.current-player .cp-label');
+      if (currentLabel) currentLabel.textContent = t(isDrawing ? 'game.currentPlayerDrawingLabel' : 'game.currentPlayerLabel');
+      const readyEmoji = document.getElementById('game-ready-emoji');
+      if (readyEmoji) readyEmoji.textContent = isDrawing ? '✏️' : '🎭';
+      const readyTitle = document.getElementById('game-ready-title');
+      if (readyTitle) readyTitle.textContent = t(isDrawing ? 'game.readyDrawingTitle' : 'game.readyTitle');
+      const readySub = document.getElementById('game-ready-sub');
+      if (readySub) readySub.textContent = t(isDrawing ? 'game.readyDrawingSub' : 'game.readySub');
+      const actorOnly = document.getElementById('game-only-actor-can-see');
+      if (actorOnly) actorOnly.textContent = t(isDrawing ? 'game.onlyDrawerCanSee' : 'game.onlyMimeCanSee');
+      syncDrawingBoardVisibility();
+    }
+
+    function selectGameType(type) {
+      gameState.gameType = GAME_TYPES.includes(type) ? type : 'mime';
+      refreshGameTypeUI();
+    }
+
     function updateDiffWordCount() {
-      const bank = getLocalizedWordBank();
-      let total = 0;
-      Object.values(bank[gameState.difficulty] || {}).forEach(arr => { total += arr.length; });
+      const total = countWordsForSelectedCategories(gameState.selectedCategories, gameState.difficulty);
       document.getElementById('diff-word-count').textContent = t('dynamic.diffCount', {
         difficulty: getDifficultyLabel(gameState.difficulty, true),
         count: total
@@ -1785,25 +2682,44 @@
     }
 
     function toggleRandomChallenge(enabled) {
-      gameState.randomChallenge = enabled;
+      gameState.randomChallenge = gameState.gameType === 'mime' && enabled;
+      refreshGameTypeUI();
     }
 
     function toggleCategory(category) {
+      gameState.selectedCategories = normalizeSelectedCategories(gameState.selectedCategories);
       if (gameState.selectedCategories.includes(category)) {
         gameState.selectedCategories = gameState.selectedCategories.filter(c => c !== category);
       } else {
         gameState.selectedCategories.push(category);
       }
+      gameState.selectedCategories = normalizeSelectedCategories(gameState.selectedCategories);
       renderCategorySelection();
     }
 
     function renderCategorySelection() {
       const container = document.getElementById('category-selection');
-      container.innerHTML = CATEGORY_KEYS.map(category => `
+      gameState.selectedCategories = normalizeSelectedCategories(gameState.selectedCategories);
+      const premiumPacks = getPremiumPacks();
+      const coreMarkup = CATEGORY_KEYS.map(category => `
         <div class="category-card ${gameState.selectedCategories.includes(category) ? 'selected' : ''}" data-category="${category}">
           ${CATEGORY_ICONS[category]} ${getCategoryLabel(category)}
         </div>
       `).join('');
+      const premiumMarkup = premiumPacks.map(pack => {
+        const category = getPremiumCategoryToken(pack.id);
+        return `
+          <div class="category-card premium-category-card ${gameState.selectedCategories.includes(category) ? 'selected' : ''}" data-category="${category}">
+            ⭐ ${getPackDisplayName(pack)}
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="category-section-title">${t('setup.coreCategoriesLabel')}</div>
+        ${coreMarkup}
+        ${premiumPacks.length ? `<div class="category-section-title">${t('setup.premiumCategoriesLabel')}</div>${premiumMarkup}` : ''}
+      `;
     }
 
     function selectMode(mode, options = {}) {
@@ -1906,11 +2822,13 @@
     }
 
     function normalizeQuickGameConfig(config) {
+      const gameType = config?.gameType === 'drawing' ? 'drawing' : 'mime';
       const mode = config?.mode === 'teams' ? 'teams' : 'ffa';
       const difficulty = DIFFICULTY_KEYS.includes(config?.difficulty) ? config.difficulty : 'easy';
       const rounds = Math.min(5, Math.max(1, parseInt(config?.rounds, 10) || 3));
-      const selectedCategories = (Array.isArray(config?.selectedCategories) ? config.selectedCategories : [])
-        .filter(category => CATEGORY_KEYS.includes(category));
+      const selectedCategories = normalizeSelectedCategories(
+        Array.isArray(config?.selectedCategories) ? config.selectedCategories : []
+      );
       const teams = {
         A: Array.isArray(config?.teams?.A) ? config.teams.A.map(name => String(name).trim()).filter(Boolean).slice(0, 3) : [],
         B: Array.isArray(config?.teams?.B) ? config.teams.B.map(name => String(name).trim()).filter(Boolean).slice(0, 3) : []
@@ -1919,11 +2837,12 @@
         ? config.players.map(name => String(name).trim()).filter(Boolean).slice(0, 6)
         : [];
       return {
+        gameType,
         mode,
         difficulty,
         rounds,
-        randomChallenge: Boolean(config?.randomChallenge),
-        selectedCategories: selectedCategories.length ? selectedCategories : getDefaultSelectedCategories(),
+        randomChallenge: gameType === 'mime' && Boolean(config?.randomChallenge),
+        selectedCategories,
         teams,
         players,
         teamNames: {
@@ -1935,6 +2854,7 @@
 
     function buildQuickGameConfig() {
       return normalizeQuickGameConfig({
+        gameType: gameState.gameType,
         mode: gameState.mode,
         difficulty: gameState.difficulty,
         rounds: parseInt(document.getElementById('rounds-slider').value, 10) || gameState.totalRounds || 3,
@@ -1953,6 +2873,7 @@
 
     function getFirstAccessQuickGameConfig() {
       return normalizeQuickGameConfig({
+        gameType: 'mime',
         mode: 'ffa',
         difficulty: 'easy',
         rounds: 3,
@@ -1977,6 +2898,7 @@
 
     function applyQuickGameConfig(config) {
       const normalized = normalizeQuickGameConfig(config);
+      selectGameType(normalized.gameType);
       selectMode(normalized.mode, { skipLoadPlayers: true });
       gameState.teams = clone(normalized.teams);
       gameState.players = normalized.mode === 'ffa' ? [...normalized.players] : [];
@@ -1990,6 +2912,7 @@
       updateTeamLabels();
       renderSetupPlayers();
       renderCategorySelection();
+      refreshGameTypeUI();
     }
 
     function startQuickGame() {
@@ -2004,6 +2927,12 @@
       const rounds = parseInt(document.getElementById('rounds-slider').value, 10);
       gameState.totalRounds = rounds;
       gameState.timerDur = parseInt(document.getElementById('timer-slider').value, 10) || 60;
+      if (gameState.gameType === 'drawing') {
+        gameState.randomChallenge = false;
+        const randomToggle = document.getElementById('random-challenge-toggle');
+        if (randomToggle) randomToggle.checked = false;
+      }
+      refreshGameTypeUI();
 
       if (gameState.mode === 'teams') {
         const teamA = gameState.teams.A || [];
@@ -2088,6 +3017,8 @@
       gameState.currentChallenge = null;
       gameState.hintShown = false;
       gameState.wordVisible = false;
+      gameState.timerLeft = gameState.timerDur;
+      updateTimerDisplay(gameState.timerDur, gameState.timerDur);
       document.getElementById('round-display').textContent = t('dynamic.roundDisplay', {
         current: gameState.currentRound,
         total: gameState.totalRounds
@@ -2100,6 +3031,8 @@
       document.getElementById('word-hidden-placeholder').classList.remove('hidden');
       document.getElementById('word-visible-content').classList.add('hidden');
       document.getElementById('btn-toggle-word').textContent = t('game.showWord');
+      refreshGameTypeUI();
+      syncDrawingBoardVisibility();
       renderScoreMini();
     }
 
@@ -2147,6 +3080,7 @@
           document.getElementById('memorize-state').classList.add('hidden');
           document.getElementById('playing-state').classList.remove('hidden');
           gameState.phase = 'playing';
+          syncDrawingBoardVisibility({ reset: true });
           playAlertBeep(880);
           startTimer();
         }
@@ -2187,11 +3121,15 @@
     // ============================================================
     function pickWord() {
       const shuffle = document.getElementById('toggle-shuffle').checked;
-      const bank = getLocalizedWordBank();
       const allWords = [];
 
+      gameState.selectedCategories = normalizeSelectedCategories(gameState.selectedCategories);
       gameState.selectedCategories.forEach(category => {
-        (bank[gameState.difficulty]?.[category] || []).forEach(word => {
+        const premiumPack = getPremiumPackByToken(category);
+        const words = premiumPack
+          ? getPremiumWordsForPack(premiumPack, gameState.difficulty)
+          : getCoreWordsForCategory(category, gameState.difficulty);
+        words.forEach(word => {
           allWords.push({ word, cat: category });
         });
       });
@@ -2209,7 +3147,7 @@
       gameState.usedWords.push(picked.word);
 
       gameState.currentChallenge = null;
-      if (gameState.randomChallenge) {
+      if (gameState.gameType === 'mime' && gameState.randomChallenge) {
         const challenges = getLocalizedChallenges();
         if (challenges.length) {
           gameState.currentChallenge = challenges[Math.floor(Math.random() * challenges.length)];
@@ -2250,19 +3188,135 @@
     }
 
     function updateTimerDisplay(left, total) {
-      document.getElementById('timer-num').textContent = left;
-      const circ = document.getElementById('timerCircle');
-      circ.style.strokeDashoffset = 427.3 - (left / total) * 427.3;
-      circ.style.stroke = left > total * 0.5
+      const strokeOffset = 427.3 - (left / total) * 427.3;
+      const strokeColor = left > total * 0.5
         ? getThemeVar('--timer-color-safe')
         : left > total * 0.25
           ? getThemeVar('--timer-color-warning')
           : getThemeVar('--timer-color-danger');
+      document.querySelectorAll('[data-timer-num]').forEach(el => {
+        el.textContent = left;
+      });
+      document.querySelectorAll('[data-timer-circle]').forEach(circ => {
+        circ.style.strokeDashoffset = strokeOffset;
+        circ.style.stroke = strokeColor;
+      });
     }
 
     function updateTimerLabel(val) {
       document.getElementById('timer-val').textContent = `${val}s`;
       gameState.timerDur = parseInt(val, 10);
+    }
+
+    // ============================================================
+    // DRAWING CANVAS
+    // ============================================================
+    function getDrawingPoint(event) {
+      const rect = drawingState.canvas.getBoundingClientRect();
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+    }
+
+    function resizeDrawingCanvas(options = {}) {
+      const { preserve = true } = options;
+      const canvas = drawingState.canvas || document.getElementById('drawing-canvas');
+      if (!canvas) return;
+      drawingState.canvas = canvas;
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+
+      const previous = preserve && canvas.width && canvas.height ? document.createElement('canvas') : null;
+      if (previous) {
+        previous.width = canvas.width;
+        previous.height = canvas.height;
+        previous.getContext('2d').drawImage(canvas, 0, 0);
+      }
+
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.round(rect.width * dpr));
+      canvas.height = Math.max(1, Math.round(rect.height * dpr));
+      const ctx = canvas.getContext('2d');
+      drawingState.ctx = ctx;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, rect.width, rect.height);
+      if (previous) {
+        ctx.drawImage(previous, 0, 0, previous.width, previous.height, 0, 0, rect.width, rect.height);
+      }
+    }
+
+    function clearDrawingCanvas() {
+      resizeDrawingCanvas({ preserve: false });
+    }
+
+    function selectDrawingTool(tool) {
+      if (!DRAWING_TOOL_CONFIG[tool]) return;
+      drawingState.activeTool = tool;
+      document.querySelectorAll('[data-tool]').forEach(button => {
+        button.classList.toggle('selected', button.dataset.tool === tool);
+      });
+    }
+
+    function strokeDrawingLine(from, to) {
+      if (!drawingState.ctx) resizeDrawingCanvas();
+      const ctx = drawingState.ctx;
+      const tool = DRAWING_TOOL_CONFIG[drawingState.activeTool] || DRAWING_TOOL_CONFIG['pen-thick'];
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = tool.color;
+      ctx.lineWidth = tool.width;
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function startDrawing(event) {
+      if (gameState.gameType !== 'drawing' || gameState.phase !== 'playing') return;
+      event.preventDefault();
+      resizeDrawingCanvas();
+      drawingState.isDrawing = true;
+      const point = getDrawingPoint(event);
+      drawingState.lastX = point.x;
+      drawingState.lastY = point.y;
+      strokeDrawingLine(point, { x: point.x + 0.01, y: point.y + 0.01 });
+      try {
+        drawingState.canvas.setPointerCapture?.(event.pointerId);
+      } catch (e) { }
+    }
+
+    function continueDrawing(event) {
+      if (!drawingState.isDrawing) return;
+      event.preventDefault();
+      const point = getDrawingPoint(event);
+      strokeDrawingLine({ x: drawingState.lastX, y: drawingState.lastY }, point);
+      drawingState.lastX = point.x;
+      drawingState.lastY = point.y;
+    }
+
+    function stopDrawing(event) {
+      if (!drawingState.isDrawing) return;
+      drawingState.isDrawing = false;
+      try {
+        drawingState.canvas.releasePointerCapture?.(event.pointerId);
+      } catch (e) { }
+    }
+
+    function initializeDrawingCanvas() {
+      const canvas = document.getElementById('drawing-canvas');
+      if (!canvas) return;
+      drawingState.canvas = canvas;
+      canvas.addEventListener('pointerdown', startDrawing);
+      canvas.addEventListener('pointermove', continueDrawing);
+      canvas.addEventListener('pointerup', stopDrawing);
+      canvas.addEventListener('pointercancel', stopDrawing);
+      canvas.addEventListener('pointerleave', stopDrawing);
+      window.addEventListener('resize', () => resizeDrawingCanvas());
+      selectDrawingTool('pen-thick');
     }
 
     function isAlertSoundEnabled() {
@@ -2529,6 +3583,85 @@
     // ============================================================
     // WORD BANK
     // ============================================================
+    function selectPackFile() {
+      const input = document.getElementById('pack-file-input');
+      if (!input) return;
+      input.value = '';
+      input.click();
+    }
+
+    async function installWordPackFile(file) {
+      setPackInstallStatus(t('notifications.packInstallReading'));
+      const envelope = await parsePackFile(file);
+      const pack = await buildInstalledPackFromEnvelope(envelope);
+      const existingIndex = contentModel.packs.findIndex(item => item.id === pack.id);
+
+      if (existingIndex >= 0) {
+        const existingPack = contentModel.packs[existingIndex];
+        if (existingPack.id === CORE_PACK_ID) throw new Error(t('packErrors.reservedPackId'));
+        const shouldReplace = confirm(t('confirmations.replacePack', { packName: getPackDisplayName(existingPack) }));
+        if (!shouldReplace) {
+          setPackInstallStatus(t('notifications.packInstallCancelled'));
+          return null;
+        }
+        contentModel.packs[existingIndex] = pack;
+      } else {
+        contentModel.packs.push(pack);
+      }
+
+      saveContentModel();
+      wbPreviewPackId = pack.id;
+      gameState.selectedCategories = normalizeSelectedCategories(gameState.selectedCategories);
+      renderInstalledPacks();
+      renderWordBank();
+      renderPackPreview();
+      renderCategorySelection();
+      updateDiffWordCount();
+      setPackInstallStatus(t('notifications.packInstallSuccess'), 'success');
+      showNotif(t('dynamic.packInstalled', { name: getPackDisplayName(pack) }));
+      return pack;
+    }
+
+    async function handlePackFileSelection(file) {
+      try {
+        await installWordPackFile(file);
+      } catch (error) {
+        const message = error?.message || t('packErrors.invalidJson');
+        setPackInstallStatus(message, 'error');
+        showNotif(message, 'var(--accent2)', 'var(--text)');
+      }
+    }
+
+    function toggleInstalledPack(packId) {
+      const pack = contentModel.packs.find(item => item.id === packId && item.source === 'downloaded');
+      if (!pack) return;
+      pack.enabled = pack.enabled === false;
+      saveContentModel();
+      gameState.selectedCategories = normalizeSelectedCategories(gameState.selectedCategories);
+      renderInstalledPacks();
+      renderWordBank();
+      renderPackPreview();
+      renderCategorySelection();
+      updateDiffWordCount();
+      showNotif(t('notifications.packToggled'));
+    }
+
+    function removeInstalledPack(packId) {
+      const pack = contentModel.packs.find(item => item.id === packId && item.source === 'downloaded');
+      if (!pack) return;
+      if (!confirm(t('confirmations.removePack', { packName: getPackDisplayName(pack) }))) return;
+      contentModel.packs = contentModel.packs.filter(item => item.id !== packId);
+      if (wbPreviewPackId === packId) wbPreviewPackId = '';
+      saveContentModel();
+      gameState.selectedCategories = normalizeSelectedCategories(gameState.selectedCategories);
+      renderInstalledPacks();
+      renderWordBank();
+      renderPackPreview();
+      renderCategorySelection();
+      updateDiffWordCount();
+      showNotif(t('notifications.packRemoved'));
+    }
+
     function syncWBDiffUI() {
       DIFFICULTY_KEYS.forEach(diff =>
         document.getElementById('wb-diff-' + diff).classList.toggle('selected', diff === wbDiff)
@@ -2546,6 +3679,7 @@
       wbDiff = diff;
       syncWBDiffUI();
       renderWordBank();
+      renderPackPreview();
     }
 
     function switchWordTab(tab) {
@@ -2556,17 +3690,16 @@
 
     function getWordEntriesForWordBank(locale = currentLanguage, diff = wbDiff, category = wbCat) {
       const entries = [];
-      getEnabledPacks().forEach(pack => {
-        const localizedBank = normalizeWordBank(pack.words?.[locale] || {});
-        (localizedBank[diff]?.[category] || []).forEach((word, index) => {
-          entries.push({
-            packId: pack.id,
-            word,
-            index,
-            diff,
-            category,
-            editable: pack.editable !== false
-          });
+      const pack = getCorePack();
+      const localizedBank = normalizeWordBank(pack.words?.[locale] || {});
+      (localizedBank[diff]?.[category] || []).forEach((word, index) => {
+        entries.push({
+          packId: pack.id,
+          word,
+          index,
+          diff,
+          category,
+          editable: pack.editable !== false
         });
       });
       return entries;
@@ -2588,12 +3721,49 @@
       document.getElementById('word-count').textContent = entries.length;
     }
 
+    function getCoreChallengeList(locale = currentLanguage) {
+      const pack = getCorePack();
+      ensurePackLocale(pack, locale);
+      const list = normalizeChallenges(pack.challenges?.[locale] || []);
+      return list.length || pack.challengeOverrides?.[locale] ? list : getDefaultCoreChallenges(locale);
+    }
+
+    function setCoreChallengeList(list, locale = currentLanguage) {
+      const pack = getCorePack();
+      ensurePackLocale(pack, locale);
+      pack.challenges[locale] = ensureUniqueWords(normalizeChallenges(list));
+      pack.challengeOverrides = pack.challengeOverrides || {};
+      pack.challengeOverrides[locale] = true;
+      saveContentModel();
+    }
+
+    function renderChallengeBank() {
+      const cont = document.getElementById('challenges-list');
+      const countEl = document.getElementById('challenge-count');
+      if (!cont || !countEl) return;
+      const challenges = getCoreChallengeList();
+      cont.innerHTML = '';
+      challenges.forEach((challenge, index) => {
+        const tag = document.createElement('span');
+        tag.className = 'word-tag';
+        const text = document.createTextNode(`🎯 ${challenge} `);
+        const removeBtn = document.createElement('span');
+        removeBtn.className = 'del-btn';
+        removeBtn.dataset.action = 'remove-challenge';
+        removeBtn.dataset.index = String(index);
+        removeBtn.textContent = '✕';
+        tag.append(text, removeBtn);
+        cont.appendChild(tag);
+      });
+      countEl.textContent = challenges.length;
+    }
+
     function addWord() {
       const inp = document.getElementById('inp-new-word');
       const category = document.getElementById('inp-word-cat').value;
       const word = inp.value.trim();
       if (!word) return;
-      const currentBank = getLocalizedWordBank();
+      const currentBank = normalizeWordBank(getCorePack().words?.[currentLanguage] || {});
       if (currentBank[wbDiff][category].includes(word)) {
         showNotif(t('notifications.duplicateWord'), 'var(--accent2)', 'var(--text)');
         return;
@@ -2610,6 +3780,22 @@
       showNotif(t('dynamic.wordAdded', { word, difficulty: getDifficultyLabel(wbDiff, true) }));
     }
 
+    function addChallenge() {
+      const inp = document.getElementById('inp-new-challenge');
+      const challenge = inp.value.trim();
+      if (!challenge) return;
+      const challenges = getCoreChallengeList();
+      if (challenges.includes(challenge)) {
+        showNotif(t('notifications.duplicateChallenge'), 'var(--accent2)', 'var(--text)');
+        return;
+      }
+
+      setCoreChallengeList([...challenges, challenge]);
+      inp.value = '';
+      renderChallengeBank();
+      showNotif(t('dynamic.challengeAdded', { challenge }));
+    }
+
     function removeWord(category, diff, packId, idx) {
       const pack = contentModel.packs.find(item => item.id === packId);
       if (!pack || pack.editable === false) return;
@@ -2618,6 +3804,28 @@
       saveContentModel();
       renderWordBank();
       updateDiffWordCount();
+    }
+
+    function removeChallenge(idx) {
+      const challenges = getCoreChallengeList();
+      if (idx < 0 || idx >= challenges.length) return;
+      challenges.splice(idx, 1);
+      setCoreChallengeList(challenges);
+      renderChallengeBank();
+      showNotif(t('notifications.challengeRemoved'));
+    }
+
+    function resetChallenges() {
+      if (confirm(t('confirmations.resetChallenges'))) {
+        const pack = getCorePack();
+        ensurePackLocale(pack, currentLanguage);
+        pack.challenges[currentLanguage] = getDefaultCoreChallenges();
+        pack.challengeOverrides = pack.challengeOverrides || {};
+        delete pack.challengeOverrides[currentLanguage];
+        saveContentModel();
+        renderChallengeBank();
+        showNotif(t('notifications.challengesRestored'));
+      }
     }
 
     function resetWords() {
@@ -2630,9 +3838,27 @@
         };
         saveContentModel();
         renderWordBank();
+        renderChallengeBank();
         updateDiffWordCount();
         showNotif(t('notifications.bankRestored'));
       }
+    }
+
+    function clearAppStorage(storage) {
+      if (!storage) return;
+      const keys = [];
+      for (let i = 0; i < storage.length; i += 1) {
+        const key = storage.key(i);
+        if (key?.startsWith(APP_STORAGE_PREFIX)) keys.push(key);
+      }
+      keys.forEach(key => storage.removeItem(key));
+    }
+
+    function resetAppDefaults() {
+      if (!confirm(t('confirmations.resetAppDefaults'))) return;
+      clearAppStorage(localStorage);
+      clearAppStorage(sessionStorage);
+      window.location.reload();
     }
 
     // ============================================================
@@ -2665,7 +3891,9 @@
         clearInterval(gameState.memInterval);
         document.getElementById('resultOverlay').classList.remove('show');
         const prevDiff = gameState.difficulty;
+        const prevGameType = gameState.gameType;
         gameState = {
+          gameType: prevGameType,
           mode: 'teams',
           difficulty: prevDiff,
           teams: { A: [], B: [] },
@@ -2690,6 +3918,7 @@
           randomChallenge: false,
           selectedCategories: getDefaultSelectedCategories()
         };
+        selectGameType(prevGameType);
         selectMode('teams');
         selectDifficulty(prevDiff);
         goTo('setup');
@@ -2708,6 +3937,7 @@
       if (key === 'team-B') addTeamPlayer('B');
       if (key === 'ffa') addFFAPlayer();
       if (key === 'add-word') addWord();
+      if (key === 'add-challenge') addChallenge();
     }
 
     function applyLayoutPreview(mode = 'auto') {
@@ -2727,13 +3957,17 @@
     }
 
     function handleAction(button) {
-      const { action, team, index, wordCategory, wordDiff, wordPack } = button.dataset;
+      const { action, team, index, wordCategory, wordDiff, wordPack, platform, packId } = button.dataset;
 
       if (shouldPlayNavigationSoundForAction(action)) {
         playNavigationSound();
       }
 
       if (action === 'next-turn') return nextTurn();
+      if (action === 'share-platform') {
+        animateButtonClick(button);
+        return shareToPlatform(platform);
+      }
       if (action === 'quick-game') {
         animateButtonClick(button);
         return startQuickGame();
@@ -2766,9 +4000,19 @@
         return markResult(false);
       }
       if (action === 'continue-game') return continueGame();
+      if (action === 'set-draw-tool') return selectDrawingTool(button.dataset.tool);
+      if (action === 'clear-drawing-canvas') return clearDrawingCanvas();
       if (action === 'add-word') return addWord();
+      if (action === 'add-challenge') return addChallenge();
       if (action === 'reset-words') return resetWords();
+      if (action === 'reset-challenges') return resetChallenges();
+      if (action === 'reset-app-defaults') return resetAppDefaults();
+      if (action === 'select-pack-file') return selectPackFile();
+      if (action === 'toggle-installed-pack') return toggleInstalledPack(packId);
+      if (action === 'remove-installed-pack') return removeInstalledPack(packId);
+      if (action === 'copy-user-id') return copyUserId();
       if (action === 'remove-word') return removeWord(wordCategory, wordDiff, wordPack, Number(index));
+      if (action === 'remove-challenge') return removeChallenge(Number(index));
       if (action === 'remove-team-player') return removeTeamPlayer(team, Number(index));
       if (action === 'remove-ffa-player') return removeFFAPlayer(Number(index));
     }
@@ -2784,6 +4028,12 @@
         const modeCard = event.target.closest('[data-mode]');
         if (modeCard) {
           selectMode(modeCard.dataset.mode);
+          return;
+        }
+
+        const gameTypeCard = event.target.closest('.mode-card[data-game-type]');
+        if (gameTypeCard) {
+          selectGameType(gameTypeCard.dataset.gameType);
           return;
         }
 
@@ -2809,6 +4059,13 @@
         if (wbTabButton) {
           playNavigationSound();
           switchWordTab(wbTabButton.dataset.wbTab);
+          return;
+        }
+
+        const packPreviewRow = event.target.closest('[data-pack-preview-id]');
+        if (packPreviewRow && !event.target.closest('[data-action]')) {
+          playNavigationSound();
+          selectPreviewPack(packPreviewRow.dataset.packPreviewId);
           return;
         }
 
@@ -2853,6 +4110,15 @@
         saveSettings();
       });
 
+      const packFileInput = document.getElementById('pack-file-input');
+      if (packFileInput) {
+        packFileInput.addEventListener('change', event => {
+          const file = event.target.files?.[0];
+          handlePackFileSelection(file);
+          event.target.value = '';
+        });
+      }
+
       const previewSelect = document.getElementById('dev-layout-preview');
       if (previewSelect) {
         previewSelect.addEventListener('change', event => {
@@ -2867,5 +4133,7 @@
     initializeLayoutPreview();
     initializeSettings();
     registerEventListeners();
+    initializeDrawingCanvas();
+    selectGameType('mime');
     selectMode('teams');
     selectDifficulty('easy');

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="theme-cosmic">
+<body class="theme-cosmic" data-active-screen="home">
 
   <div class="stars" id="stars"></div>
   <div class="notif" id="notif">✅</div>
@@ -30,8 +30,7 @@
   <div class="screen active" id="screen-home">
     <div class="page-shell">
       <h1 class="logo">MimiMania</h1>
-      <p class="logo-sub" data-i18n="home.subtitle">🎭 O jogo da mímica</p>
-      <!--
+      <p class="logo-sub" data-i18n="home.subtitle">🎭 Mímica e desenho em família</p>
       <div class="dev-preview-panel mb">
         <div class="dev-preview-copy">
           <div class="eyebrow eyebrow-accent" data-i18n="dev.mode">Modo de desenvolvimento</div>
@@ -47,7 +46,6 @@
           </select>
         </div>
       </div>
-      -->
       <div class="home-grid">
         <div class="card home-card">
           <div class="flex-col home-actions">
@@ -56,7 +54,7 @@
               <span data-i18n="home.quickGame">⚡ Jogo Rápido</span>
               <span class="btn-quick-game-summary" id="quick-game-summary">Free for All | 4 players | Objects, Actions, Animals | 3 rounds</span>
             </button>
-            <button class="btn btn-ghost btn-lg btn-block" data-nav="wordbank" data-i18n="home.wordBank">📝 Banco de Palavras</button>
+            <button class="btn btn-ghost btn-lg btn-block" data-nav="wordbank" data-i18n="home.wordBank">🧩 Conteúdo e Expansões</button>
             <button class="btn btn-ghost btn-lg btn-block" data-nav="donate" data-i18n="home.donate">❤️ Donate</button>
             <button class="btn btn-ghost btn-lg btn-block" data-nav="settings" data-i18n="home.settings">⚙️ Configurações</button>
           </div>
@@ -75,7 +73,7 @@
               <div class="emoji-lg emoji-fixed">🎭</div>
               <div>
                 <div class="text-strong text-sm-title" data-i18n="home.howTo.turnTitle">Veja e atue</div>
-                <div class="text-sm" data-i18n="home.howTo.turnDesc">Um jogador vê a palavra, memoriza e faz a mímica sem falar enquanto o resto tenta adivinhar.</div>
+                <div class="text-sm" data-i18n="home.howTo.turnDesc">Um jogador vê a palavra, memoriza e faz mímica ou desenha enquanto o resto tenta adivinhar.</div>
               </div>
             </div>
             <div class="media-row media-row-start">
@@ -107,9 +105,26 @@
       </header>
       <div class="setup-grid">
 
+        <!-- GAME TYPE -->
+        <div class="card mb setup-block-game-type">
+          <h2 class="card-title" data-i18n="setup.gameTypeTitle">Tipo do Jogo</h2>
+          <div class="mode-grid">
+            <div class="mode-card selected" id="game-type-mime" data-game-type="mime">
+              <div class="mode-icon">🎭</div>
+              <div class="mode-name" data-i18n="setup.gameTypeMimeName">Mímica</div>
+              <div class="mode-desc" data-i18n="setup.gameTypeMimeDesc">Atue sem falar</div>
+            </div>
+            <div class="mode-card" id="game-type-drawing" data-game-type="drawing">
+              <div class="mode-icon">✏️</div>
+              <div class="mode-name" data-i18n="setup.gameTypeDrawingName">Desenho</div>
+              <div class="mode-desc" data-i18n="setup.gameTypeDrawingDesc">Desenhe a palavra</div>
+            </div>
+          </div>
+        </div>
+
         <!-- STEP 1: MODE -->
-        <div class="card mb setup-block-full">
-          <h2 class="card-title" data-i18n="setup.modeTitle">1️⃣ Modo de Jogo</h2>
+        <div class="card mb setup-block-mode">
+          <h2 class="card-title" data-i18n="setup.modeTitle">Modo de Jogo</h2>
           <div class="mode-grid">
             <div class="mode-card selected" id="mode-teams" data-mode="teams">
               <div class="mode-icon">🤝</div>
@@ -193,10 +208,10 @@
         <!-- STEP 4: CHALLENGE & CATEGORIES -->
         <div class="card mb">
           <h2 class="card-title" data-i18n="setup.optionsTitle">4️⃣ Opções de Jogo</h2>
-          <div class="toggle-wrap">
+          <div class="toggle-wrap" id="random-challenge-wrap">
             <div>
               <div class="toggle-label" data-i18n="setup.randomChallengeLabel">Desafio Aleatório</div>
-              <div class="toggle-sub" data-i18n="setup.randomChallengeSub">Adiciona modificadores à mímica</div>
+              <div class="toggle-sub" id="random-challenge-sub" data-i18n="setup.randomChallengeSub">Adiciona modificadores à mímica</div>
             </div>
             <label class="toggle">
               <input type="checkbox" id="random-challenge-toggle">
@@ -240,17 +255,30 @@
         <button class="btn btn-ghost btn-sm" data-action="confirm-restart" data-i18n="common.restart">🔄 Reiniciar</button>
       </div>
       <div id="score-mini" class="score-mini-row"></div>
-      <div class="current-player">
-        <div class="cp-label" data-i18n="game.currentPlayerLabel">Vez de fazer a mímica:</div>
-        <div class="cp-name" id="current-player-name">--</div>
-        <div id="current-team-badge" class="mt-xs"></div>
+      <div class="game-status-row">
+        <div class="current-player">
+          <div class="cp-label" data-i18n="game.currentPlayerLabel">Vez de fazer a mímica:</div>
+          <div class="cp-name" id="current-player-name">--</div>
+          <div id="current-team-badge" class="mt-xs"></div>
+        </div>
+        <div class="drawing-timer-dock" aria-hidden="true">
+          <div class="timer-wrap timer-wrap-compact">
+            <svg class="timer-svg" viewBox="0 0 160 160">
+              <circle class="timer-track" cx="80" cy="80" r="68" />
+              <circle class="timer-prog" data-timer-circle cx="80" cy="80" r="68" stroke="#ffd93d" stroke-dasharray="427.3"
+                stroke-dashoffset="0" />
+            </svg>
+            <div class="timer-num" data-timer-num>60</div>
+            <div class="timer-label" data-i18n="game.secondsLabel">SEGUNDOS</div>
+          </div>
+        </div>
       </div>
 
       <!-- PREPARING -->
       <div id="preparing-state" class="card center">
-        <div class="emoji-hero mb-sm">🎭</div>
-        <h2 class="section-title section-title-light mb-xs" data-i18n="game.readyTitle">Prontos para ver a palavra?</h2>
-        <div class="text-sm mb-lg" data-i18n="game.readySub">Só o mimo deve ver! Os outros fechem os olhos! 👀</div>
+        <div class="emoji-hero mb-sm" id="game-ready-emoji">🎭</div>
+        <h2 class="section-title section-title-light mb-xs" id="game-ready-title" data-i18n="game.readyTitle">Prontos para ver a palavra?</h2>
+        <div class="text-sm mb-lg" id="game-ready-sub" data-i18n="game.readySub">Só o mimo deve ver! Os outros fechem os olhos! 👀</div>
         <button class="btn btn-primary btn-lg btn-block" data-action="reveal-word" data-i18n="game.revealWord">🎲 Revelar Palavra</button>
       </div>
 
@@ -277,7 +305,7 @@
           <div id="mem-challenge-display" class="challenge-text hidden">
             <span data-i18n="game.challengePrefix">🎯 Desafio:</span> <span id="mem-challenge-text">---</span>
           </div>
-          <div class="eyebrow eyebrow-muted mt-xs" data-i18n="game.onlyMimeCanSee">
+          <div class="eyebrow eyebrow-muted mt-xs" id="game-only-actor-can-see" data-i18n="game.onlyMimeCanSee">
             Só o mimo pode ver!
           </div>
         </div>
@@ -290,10 +318,10 @@
             <div class="timer-wrap">
               <svg class="timer-svg" viewBox="0 0 160 160">
                 <circle class="timer-track" cx="80" cy="80" r="68" />
-                <circle class="timer-prog" id="timerCircle" cx="80" cy="80" r="68" stroke="#ffd93d" stroke-dasharray="427.3"
+                <circle class="timer-prog" id="timerCircle" data-timer-circle cx="80" cy="80" r="68" stroke="#ffd93d" stroke-dasharray="427.3"
                   stroke-dashoffset="0" />
               </svg>
-              <div class="timer-num" id="timer-num">60</div>
+              <div class="timer-num" id="timer-num" data-timer-num>60</div>
               <div class="timer-label" data-i18n="game.secondsLabel">SEGUNDOS</div>
             </div>
           </div>
@@ -321,6 +349,33 @@
             <div class="action-row action-row-center action-row-compact">
               <button id="btn-toggle-word" class="btn btn-ghost btn-sm" data-action="toggle-word" data-i18n="game.showWord">👁️ Mostrar
                 palavra</button>
+            </div>
+            <div class="drawing-board hidden" id="drawing-board">
+              <div class="drawing-canvas-shell">
+                <canvas id="drawing-canvas" aria-label="Área de desenho" data-i18n-aria-label="drawing.canvasLabel"></canvas>
+              </div>
+              <div class="drawing-toolbar" role="toolbar" aria-label="Ferramentas de desenho" data-i18n-aria-label="drawing.toolbarLabel">
+                <button class="btn btn-ghost btn-sm drawing-tool-btn selected" data-action="set-draw-tool" data-tool="pen-thick"
+                  title="Linha grossa" aria-label="Linha grossa" data-i18n-title="drawing.penThick" data-i18n-aria-label="drawing.penThick">
+                  <span class="drawing-tool-icon">⬤</span><span class="drawing-tool-text" data-i18n="drawing.penThick">Linha grossa</span>
+                </button>
+                <button class="btn btn-ghost btn-sm drawing-tool-btn" data-action="set-draw-tool" data-tool="pen-thin"
+                  title="Linha fina" aria-label="Linha fina" data-i18n-title="drawing.penThin" data-i18n-aria-label="drawing.penThin">
+                  <span class="drawing-tool-icon">●</span><span class="drawing-tool-text" data-i18n="drawing.penThin">Linha fina</span>
+                </button>
+                <button class="btn btn-ghost btn-sm drawing-tool-btn" data-action="set-draw-tool" data-tool="eraser-thick"
+                  title="Borracha grossa" aria-label="Borracha grossa" data-i18n-title="drawing.eraserThick" data-i18n-aria-label="drawing.eraserThick">
+                  <span class="drawing-tool-icon">▰</span><span class="drawing-tool-text" data-i18n="drawing.eraserThick">Borracha grossa</span>
+                </button>
+                <button class="btn btn-ghost btn-sm drawing-tool-btn" data-action="set-draw-tool" data-tool="eraser-thin"
+                  title="Borracha fina" aria-label="Borracha fina" data-i18n-title="drawing.eraserThin" data-i18n-aria-label="drawing.eraserThin">
+                  <span class="drawing-tool-icon">▱</span><span class="drawing-tool-text" data-i18n="drawing.eraserThin">Borracha fina</span>
+                </button>
+                <button class="btn btn-ghost btn-sm drawing-tool-btn" data-action="clear-drawing-canvas"
+                  title="Limpar canvas" aria-label="Limpar canvas" data-i18n-title="drawing.clear" data-i18n-aria-label="drawing.clear">
+                  <span class="drawing-tool-icon">⌫</span><span class="drawing-tool-text" data-i18n="drawing.clear">Limpar</span>
+                </button>
+              </div>
             </div>
             <div class="game-actions-grid">
               <button class="btn btn-success btn-lg" data-action="mark-correct" data-i18n="game.correct">✅ Acertou!</button>
@@ -371,7 +426,7 @@
     <div class="page-shell">
       <header class="page-header page-header-tight">
         <button class="btn btn-ghost btn-sm" data-nav="home" data-i18n="common.back">← Voltar</button>
-        <h1 class="page-title" data-i18n="wordbank.title">Banco de Palavras</h1>
+        <h1 class="page-title" data-i18n="wordbank.title">Conteúdo e Expansões</h1>
       </header>
       <div class="wordbank-layout">
         <div class="wordbank-sidebar">
@@ -424,6 +479,7 @@
               <button class="btn btn-secondary btn-block" data-action="add-word" data-i18n="wordbank.addButton">➕ Adicionar Palavra</button>
             </div>
           </div>
+
         </div>
 
         <!-- LIST -->
@@ -435,6 +491,57 @@
             <button class="btn btn-ghost btn-sm" data-action="reset-words" data-i18n="wordbank.resetButton">↺ Restaurar</button>
           </div>
           <div class="words-container" id="words-list"></div>
+        </div>
+
+        <!-- ADD CORE CHALLENGE -->
+        <div class="card wordbank-challenge-add-card">
+          <h2 class="card-title card-title-sm" data-i18n="wordbank.addChallengeTitle">🎯 Adicionar Desafio</h2>
+          <div class="flex-col">
+            <input class="inp" id="inp-new-challenge" placeholder="Digite o desafio..." data-enter-submit="add-challenge"
+              data-i18n-placeholder="wordbank.newChallengePlaceholder">
+            <button class="btn btn-secondary btn-block" data-action="add-challenge" data-i18n="wordbank.addChallengeButton">➕ Adicionar Desafio</button>
+          </div>
+        </div>
+
+        <!-- CORE CHALLENGES -->
+        <div class="card wordbank-challenges-card">
+          <div class="action-row action-row-between mb">
+            <h2 class="card-title card-title-sm card-title-inline">
+              <span data-i18n="wordbank.challengesTitle">🎯 Desafios Core</span> (<span id="challenge-count">0</span>)
+            </h2>
+            <button class="btn btn-ghost btn-sm" data-action="reset-challenges" data-i18n="wordbank.resetButton">↺ Restaurar</button>
+          </div>
+          <div class="words-container challenges-container" id="challenges-list"></div>
+        </div>
+
+        <!-- INSTALL WORD PACK -->
+        <div class="card mb wordbank-install-card">
+          <h2 class="card-title card-title-sm" data-i18n="wordbank.installPackTitle">📦 Instalar pack</h2>
+          <p class="text-sm text-muted mb-sm" data-i18n="wordbank.installPackSub">Envie o arquivo .json comprado para liberar novas palavras neste dispositivo.</p>
+          <input type="file" id="pack-file-input" accept="application/json,.json" hidden>
+          <button class="btn btn-secondary btn-block" data-action="select-pack-file" data-i18n="wordbank.selectPackFile">📁 Escolher arquivo</button>
+          <div id="pack-install-status" class="pack-install-status" role="status"></div>
+          <div class="installed-packs">
+            <div class="installed-packs-title" data-i18n="wordbank.installedPacksTitle">Packs instalados</div>
+            <div id="installed-packs-list" class="installed-packs-list"></div>
+          </div>
+        </div>
+
+        <!-- PREMIUM PACK PREVIEW -->
+        <div class="card wordbank-pack-preview-card">
+          <div class="action-row action-row-between mb">
+            <h2 class="card-title card-title-sm card-title-inline" data-i18n="wordbank.packPreviewTitle">⭐ Conteúdo do pack</h2>
+            <span id="pack-preview-diff-label" class="text-accent">🌱 Fácil</span>
+          </div>
+          <div id="pack-preview-subtitle" class="text-sm mb-sm" data-i18n="wordbank.packPreviewPrompt">Clique em um pack instalado para ver palavras e desafios.</div>
+          <div class="pack-preview-section">
+            <div class="installed-packs-title" data-i18n="wordbank.packPreviewWordsTitle">Palavras do pack</div>
+            <div id="pack-preview-words" class="pack-preview-list"></div>
+          </div>
+          <div class="pack-preview-section">
+            <div class="installed-packs-title" data-i18n="wordbank.packPreviewChallengesTitle">Challenges do pack</div>
+            <div id="pack-preview-challenges" class="pack-preview-list"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -506,6 +613,19 @@
           </div>
         </div>
         <div class="card">
+          <h2 class="card-title" data-i18n="settings.userIdTitle">🪪 ID de compra</h2>
+          <div class="flex-col">
+            <div>
+              <label class="toggle-label" for="user-id-display" data-i18n="settings.userIdLabel">Seu user_id</label>
+              <div class="toggle-sub mt-xs" data-i18n="settings.userIdSub">Use este código na compra de packs para que o arquivo seja emitido para este dispositivo.</div>
+            </div>
+            <div class="copy-row">
+              <input class="inp mono-input" id="user-id-display" readonly>
+              <button class="btn btn-ghost btn-sm" data-action="copy-user-id" data-i18n="settings.copyUserId">Copiar</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
           <h2 class="card-title" data-i18n="settings.wordsTitle">🎲 Palavras</h2>
           <div class="toggle-wrap toggle-wrap-last">
             <div>
@@ -530,6 +650,13 @@
               <option value="liquid-glass" data-i18n="theme.liquid-glass">Outono</option>
               <option value="material3" data-i18n="theme.material3">Primavera</option>
             </select>
+          </div>
+        </div>
+        <div class="card settings-reset-card">
+          <h2 class="card-title" data-i18n="settings.resetAllTitle">🧹 Restaurar aplicação</h2>
+          <div class="flex-col">
+            <p class="text-sm text-muted" data-i18n="settings.resetAllSub">Remove configurações, jogadores salvos, packs instalados e o user_id deste dispositivo.</p>
+            <button class="btn btn-danger btn-block" data-action="reset-app-defaults" data-i18n="settings.resetAllButton">Restaurar tudo</button>
           </div>
         </div>
       </div>
@@ -583,8 +710,43 @@
     </div>
   </div>
 
+  <div class="footer-share" aria-label="Compartilhar MimiMania">
+    <div class="share-grid">
+      <button class="share-platform share-whatsapp" type="button" data-action="share-platform" data-platform="whatsapp" aria-label="WhatsApp" title="WhatsApp">
+        <svg class="share-platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.1 2a9.8 9.8 0 0 0-8.5 14.7L2.2 22l5.5-1.4A9.9 9.9 0 1 0 12.1 2zm0 17.8c-1.5 0-2.9-.4-4.1-1.1l-.3-.2-3.2.8.9-3.1-.2-.3a7.8 7.8 0 1 1 6.9 3.9zm4.4-5.8c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7 1-.3.2-.5.1a6.4 6.4 0 0 1-3.2-2.8c-.2-.3 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5s-.5-1.2-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.8.4s-1 1-1 2.3 1 2.7 1.1 2.8c.1.2 1.9 2.9 4.6 4.1.6.3 1.1.4 1.5.5.6.2 1.2.2 1.7.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.2-.2-.2-.4-.3z" />
+        </svg>
+      </button>
+      <button class="share-platform share-instagram" type="button" data-action="share-platform" data-platform="instagram" aria-label="Instagram" title="Instagram">
+        <svg class="share-platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.2-2.7a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z" />
+        </svg>
+      </button>
+      <button class="share-platform share-tiktok" type="button" data-action="share-platform" data-platform="tiktok" aria-label="TikTok" title="TikTok">
+        <svg class="share-platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15.2 2c.4 3 2.1 4.8 4.8 5v3.2a7.5 7.5 0 0 1-4.7-1.7v6.8A6.7 6.7 0 1 1 9.1 8.6c.4 0 .8 0 1.2.1v3.4a3.3 3.3 0 1 0 1.7 2.9V2h3.2z" />
+        </svg>
+      </button>
+      <button class="share-platform share-facebook" type="button" data-action="share-platform" data-platform="facebook" aria-label="Facebook" title="Facebook">
+        <svg class="share-platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14 8.4V6.8c0-.8.2-1.3 1.3-1.3H17V2.2c-.3 0-1.4-.2-2.7-.2-2.7 0-4.5 1.6-4.5 4.6v1.8h-3v3.7h3V22H14v-9.9h3.1l.5-3.7H14z" />
+        </svg>
+      </button>
+      <button class="share-platform share-x" type="button" data-action="share-platform" data-platform="x" aria-label="X" title="X">
+        <svg class="share-platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14.2 10.4 22 2h-2.4l-6.5 7-5-7H2l8 11.2L2 22h2.4l6.8-7.3 5.2 7.3H22l-7.8-11.6zm-2 2.1-1.1-1.6L6.5 4h1.2l4 5.7 1.1 1.6L17.6 20h-1.2l-4.2-7.5z" />
+        </svg>
+      </button>
+      <button class="share-platform share-copy" type="button" data-action="share-platform" data-platform="copy" aria-label="Copiar link" title="Copiar link">
+        <svg class="share-platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 7a5 5 0 0 1 5-5h4a5 5 0 0 1 0 10h-2V9h2a2 2 0 0 0 0-4h-4a2 2 0 0 0-2 2v2H8V7zm1 5H7a2 2 0 0 0 0 4h4a2 2 0 0 0 2-2v-2h3v2a5 5 0 0 1-5 5H7A5 5 0 0 1 7 9h2v3zm-1.5-1.5h9v3h-9v-3z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
   <footer class="site-footer">
-    <span data-i18n="footer.copyPrefix">© 2025 MimiMania v3.0 · Insight X Lab Technologies · Publicado no </span><a href="https://github.com/insight-x-lab-technologies" target="_blank"
+    <span data-i18n="footer.copyPrefix">© 2025 MimiMania v4.0 · Insight X Lab Technologies · Publicado no </span><a href="https://github.com/insight-x-lab-technologies" target="_blank"
       class="site-footer-link" data-i18n="footer.githubPages">GitHub Pages</a>
   </footer>
 
