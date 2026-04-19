@@ -116,35 +116,35 @@
         },
         setup: {
           title: 'Nova Partida',
-          gameTypeTitle: 'Tipo do Jogo',
+          gameTypeTitle: '1️⃣ Tipo do Jogo',
           gameTypeMimeName: 'Mímica',
           gameTypeMimeDesc: 'Atue sem falar',
           gameTypeDrawingName: 'Desenho',
           gameTypeDrawingDesc: 'Desenhe a palavra',
-          modeTitle: 'Modo de Jogo',
+          modeTitle: '2️⃣ Modo de Jogo',
           modeTeamsName: 'Dois Times',
           modeTeamsDesc: 'Equipes competem',
           modeFfaName: 'Cada um por si',
           modeFfaDesc: 'Todos contra todos',
-          teamPlayersTitle: '2️⃣ Jogadores por Time',
-          playersTitle: '2️⃣ Jogadores',
+          teamPlayersTitle: '3️⃣ Jogadores por Time',
+          playersTitle: '3️⃣ Jogadores',
           teamAPlaceholder: 'Nome do Time A',
           teamBPlaceholder: 'Nome do Time B',
           playerNamePlaceholder: 'Nome do jogador...',
           teamHelper: '💡 Mínimo 1 por time, máximo 3 por time (até 6 jogadores)',
           ffaHelper: '💡 Mínimo 3, máximo 6 jogadores',
-          difficultyTitle: '3️⃣ Dificuldade',
+          difficultyTitle: '4️⃣ Dificuldade',
           difficultyEasyDesc: 'Ótimo para crianças e iniciantes',
           difficultyNormalDesc: 'Desafio equilibrado para a família',
           difficultyHardDesc: 'Palavras complexas, para os corajosos!',
-          optionsTitle: '4️⃣ Opções de Jogo',
+          optionsTitle: '5️⃣ Opções de Jogo',
           randomChallengeLabel: 'Desafio Aleatório',
           randomChallengeSub: 'Adiciona modificadores à mímica',
           randomChallengeDisabledSub: 'Indisponível no modo desenho',
           categoriesLabel: 'Categorias Disponíveis',
           coreCategoriesLabel: 'Categorias Core',
           premiumCategoriesLabel: 'Categorias Premium',
-          matchTitle: '5️⃣ Configurar Partida',
+          matchTitle: '6️⃣ Configurar Partida',
           roundsLabel: 'Número de Rodadas',
           roundsSub: 'Quantas rodadas por jogador',
           startGame: '🎭 Começar o Jogo!'
@@ -409,35 +409,35 @@
         },
         setup: {
           title: 'New Game',
-          gameTypeTitle: 'Game Type',
+          gameTypeTitle: '1️⃣ Game Type',
           gameTypeMimeName: 'Mime',
           gameTypeMimeDesc: 'Act without speaking',
           gameTypeDrawingName: 'Drawing',
           gameTypeDrawingDesc: 'Draw the word',
-          modeTitle: 'Game Mode',
+          modeTitle: '2️⃣ Game Mode',
           modeTeamsName: 'Two Teams',
           modeTeamsDesc: 'Teams compete',
           modeFfaName: 'Free for All',
           modeFfaDesc: 'Everyone versus everyone',
-          teamPlayersTitle: '2️⃣ Players per Team',
-          playersTitle: '2️⃣ Players',
+          teamPlayersTitle: '3️⃣ Players per Team',
+          playersTitle: '3️⃣ Players',
           teamAPlaceholder: 'Team A name',
           teamBPlaceholder: 'Team B name',
           playerNamePlaceholder: 'Player name...',
           teamHelper: '💡 Minimum 1 per team, maximum 3 per team (up to 6 players)',
           ffaHelper: '💡 Minimum 3, maximum 6 players',
-          difficultyTitle: '3️⃣ Difficulty',
+          difficultyTitle: '4️⃣ Difficulty',
           difficultyEasyDesc: 'Great for kids and beginners',
           difficultyNormalDesc: 'Balanced fun for the whole family',
           difficultyHardDesc: 'Complex words for the brave!',
-          optionsTitle: '4️⃣ Game Options',
+          optionsTitle: '5️⃣ Game Options',
           randomChallengeLabel: 'Random Challenge',
           randomChallengeSub: 'Adds modifiers to the mime',
           randomChallengeDisabledSub: 'Unavailable in drawing mode',
           categoriesLabel: 'Available Categories',
           coreCategoriesLabel: 'Core Categories',
           premiumCategoriesLabel: 'Premium Categories',
-          matchTitle: '5️⃣ Match Setup',
+          matchTitle: '6️⃣ Match Setup',
           roundsLabel: 'Number of Rounds',
           roundsSub: 'How many rounds per player',
           startGame: '🎭 Start Game!'
@@ -702,35 +702,35 @@
         },
         setup: {
           title: 'Nueva Partida',
-          gameTypeTitle: 'Tipo de Juego',
+          gameTypeTitle: '1️⃣ Tipo de Juego',
           gameTypeMimeName: 'Mímica',
           gameTypeMimeDesc: 'Actúa sin hablar',
           gameTypeDrawingName: 'Dibujo',
           gameTypeDrawingDesc: 'Dibuja la palabra',
-          modeTitle: 'Modo de Juego',
+          modeTitle: '2️⃣ Modo de Juego',
           modeTeamsName: 'Dos Equipos',
           modeTeamsDesc: 'Compiten por equipos',
           modeFfaName: 'Todos contra todos',
           modeFfaDesc: 'Cada quien por su cuenta',
-          teamPlayersTitle: '2️⃣ Jugadores por Equipo',
-          playersTitle: '2️⃣ Jugadores',
+          teamPlayersTitle: '3️⃣ Jugadores por Equipo',
+          playersTitle: '3️⃣ Jugadores',
           teamAPlaceholder: 'Nombre del Equipo A',
           teamBPlaceholder: 'Nombre del Equipo B',
           playerNamePlaceholder: 'Nombre del jugador...',
           teamHelper: '💡 Mínimo 1 por equipo, máximo 3 por equipo (hasta 6 jugadores)',
           ffaHelper: '💡 Mínimo 3, máximo 6 jugadores',
-          difficultyTitle: '3️⃣ Dificultad',
+          difficultyTitle: '4️⃣ Dificultad',
           difficultyEasyDesc: 'Ideal para niños y principiantes',
           difficultyNormalDesc: 'Desafío equilibrado para la familia',
           difficultyHardDesc: 'Palabras complejas para los valientes',
-          optionsTitle: '4️⃣ Opciones de Juego',
+          optionsTitle: '5️⃣ Opciones de Juego',
           randomChallengeLabel: 'Desafío Aleatorio',
           randomChallengeSub: 'Añade modificadores a la mímica',
           randomChallengeDisabledSub: 'No disponible en modo dibujo',
           categoriesLabel: 'Categorías Disponibles',
           coreCategoriesLabel: 'Categorías Core',
           premiumCategoriesLabel: 'Categorías Premium',
-          matchTitle: '5️⃣ Configurar Partida',
+          matchTitle: '6️⃣ Configurar Partida',
           roundsLabel: 'Número de Rondas',
           roundsSub: 'Cuántas rondas por jugador',
           startGame: '🎭 ¡Empezar Juego!'
@@ -1925,10 +1925,32 @@
       return [gameTypeLabel, modeLabel, playerCountLabel, categoriesLabel, roundsLabel].join(' | ');
     }
 
+    function getQuickGameCategoryIcon(category) {
+      if (getPremiumPackByToken(category)) return '⭐';
+      return CATEGORY_ICONS[category] || '🏷️';
+    }
+
+    function getQuickGameCompactSummary(config) {
+      const normalized = normalizeQuickGameConfig(config);
+      const gameTypeIcon = normalized.gameType === 'drawing' ? '✏️' : '🎭';
+      const modeIcon = normalized.mode === 'teams' ? '🤝' : '🏆';
+      const playerIcon = `👥${getQuickGamePlayerCount(normalized)}`;
+      const difficultyIcon = DIFFICULTY_ICONS[normalized.difficulty] || '';
+      const categoryIcons = normalized.selectedCategories.map(getQuickGameCategoryIcon).join(' ');
+      const roundsIcon = `🔁${normalized.rounds}`;
+      return [gameTypeIcon, modeIcon, playerIcon, difficultyIcon, categoryIcons, roundsIcon].filter(Boolean).join(' | ');
+    }
+
     function renderQuickGameSummary() {
       const summary = document.getElementById('quick-game-summary');
       if (!summary) return;
-      summary.textContent = getQuickGameSummary(loadQuickGameConfig());
+      const config = loadQuickGameConfig();
+      const fullSummary = getQuickGameSummary(config);
+      summary.textContent = getQuickGameCompactSummary(config);
+      summary.title = fullSummary;
+      summary.setAttribute('aria-label', fullSummary);
+      const button = summary.closest('button');
+      if (button) button.title = fullSummary;
     }
 
     function syncTeamNamesForLanguage(previousLanguage, nextLanguage) {
