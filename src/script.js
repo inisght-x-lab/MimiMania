@@ -13,6 +13,11 @@
     const CORE_PACK_ID = 'core-default';
     const KO_FI_WIDGET_SCRIPT_URL = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
     const KO_FI_SLUG = 'insightxlabgamestudio';
+    const APP_PUBLIC_URL = 'https://insight-x-lab-technologies.github.io/MimiMania/';
+    const SOCIAL_WEB_FALLBACKS = {
+      instagram: 'https://www.instagram.com/',
+      tiktok: 'https://www.tiktok.com/'
+    };
     const DONATION_LINKS = {
       buyMeCoffee: 'https://buymeacoffee.com/insight.x.lab.game.studio',
       koFi: `https://ko-fi.com/${KO_FI_SLUG}`
@@ -192,6 +197,10 @@
           whyLanguages: 'Seu apoio ajuda a financiar novos idiomas, packs de conteúdo e futuras expansões do banco de palavras.',
           whyUpdates: 'Também ajuda a manter o MimiMania atualizado com polimento, ajustes de balanceamento e novos recursos.'
         },
+        share: {
+          title: 'MimiMania',
+          text: 'Venha jogar MimiMania comigo!'
+        },
         theme: {
           cosmic: 'Cósmico',
           'liquid-glass': 'Outono',
@@ -228,7 +237,12 @@
           maxTeamPlayers: '❌ Máximo 3 por time!',
           minTeamPlayers: '❌ Mínimo 1 por time!',
           minFfaPlayers: '❌ Mínimo 3 jogadores!',
-          donationLinkUnavailable: '⚠️ Configure o link de doação deste parceiro para ativá-lo.'
+          donationLinkUnavailable: '⚠️ Configure o link de doação deste parceiro para ativá-lo.',
+          shareCopied: '🔗 Link copiado!',
+          shareUnavailable: '🔗 Link copiado para compartilhar.',
+          shareCopyFailed: '⚠️ Não foi possível copiar o link.',
+          shareInstagramFallback: '🔗 Link copiado. Cole no Instagram.',
+          shareTikTokFallback: '🔗 Link copiado. Cole no TikTok.'
         },
         confirmations: {
           resetWords: 'Restaurar o banco de palavras padrão? Palavras customizadas serão perdidas.',
@@ -399,6 +413,10 @@
           whyLanguages: 'Your support helps fund new languages, content packs, and future word bank expansions.',
           whyUpdates: 'It also helps keep MimiMania maintained with polish, balance tweaks, and new features.'
         },
+        share: {
+          title: 'MimiMania',
+          text: 'Come play MimiMania with me!'
+        },
         theme: {
           cosmic: 'Cosmic',
           'liquid-glass': 'Autumn',
@@ -435,7 +453,12 @@
           maxTeamPlayers: '❌ Maximum 3 per team!',
           minTeamPlayers: '❌ At least 1 per team!',
           minFfaPlayers: '❌ At least 3 players!',
-          donationLinkUnavailable: '⚠️ Configure this partner donation link to enable it.'
+          donationLinkUnavailable: '⚠️ Configure this partner donation link to enable it.',
+          shareCopied: '🔗 Link copied!',
+          shareUnavailable: '🔗 Link copied for sharing.',
+          shareCopyFailed: '⚠️ Could not copy the link.',
+          shareInstagramFallback: '🔗 Link copied. Paste it into Instagram.',
+          shareTikTokFallback: '🔗 Link copied. Paste it into TikTok.'
         },
         confirmations: {
           resetWords: 'Restore the default word bank? Custom words will be lost.',
@@ -606,6 +629,10 @@
           whyLanguages: 'Tu apoyo ayuda a financiar nuevos idiomas, packs de contenido y futuras expansiones del banco de palabras.',
           whyUpdates: 'También ayuda a mantener MimiMania con más pulido, ajustes de balance y nuevas funciones.'
         },
+        share: {
+          title: 'MimiMania',
+          text: '¡Ven a jugar MimiMania conmigo!'
+        },
         theme: {
           cosmic: 'Cósmico',
           'liquid-glass': 'Otoño',
@@ -642,7 +669,12 @@
           maxTeamPlayers: '❌ ¡Máximo 3 por equipo!',
           minTeamPlayers: '❌ ¡Mínimo 1 por equipo!',
           minFfaPlayers: '❌ ¡Mínimo 3 jugadores!',
-          donationLinkUnavailable: '⚠️ Configura el enlace de donación de este socio para activarlo.'
+          donationLinkUnavailable: '⚠️ Configura el enlace de donación de este socio para activarlo.',
+          shareCopied: '🔗 ¡Enlace copiado!',
+          shareUnavailable: '🔗 Enlace copiado para compartir.',
+          shareCopyFailed: '⚠️ No se pudo copiar el enlace.',
+          shareInstagramFallback: '🔗 Enlace copiado. Pégalo en Instagram.',
+          shareTikTokFallback: '🔗 Enlace copiado. Pégalo en TikTok.'
         },
         confirmations: {
           resetWords: '¿Restaurar el banco de palabras predeterminado? Las palabras personalizadas se perderán.',
@@ -1130,16 +1162,46 @@
       }
     };
 
-    const SAMPLE_CHALLENGES_EN = [
-      'Act it out while sitting down',
-      'Act it out using only one hand',
-      'Act it out in slow motion'
+    const CHALLENGES_EN = [
+      'Act it out while sitting down', 'Act it out while crouching', 'Act it out while jumping', 'Act it out while walking in place',
+      'Act it out with one hand behind your back', 'Act it out using only one hand', 'Act it out with your arms stretched out',
+      'Act it out while spinning slowly', 'Act it out as if you were in slow motion', 'Act it out as if you were sped up (super fast)',
+      'Act it out exaggerating A LOT', 'Act it out barely moving', 'Act it out as if you were scared',
+      'Act it out as if you were very happy', 'Act it out as if you were angry', 'Act it out as if you were tired',
+      'Act it out as if you were confused', 'Act it out as if you were panicking', 'Act it out like a robot',
+      'Act it out like a cartoon character', 'Act it out like an elderly person', 'Act it out like a child',
+      'Act it out like a superhero', 'Act it out like a villain', 'Act it out like an animal',
+      'Act it out as if you were on the moon (low gravity)', 'Act it out as if you were underwater', 'Act it out as if you were invisible',
+      'Act it out as if you were giant', 'Act it out as if you were very tiny', 'You cannot use your hands',
+      'You cannot use your arms', 'You cannot move from your spot', 'You cannot repeat the same gesture', 'You cannot point at anything',
+      'You cannot use your face (no facial expressions)', 'You can only use your face (no body)', 'You must start from the end of the action',
+      'You must do everything backwards (from end to beginning)', 'You must freeze completely every 3 seconds',
+      'Act it out as if you were in an action movie', 'Act it out as if it were a comedy',
+      'Act it out as if you were in dramatic slow motion', 'Act it out as if you were in a dream',
+      'Act it out as if you were very cold', 'Act it out as if you were very hot',
+      'Act it out as if you were in the dark', 'Act it out as if you were on a stage',
+      'Act it out as if a huge audience were watching you', 'Act it out as if it were your last chance to win the game'
     ];
 
-    const SAMPLE_CHALLENGES_ES = [
-      'Haz la mímica sentado',
-      'Haz la mímica usando solo una mano',
-      'Haz la mímica en cámara lenta'
+    const CHALLENGES_ES = [
+      'Haz la mímica sentado', 'Haz la mímica agachado', 'Haz la mímica saltando', 'Haz la mímica caminando en el lugar',
+      'Haz la mímica con una mano detrás de la espalda', 'Haz la mímica usando solo una mano', 'Haz la mímica con los brazos estirados',
+      'Haz la mímica girando lentamente', 'Haz la mímica como si estuvieras en cámara lenta', 'Haz la mímica como si estuvieras acelerado (super rápido)',
+      'Haz la mímica exagerando MUCHO', 'Haz la mímica casi sin moverte', 'Haz la mímica como si tuvieras miedo',
+      'Haz la mímica como si estuvieras muy feliz', 'Haz la mímica como si estuvieras enojado', 'Haz la mímica como si estuvieras cansado',
+      'Haz la mímica como si estuvieras confundido', 'Haz la mímica como si estuvieras en pánico', 'Haz la mímica como un robot',
+      'Haz la mímica como un personaje de caricatura', 'Haz la mímica como una persona mayor', 'Haz la mímica como un niño',
+      'Haz la mímica como un superhéroe', 'Haz la mímica como un villano', 'Haz la mímica como un animal',
+      'Haz la mímica como si estuvieras en la luna (baja gravedad)', 'Haz la mímica como si estuvieras bajo el agua', 'Haz la mímica como si fueras invisible',
+      'Haz la mímica como si fueras gigante', 'Haz la mímica como si fueras muy pequeño', 'No puedes usar las manos',
+      'No puedes usar los brazos', 'No puedes moverte del lugar', 'No puedes repetir el mismo gesto', 'No puedes señalar nada',
+      'No puedes usar la cara (sin expresiones faciales)', 'Solo puedes usar la cara (sin cuerpo)', 'Tienes que empezar por el final de la acción',
+      'Tienes que hacer todo al revés (de atrás hacia adelante)', 'Tienes que detenerte por completo cada 3 segundos',
+      'Haz la mímica como si estuvieras en una película de acción', 'Haz la mímica como si fuera una comedia',
+      'Haz la mímica como si estuvieras en cámara lenta dramática', 'Haz la mímica como si estuvieras en un sueño',
+      'Haz la mímica como si tuvieras mucho frío', 'Haz la mímica como si tuvieras mucho calor',
+      'Haz la mímica como si estuvieras en la oscuridad', 'Haz la mímica como si estuvieras en un escenario',
+      'Haz la mímica como si te estuviera mirando un público enorme', 'Haz la mímica como si fuera la última oportunidad de ganar el juego'
     ];
 
     // Content pack schema used by the app and by future downloadable packs:
@@ -1166,8 +1228,8 @@
         },
         challenges: {
           pt: clone(CHALLENGES_PT),
-          en: clone(SAMPLE_CHALLENGES_EN),
-          es: clone(SAMPLE_CHALLENGES_ES)
+          en: clone(CHALLENGES_EN),
+          es: clone(CHALLENGES_ES)
         }
       };
     }
@@ -1492,6 +1554,7 @@
     function goTo(screen) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById('screen-' + screen).classList.add('active');
+      document.body.dataset.activeScreen = screen;
       if (screen === 'wordbank') {
         wbDiff = 'easy';
         wbCat = 'objects';
@@ -1539,6 +1602,132 @@
       document.body.appendChild(link);
       link.click();
       link.remove();
+    }
+
+    function getShareUrl() {
+      try {
+        const url = new URL(window.location.href);
+        if (url.protocol === 'http:' || url.protocol === 'https:') {
+          if (['localhost', '127.0.0.1', '0.0.0.0'].includes(url.hostname)) return APP_PUBLIC_URL;
+          url.hash = '';
+          return url.href;
+        }
+      } catch (error) {
+        console.warn('Could not read current URL for sharing.', error);
+      }
+
+      return APP_PUBLIC_URL;
+    }
+
+    function getShareData() {
+      return {
+        title: t('share.title'),
+        text: t('share.text'),
+        url: getShareUrl()
+      };
+    }
+
+    function canUseNativeShare(shareData) {
+      if (!navigator.share) return false;
+      if (!navigator.canShare) return true;
+
+      try {
+        return navigator.canShare(shareData);
+      } catch (error) {
+        console.warn('Native share capability check failed.', error);
+        return false;
+      }
+    }
+
+    function createPlatformShareUrl(platform, shareData) {
+      const encodedUrl = encodeURIComponent(shareData.url);
+      const encodedText = encodeURIComponent(shareData.text);
+      const encodedMessage = encodeURIComponent(`${shareData.text} ${shareData.url}`);
+
+      if (platform === 'whatsapp') return `https://wa.me/?text=${encodedMessage}`;
+      if (platform === 'facebook') return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+      if (platform === 'x') return `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+
+      return '';
+    }
+
+    async function copyTextToClipboard(text) {
+      if (navigator.clipboard?.writeText && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      textarea.style.top = '0';
+      document.body.appendChild(textarea);
+
+      const activeElement = document.activeElement;
+      textarea.focus();
+      textarea.select();
+      const copied = document.execCommand('copy');
+      textarea.remove();
+      if (activeElement?.focus) activeElement.focus();
+      if (!copied) throw new Error('Clipboard fallback failed');
+    }
+
+    async function copyShareLink(notificationKey = 'notifications.shareCopied') {
+      try {
+        await copyTextToClipboard(getShareData().url);
+        showNotif(t(notificationKey));
+        return true;
+      } catch (error) {
+        console.warn('Share link could not be copied.', error);
+        showNotif(t('notifications.shareCopyFailed'), 'var(--accent2)', 'var(--text)');
+        return false;
+      }
+    }
+
+    async function nativeShareApp(options = {}) {
+      const { fallbackNotification = 'notifications.shareUnavailable' } = options;
+      const shareData = getShareData();
+
+      if (canUseNativeShare(shareData)) {
+        try {
+          await navigator.share(shareData);
+          return true;
+        } catch (error) {
+          if (error?.name === 'AbortError') return false;
+          console.warn('Native sharing failed; falling back to clipboard.', error);
+        }
+      }
+
+      return copyShareLink(fallbackNotification);
+    }
+
+    async function shareToPlatform(platform) {
+      const shareData = getShareData();
+      const target = platform || '';
+
+      if (target === 'copy') return copyShareLink();
+
+      // Instagram and TikTok do not expose reliable public web share-intent URLs
+      // for arbitrary app links. Use the native share sheet when supported;
+      // otherwise copy the URL and open the platform so users can paste it.
+      if (target === 'instagram' || target === 'tiktok') {
+        const fallbackNotification = target === 'instagram'
+          ? 'notifications.shareInstagramFallback'
+          : 'notifications.shareTikTokFallback';
+        const shared = await nativeShareApp({ fallbackNotification });
+        if (!canUseNativeShare(shareData)) openExternalUrl(SOCIAL_WEB_FALLBACKS[target]);
+        return shared;
+      }
+
+      const platformUrl = createPlatformShareUrl(target, shareData);
+      if (platformUrl) {
+        openExternalUrl(platformUrl);
+        return true;
+      }
+
+      return nativeShareApp();
     }
 
     function loadExternalScript(src, scriptId) {
@@ -2727,13 +2916,17 @@
     }
 
     function handleAction(button) {
-      const { action, team, index, wordCategory, wordDiff, wordPack } = button.dataset;
+      const { action, team, index, wordCategory, wordDiff, wordPack, platform } = button.dataset;
 
       if (shouldPlayNavigationSoundForAction(action)) {
         playNavigationSound();
       }
 
       if (action === 'next-turn') return nextTurn();
+      if (action === 'share-platform') {
+        animateButtonClick(button);
+        return shareToPlatform(platform);
+      }
       if (action === 'quick-game') {
         animateButtonClick(button);
         return startQuickGame();

@@ -318,6 +318,68 @@
       max-width: 100%;
     }
 
+    .share-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .share-platform {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-family: var(--font-body);
+      opacity: 0.62;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+    }
+
+    .share-platform:hover {
+      transform: translateY(-1px);
+      background: var(--surface-bg);
+      border-color: currentColor;
+      opacity: 1;
+    }
+
+    .share-platform-icon {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      fill: currentColor;
+    }
+
+    .share-whatsapp {
+      color: #25d366;
+    }
+
+    .share-instagram {
+      color: #e4405f;
+    }
+
+    .share-tiktok {
+      color: #25f4ee;
+    }
+
+    .share-facebook {
+      color: #1877f2;
+    }
+
+    .share-x {
+      color: var(--text);
+    }
+
+    .share-copy {
+      color: var(--accent2);
+    }
+
     .btn-nowrap {
       white-space: nowrap;
     }
@@ -1455,11 +1517,23 @@
       font-weight: 700;
     }
 
+    .footer-share {
+      position: relative;
+      z-index: 1;
+      display: none;
+      justify-content: center;
+      padding: 18px 16px 0;
+    }
+
+    body[data-active-screen="home"] .footer-share {
+      display: flex;
+    }
+
     .site-footer {
       position: relative;
       z-index: 1;
       text-align: center;
-      padding: 20px 16px 28px;
+      padding: 10px 16px 28px;
       font-size: 0.75rem;
       color: var(--footer-text);
       font-weight: 700;
@@ -1528,6 +1602,7 @@
         gap: 14px;
         align-items: flex-start;
       }
+
     }
 
     @media (min-width: 768px) {

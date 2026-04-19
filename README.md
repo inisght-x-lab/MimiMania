@@ -17,6 +17,11 @@ This game was created for families who want to have fun with their children and 
 * **Fully Customizable:** Edit the word bank directly from the interface to include family jokes, pet names, favorite themes, or personalized challenges.
 * **Responsive Interface:** Optimized design for tablets, laptops, and desktop devices.
 * **Score System and Visual Timer:** Automatic score management and a visual countdown timer to keep the excitement high.
+* **Social Sharing:** Share the app from the discreet icon row above the footer through the Web Share API, WhatsApp, Facebook, X/Twitter, or by copying the link.
+
+### Sharing Notes
+
+WhatsApp, Facebook, and X/Twitter use their standard web sharing URLs. Instagram and TikTok do not provide reliable public web share-intent URLs for arbitrary links, so MimiMania uses the native Web Share API on supported mobile browsers; if that is unavailable, the app copies the link and opens the platform so users can paste it manually.
 
 ---
 
