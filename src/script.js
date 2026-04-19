@@ -286,7 +286,7 @@
           material3: 'Primavera'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v3.0 · Insight X Lab Technologies · Publicado no ',
+          copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Publicado no ',
           githubPages: 'GitHub Pages'
         },
         teams: {
@@ -579,7 +579,7 @@
           material3: 'Spring'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v3.0 · Insight X Lab Technologies · Published on ',
+          copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Published on ',
           githubPages: 'GitHub Pages'
         },
         teams: {
@@ -872,7 +872,7 @@
           material3: 'Primavera'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v3.0 · Insight X Lab Technologies · Publicado en ',
+          copyPrefix: '© 2025 MimiMania v4.0 · Insight X Lab Technologies · Publicado en ',
           githubPages: 'GitHub Pages'
         },
         teams: {
