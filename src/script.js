@@ -333,8 +333,7 @@
           'high-contrast': 'Alto Contraste'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v6.0 · Insight X Lab Technologies · Publicado no ',
-          githubPages: 'GitHub Pages'
+          copyPrefix: '© 2025 MimiMania v6.0 · Insight X Lab Technologies'
         },
         teams: {
           defaultA: 'Time A',
@@ -674,8 +673,7 @@
           'high-contrast': 'High Contrast'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v6.0 · Insight X Lab Technologies · Published on ',
-          githubPages: 'GitHub Pages'
+          copyPrefix: '© 2025 MimiMania v6.0 · Insight X Lab Technologies'
         },
         teams: {
           defaultA: 'Team A',
@@ -1015,8 +1013,7 @@
           'high-contrast': 'Alto Contraste'
         },
         footer: {
-          copyPrefix: '© 2025 MimiMania v6.0 · Insight X Lab Technologies · Publicado en ',
-          githubPages: 'GitHub Pages'
+          copyPrefix: '© 2025 MimiMania v6.0 · Insight X Lab Technologies'
         },
         teams: {
           defaultA: 'Equipo A',
