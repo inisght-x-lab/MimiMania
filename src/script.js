@@ -6,7 +6,7 @@
     const USER_ID_KEY = 'mm_user_id_v1';
     const APP_STORAGE_PREFIX = 'mm_';
     const AVAILABLE_THEMES = ['cosmic', 'liquid-glass', 'material3', 'light-mode', 'dark-mode', 'high-contrast'];
-    const THEMES_WITH_MUSIC = ['cosmic'];
+    const THEMES_WITH_MUSIC = ['cosmic', 'liquid-glass', 'material3'];
     const THEME_MUSIC_PREFIX = {
       cosmic: 'cosmic',
       'liquid-glass': 'autumn',
@@ -4775,6 +4775,10 @@
     }
 
     function initializeLayoutPreview() {
+      if (!document.getElementById('dev-layout-preview')) {
+        applyLayoutPreview('auto');
+        return;
+      }
       const saved = localStorage.getItem('mm_layout_preview') || 'auto';
       applyLayoutPreview(saved);
     }

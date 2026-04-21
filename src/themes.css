@@ -887,3 +887,133 @@ body.theme-high-contrast {
   --player-avatar-bg: #ffffff;
   --player-avatar-text: #000000;
 }
+
+@media (max-width: 767px) and (orientation: portrait) {
+  body.theme-cosmic {
+    --home-bg-image: url("./assets/background/cosmic_mobile_bg_home.png");
+    --home-bg-position: center top;
+  }
+
+  body.theme-liquid-glass {
+    --home-bg-image: url("./assets/background/autumn_mobile_bg_home.png");
+    --home-bg-position: center top;
+  }
+
+  body.theme-material3 {
+    --home-bg-image: url("./assets/background/spring_mobile_bg_home.png");
+    --home-bg-position: center top;
+  }
+
+  body.theme-light-mode {
+    --home-bg-image: url("./assets/background/light_mobile_bg_home.png");
+    --home-bg-position: center top;
+  }
+
+  body.theme-dark-mode {
+    --home-bg-image: url("./assets/background/dark_mobile_bg_home.png");
+    --home-bg-position: center top;
+  }
+
+  body.theme-high-contrast {
+    --home-bg-image: url("./assets/background/contrast_mobile_bg_home.png");
+    --home-bg-position: center top;
+  }
+}
+
+@media (max-width: 767px) and (orientation: landscape) {
+  body.theme-cosmic {
+    --home-bg-image: url("./assets/background/cosmic_desktop_bg_home.png");
+    --home-bg-position: center;
+  }
+
+  body.theme-liquid-glass {
+    --home-bg-image: url("./assets/background/autumn_desktop_bg_home.png");
+    --home-bg-position: center;
+  }
+
+  body.theme-material3 {
+    --home-bg-image: url("./assets/background/spring_desktop_bg_home.png");
+    --home-bg-position: center;
+  }
+
+  body.theme-light-mode {
+    --home-bg-image: url("./assets/background/light_desktop_bg_home.png");
+    --home-bg-position: center;
+  }
+
+  body.theme-dark-mode {
+    --home-bg-image: url("./assets/background/dark_desktop_bg_home.png");
+    --home-bg-position: center;
+  }
+
+  body.theme-high-contrast {
+    --home-bg-image: url("./assets/background/contrast_desktop_bg_home.png");
+    --home-bg-position: center;
+  }
+}
+
+body[data-preview-mode="mobile"].theme-cosmic {
+  --home-bg-image: url("./assets/background/cosmic_mobile_bg_home.png");
+  --home-bg-position: center top;
+}
+
+body[data-preview-mode="mobile"].theme-liquid-glass {
+  --home-bg-image: url("./assets/background/autumn_mobile_bg_home.png");
+  --home-bg-position: center top;
+}
+
+body[data-preview-mode="mobile"].theme-material3 {
+  --home-bg-image: url("./assets/background/spring_mobile_bg_home.png");
+  --home-bg-position: center top;
+}
+
+body[data-preview-mode="mobile"].theme-light-mode {
+  --home-bg-image: url("./assets/background/light_mobile_bg_home.png");
+  --home-bg-position: center top;
+}
+
+body[data-preview-mode="mobile"].theme-dark-mode {
+  --home-bg-image: url("./assets/background/dark_mobile_bg_home.png");
+  --home-bg-position: center top;
+}
+
+body[data-preview-mode="mobile"].theme-high-contrast {
+  --home-bg-image: url("./assets/background/contrast_mobile_bg_home.png");
+  --home-bg-position: center top;
+}
+
+body[data-preview-mode="tablet"].theme-cosmic,
+body[data-preview-mode="desktop"].theme-cosmic {
+  --home-bg-image: url("./assets/background/cosmic_desktop_bg_home.png");
+  --home-bg-position: center;
+}
+
+body[data-preview-mode="tablet"].theme-liquid-glass,
+body[data-preview-mode="desktop"].theme-liquid-glass {
+  --home-bg-image: url("./assets/background/autumn_desktop_bg_home.png");
+  --home-bg-position: center;
+}
+
+body[data-preview-mode="tablet"].theme-material3,
+body[data-preview-mode="desktop"].theme-material3 {
+  --home-bg-image: url("./assets/background/spring_desktop_bg_home.png");
+  --home-bg-position: center;
+}
+
+body[data-preview-mode="tablet"].theme-light-mode,
+body[data-preview-mode="desktop"].theme-light-mode {
+  --home-bg-image: url("./assets/background/light_desktop_bg_home.png");
+  --home-bg-position: center;
+}
+
+body[data-preview-mode="tablet"].theme-dark-mode,
+body[data-preview-mode="desktop"].theme-dark-mode {
+  --home-bg-image: url("./assets/background/dark_desktop_bg_home.png");
+  --home-bg-position: center;
+}
+
+body[data-preview-mode="tablet"].theme-high-contrast,
+body[data-preview-mode="desktop"].theme-high-contrast {
+  --home-bg-image: url("./assets/background/contrast_desktop_bg_home.png");
+  --home-bg-position: center;
+}

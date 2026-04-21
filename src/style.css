@@ -68,6 +68,30 @@
       background: var(--app-bg-overlay);
     }
 
+    @media (max-width: 767px) {
+      body[data-active-screen="home"] {
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        height: 100vh;
+        height: 100svh;
+        min-height: 100vh;
+        min-height: 100svh;
+        overflow: hidden;
+      }
+
+      body[data-active-screen="home"],
+      body:not([data-active-screen="home"]) {
+        background-attachment: scroll;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 520px) {
+      body[data-active-screen="home"],
+      body:not([data-active-screen="home"]) {
+        background-attachment: scroll;
+      }
+    }
+
     @media (min-width: 768px) {
       body[data-active-screen="home"] {
         display: grid;
@@ -1400,6 +1424,12 @@
         grid-template-columns: 1fr;
       }
 
+      #screen-multidevice {
+        align-items: stretch;
+        justify-content: flex-start;
+        padding-top: max(14px, env(safe-area-inset-top));
+      }
+
       #multidevice-host-card,
       #multidevice-host-panel,
       #multidevice-join-card {
@@ -2089,6 +2119,87 @@
 
       .copy-row .btn {
         width: 100%;
+      }
+    }
+
+    @media (max-width: 767px) and (orientation: portrait) {
+      #screen-home {
+        min-height: 0;
+        height: 100%;
+        justify-content: center;
+        padding: 10px 16px 4px;
+      }
+
+      #screen-home .page-shell {
+        width: 100%;
+      }
+
+      #screen-home .logo {
+        font-size: clamp(2.5rem, 12vw, 3.25rem);
+      }
+
+      #screen-home .logo-sub {
+        margin-bottom: 14px;
+        font-size: 0.78rem;
+        letter-spacing: 2px;
+      }
+
+      #screen-home .home-actions-card {
+        padding: 8px 12px;
+      }
+
+      #screen-home .home-actions {
+        gap: 7px;
+      }
+
+      #screen-home .home-actions > .btn {
+        min-height: 52px;
+        height: 52px;
+        padding: 8px 16px;
+      }
+
+      #screen-home .btn-lg {
+        font-size: 0.96rem;
+      }
+
+      #screen-home .btn-quick-game {
+        height: 52px;
+        max-height: 52px;
+        gap: 1px;
+      }
+
+      #screen-home .btn-quick-game-summary {
+        font-size: 0.74rem;
+        line-height: 1.1;
+      }
+
+      body[data-active-screen="home"] .home-footer-panel {
+        width: min(calc(100% - 24px), calc(var(--home-actions-width) - var(--home-actions-inline-inset)));
+        margin-bottom: max(4px, env(safe-area-inset-bottom));
+      }
+
+      body[data-active-screen="home"] .footer-share {
+        padding: 4px 10px 0;
+      }
+
+      body[data-active-screen="home"] .share-grid {
+        gap: 6px;
+      }
+
+      body[data-active-screen="home"] .share-platform {
+        width: 30px;
+        height: 30px;
+      }
+
+      body[data-active-screen="home"] .share-platform-icon {
+        width: 15px;
+        height: 15px;
+      }
+
+      body[data-active-screen="home"] .site-footer {
+        padding: 4px 10px 8px;
+        font-size: 0.66rem;
+        line-height: 1.2;
       }
     }
 
