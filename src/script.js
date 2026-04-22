@@ -124,7 +124,10 @@
           enterFullscreen: 'Tela cheia',
           exitFullscreen: 'Sair da tela cheia',
           newGame: '🎮 Nova Partida',
-          multiDeviceGame: '📡 Nova Partida Multi Device',
+          multiDeviceGame: '📡 Conectar Dispositivos',
+          multiDeviceOnline: 'On-line',
+          multiDeviceOffline: 'Off-line',
+          multiDeviceSummary: ({ status, count }) => `${status} | ${count} device${count !== 1 ? 's' : ''} conectado${count !== 1 ? 's' : ''}`,
           quickGame: '⚡ Jogo Rápido',
           wordBank: '🧩 Conteúdo e Expansões',
           donate: '❤️ Doar',
@@ -157,6 +160,8 @@
           hostError: 'Não foi possível abrir a sessão.',
           sessionCode: 'Código da sessão:',
           guestsConnected: ({ count }) => `${count} device${count !== 1 ? 's' : ''} conectado${count !== 1 ? 's' : ''}`,
+          online: 'On-line',
+          offline: 'Off-line',
           continueSetup: 'Continuar configuração',
           joinTitle: '🔗 Conectar',
           joinDesc: 'Entre como tela auxiliar para acompanhar a partida do host.',
@@ -561,7 +566,10 @@
           enterFullscreen: 'Full screen',
           exitFullscreen: 'Exit full screen',
           newGame: '🎮 New Game',
-          multiDeviceGame: '📡 New Multi Device Game',
+          multiDeviceGame: '📡 Connect Devices',
+          multiDeviceOnline: 'Online',
+          multiDeviceOffline: 'Offline',
+          multiDeviceSummary: ({ status, count }) => `${status} | ${count} device${count !== 1 ? 's' : ''} connected`,
           quickGame: '⚡ Quick Game',
           wordBank: '🧩 Content & Expansions',
           donate: '❤️ Donate',
@@ -594,6 +602,8 @@
           hostError: 'Could not open the session.',
           sessionCode: 'Session code:',
           guestsConnected: ({ count }) => `${count} device${count !== 1 ? 's' : ''} connected`,
+          online: 'Online',
+          offline: 'Offline',
           continueSetup: 'Continue setup',
           joinTitle: '🔗 Join',
           joinDesc: 'Join as a companion screen to follow the host game.',
@@ -998,7 +1008,10 @@
           enterFullscreen: 'Pantalla completa',
           exitFullscreen: 'Salir de pantalla completa',
           newGame: '🎮 Nueva Partida',
-          multiDeviceGame: '📡 Nueva Partida Multi Device',
+          multiDeviceGame: '📡 Conectar dispositivos',
+          multiDeviceOnline: 'En línea',
+          multiDeviceOffline: 'Sin conexión',
+          multiDeviceSummary: ({ status, count }) => `${status} | ${count} dispositivo${count !== 1 ? 's' : ''} conectado${count !== 1 ? 's' : ''}`,
           quickGame: '⚡ Juego Rápido',
           wordBank: '🧩 Contenido y Expansiones',
           donate: '❤️ Donar',
@@ -1031,6 +1044,8 @@
           hostError: 'No se pudo abrir la sesión.',
           sessionCode: 'Código de sesión:',
           guestsConnected: ({ count }) => `${count} dispositivo${count !== 1 ? 's' : ''} conectado${count !== 1 ? 's' : ''}`,
+          online: 'En línea',
+          offline: 'Sin conexión',
           continueSetup: 'Continuar configuración',
           joinTitle: '🔗 Conectar',
           joinDesc: 'Entra como pantalla auxiliar para seguir la partida del host.',
@@ -1419,7 +1434,10 @@
         enterFullscreen: 'Plein écran',
         exitFullscreen: 'Quitter le plein écran',
         newGame: '🎮 Nouvelle partie',
-        multiDeviceGame: '📡 Nouvelle partie multi-device',
+        multiDeviceGame: '📡 Connecter les appareils',
+        multiDeviceOnline: 'En ligne',
+        multiDeviceOffline: 'Hors ligne',
+        multiDeviceSummary: ({ status, count }) => `${status} | ${count} appareil${count !== 1 ? 's' : ''} connecté${count !== 1 ? 's' : ''}`,
         quickGame: '⚡ Partie rapide',
         wordBank: '🧩 Contenu et extensions',
         donate: '❤️ Faire un don',
@@ -1452,6 +1470,8 @@
         hostError: 'Impossible d’ouvrir la session.',
         sessionCode: 'Code de session :',
         guestsConnected: ({ count }) => `${count} appareil${count !== 1 ? 's' : ''} connecté${count !== 1 ? 's' : ''}`,
+        online: 'En ligne',
+        offline: 'Hors ligne',
         continueSetup: 'Continuer la configuration',
         joinTitle: '🔗 Rejoindre',
         joinDesc: 'Rejoignez comme écran auxiliaire pour suivre la partie de l’hôte.',
@@ -1795,7 +1815,10 @@
         enterFullscreen: 'Vollbild',
         exitFullscreen: 'Vollbild verlassen',
         newGame: '🎮 Neues Spiel',
-        multiDeviceGame: '📡 Neues Multi-Device-Spiel',
+        multiDeviceGame: '📡 Geräte verbinden',
+        multiDeviceOnline: 'Online',
+        multiDeviceOffline: 'Offline',
+        multiDeviceSummary: ({ status, count }) => `${status} | ${count} Gerät${count !== 1 ? 'e' : ''} verbunden`,
         quickGame: '⚡ Schnellspiel',
         wordBank: '🧩 Inhalte und Erweiterungen',
         donate: '❤️ Spenden',
@@ -1828,6 +1851,8 @@
         hostError: 'Sitzung konnte nicht geöffnet werden.',
         sessionCode: 'Sitzungscode:',
         guestsConnected: ({ count }) => `${count} Gerät${count !== 1 ? 'e' : ''} verbunden`,
+        online: 'Online',
+        offline: 'Offline',
         continueSetup: 'Einrichtung fortsetzen',
         joinTitle: '🔗 Beitreten',
         joinDesc: 'Als Zusatzbildschirm beitreten, um dem Host-Spiel zu folgen.',
@@ -2171,7 +2196,10 @@
         enterFullscreen: 'Schermo intero',
         exitFullscreen: 'Esci da schermo intero',
         newGame: '🎮 Nuova partita',
-        multiDeviceGame: '📡 Nuova partita multi-device',
+        multiDeviceGame: '📡 Connetti dispositivi',
+        multiDeviceOnline: 'Online',
+        multiDeviceOffline: 'Offline',
+        multiDeviceSummary: ({ status, count }) => `${status} | ${count} dispositiv${count === 1 ? 'o' : 'i'} conness${count === 1 ? 'o' : 'i'}`,
         quickGame: '⚡ Partita rapida',
         wordBank: '🧩 Contenuti ed espansioni',
         donate: '❤️ Dona',
@@ -2204,6 +2232,8 @@
         hostError: 'Impossibile aprire la sessione.',
         sessionCode: 'Codice sessione:',
         guestsConnected: ({ count }) => `${count} dispositiv${count !== 1 ? 'i' : 'o'} conness${count !== 1 ? 'i' : 'o'}`,
+        online: 'Online',
+        offline: 'Offline',
         continueSetup: 'Continua configurazione',
         joinTitle: '🔗 Connetti',
         joinDesc: 'Entra come schermo ausiliario per seguire la partita dell’host.',
@@ -4015,6 +4045,29 @@
       if (button) button.title = fullSummary;
     }
 
+    function getMultiDeviceHomeConnectionCount() {
+      if (isHostSessionOpen()) return multiDeviceState.connections.filter(conn => conn.open).length;
+      if (isGuestSessionOpen()) return 1;
+      return 0;
+    }
+
+    function renderMultiDeviceHomeSummary() {
+      const summary = document.getElementById('multi-device-summary');
+      if (!summary) return;
+      const isOnline = isHostSessionOpen() || isGuestSessionOpen();
+      const count = getMultiDeviceHomeConnectionCount();
+      const status = t(isOnline ? 'home.multiDeviceOnline' : 'home.multiDeviceOffline');
+      const text = t('home.multiDeviceSummary', { status, count });
+      const dot = document.createElement('span');
+      dot.className = `connection-status-dot ${isOnline ? 'is-online' : 'is-offline'}`;
+      dot.setAttribute('aria-hidden', 'true');
+      summary.replaceChildren(dot, document.createTextNode(text));
+      summary.title = text;
+      summary.setAttribute('aria-label', text);
+      const button = summary.closest('button');
+      if (button) button.title = `${t('home.multiDeviceGame')} | ${text}`;
+    }
+
     function syncTeamNamesForLanguage(previousLanguage, nextLanguage) {
       ['A', 'B'].forEach(team => {
         const previousDefault = getDefaultTeamName(team, previousLanguage);
@@ -4078,7 +4131,10 @@
       role: 'single',
       peer: null,
       peerId: '',
+      hostPeerId: '',
       hostConnection: null,
+      guestConnectionStatus: 'disconnected',
+      lastGuestDrawingTurnKey: '',
       connections: [],
       sessionUrl: '',
       lastPayload: null
@@ -4144,6 +4200,7 @@
       applyTranslations();
       refreshGameTypeUI();
       renderQuickGameSummary();
+      renderMultiDeviceHomeSummary();
       updateTeamLabels();
       renderCategorySelection();
       renderSetupPlayers();
@@ -4164,6 +4221,7 @@
       if (document.getElementById('screen-guest')?.classList.contains('active') && multiDeviceState.lastPayload) {
         renderGuestSessionState(multiDeviceState.lastPayload);
       }
+      renderGuestConnectionStatus();
       updateScoreManagerButton();
       updateTimerLabel(document.getElementById('timer-slider').value);
       updateFullscreenButton();
@@ -4223,7 +4281,7 @@
         renderCategorySelection();
       }
       if (screen === 'multidevice') {
-        resetMultiDeviceChoice();
+        restoreMultiDeviceScreenState();
       }
       if (screen === 'leaderboard') {
         renderLeaderboard();
@@ -4295,6 +4353,23 @@
       el.textContent = keyOrText.includes('.') ? t(keyOrText) : keyOrText;
     }
 
+    function renderGuestConnectionStatus() {
+      const el = document.getElementById('guest-connection-status');
+      if (!el) return;
+      const statusKey = multiDeviceState.guestConnectionStatus === 'connected'
+        ? 'multiDevice.online'
+        : multiDeviceState.guestConnectionStatus === 'disconnected'
+          ? 'multiDevice.offline'
+          : 'multiDevice.connecting';
+      el.textContent = t(statusKey);
+      el.dataset.connectionStatus = multiDeviceState.guestConnectionStatus;
+    }
+
+    function setGuestConnectionStatus(status) {
+      multiDeviceState.guestConnectionStatus = status;
+      renderGuestConnectionStatus();
+    }
+
     function getSessionUrl(peerId) {
       const url = new URL(window.location.href);
       url.search = '';
@@ -4336,6 +4411,7 @@
       const count = multiDeviceState.connections.filter(conn => conn.open).length;
       const el = document.getElementById('multidevice-guest-count');
       if (el) el.textContent = t('multiDevice.guestsConnected', { count });
+      renderMultiDeviceHomeSummary();
     }
 
     function closeCurrentPeer() {
@@ -4346,10 +4422,27 @@
       } catch (e) { }
       multiDeviceState.peer = null;
       multiDeviceState.hostConnection = null;
+      multiDeviceState.guestConnectionStatus = 'disconnected';
+      multiDeviceState.lastGuestDrawingTurnKey = '';
       multiDeviceState.connections = [];
       multiDeviceState.peerId = '';
+      multiDeviceState.hostPeerId = '';
       multiDeviceState.sessionUrl = '';
       multiDeviceState.lastPayload = null;
+      renderMultiDeviceHomeSummary();
+    }
+
+    function isCurrentPeerOpen() {
+      const peer = multiDeviceState.peer;
+      return Boolean(peer && !peer.destroyed && peer.disconnected !== true);
+    }
+
+    function isHostSessionOpen() {
+      return multiDeviceState.role === 'host' && isCurrentPeerOpen() && Boolean(multiDeviceState.peerId && multiDeviceState.sessionUrl);
+    }
+
+    function isGuestSessionOpen() {
+      return multiDeviceState.role === 'guest' && isCurrentPeerOpen() && Boolean(multiDeviceState.hostConnection?.open);
     }
 
     function resetMultiDeviceChoice() {
@@ -4369,15 +4462,46 @@
       }
     }
 
+    function showExistingHostSession() {
+      selectMultiDeviceMode('host');
+      document.getElementById('multidevice-host-panel')?.classList.remove('hidden');
+      document.getElementById('multidevice-session-code').textContent = multiDeviceState.peerId;
+      document.getElementById('multidevice-link').value = multiDeviceState.sessionUrl;
+      renderSessionQRCode(multiDeviceState.sessionUrl);
+      setHostStatus('multiDevice.hostReady');
+      updateHostGuestCount();
+    }
+
+    function showExistingGuestSession() {
+      selectMultiDeviceMode('join');
+      const input = document.getElementById('multidevice-join-code');
+      const hostCode = multiDeviceState.hostPeerId || multiDeviceState.hostConnection?.peer || '';
+      if (input) input.value = hostCode;
+      setJoinStatus('multiDevice.connected');
+    }
+
+    function restoreMultiDeviceScreenState() {
+      if (isHostSessionOpen()) {
+        showExistingHostSession();
+        return;
+      }
+      if (isGuestSessionOpen()) {
+        showExistingGuestSession();
+        return;
+      }
+      resetMultiDeviceChoice();
+    }
+
     function disconnectGuestSession() {
       closeCurrentPeer();
       multiDeviceState.role = 'single';
-      document.getElementById('guest-connection-status').textContent = t('multiDevice.disconnected');
+      setGuestConnectionStatus('disconnected');
       document.getElementById('guest-round-title').textContent = t('multiDevice.waitingTitle');
       document.getElementById('guest-current-player-label').textContent = t('multiDevice.guestWaiting');
       document.getElementById('guest-current-player-name').textContent = '--';
       document.getElementById('guest-hint-banner')?.classList.add('hidden');
       document.getElementById('guest-drawing-card')?.classList.add('hidden');
+      document.body.dataset.guestGameType = 'mime';
       updateGuestTimerDisplay(NaN, 1);
       goTo('home');
     }
@@ -4441,6 +4565,7 @@
         timerDur: gameState.timerDur,
         currentRound: hasStarted ? gameState.currentRound : 0,
         totalRounds: hasStarted ? gameState.totalRounds : 0,
+        drawingTurnKey: `${gameState.turnsDone}:${gameState.currentRound}:${gameState.currentPlayerIdx}`,
         statusKey: getGuestStatusKey(phase),
         currentPlayerName: currentPlayer.name,
         teamLabel: currentPlayer.teamLabel,
@@ -4497,11 +4622,13 @@
         document.getElementById('multidevice-link').value = multiDeviceState.sessionUrl;
         renderSessionQRCode(multiDeviceState.sessionUrl);
         setHostStatus('multiDevice.hostReady');
+        renderMultiDeviceHomeSummary();
         broadcastHostGameState();
       });
       peer.on('connection', attachHostConnection);
       peer.on('error', () => {
         setHostStatus('multiDevice.hostError');
+        renderMultiDeviceHomeSummary();
         showNotif(t('multiDevice.hostError'), 'var(--accent1)', 'var(--btn-danger-text)');
       });
     }
@@ -4520,8 +4647,9 @@
 
       closeCurrentPeer();
       multiDeviceState.role = 'guest';
+      multiDeviceState.hostPeerId = hostId;
       setJoinStatus('multiDevice.connecting');
-      document.getElementById('guest-connection-status').textContent = t('multiDevice.connecting');
+      setGuestConnectionStatus('connecting');
       goTo('guest');
 
       const peer = new window.Peer();
@@ -4532,23 +4660,27 @@
         attachGuestConnection(conn);
       });
       peer.on('error', () => {
-        document.getElementById('guest-connection-status').textContent = t('multiDevice.disconnected');
+        setGuestConnectionStatus('disconnected');
         setJoinStatus('multiDevice.hostError');
+        renderMultiDeviceHomeSummary();
       });
     }
 
     function attachGuestConnection(conn) {
       conn.on('open', () => {
-        document.getElementById('guest-connection-status').textContent = t('multiDevice.connected');
+        setGuestConnectionStatus('connected');
         setJoinStatus('multiDevice.connected');
+        renderMultiDeviceHomeSummary();
         sendToGuest(conn, { type: 'guest-ready' });
       });
       conn.on('data', handleGuestMessage);
       conn.on('close', () => {
-        document.getElementById('guest-connection-status').textContent = t('multiDevice.disconnected');
+        setGuestConnectionStatus('disconnected');
+        renderMultiDeviceHomeSummary();
       });
       conn.on('error', () => {
-        document.getElementById('guest-connection-status').textContent = t('multiDevice.disconnected');
+        setGuestConnectionStatus('disconnected');
+        renderMultiDeviceHomeSummary();
       });
     }
 
@@ -4603,6 +4735,7 @@
     function renderGuestSessionState(payload) {
       multiDeviceState.lastPayload = payload;
       if (!document.getElementById('screen-guest').classList.contains('active')) goTo('guest');
+      document.body.dataset.guestGameType = payload.gameType === 'drawing' ? 'drawing' : 'mime';
       document.getElementById('guest-round-title').textContent = getGuestRoundText(payload);
       document.getElementById('guest-current-player-label').textContent = getGuestStatusText(payload);
       document.getElementById('guest-current-player-name').textContent = payload.phase === 'waiting' ? '--' : (payload.currentPlayerName || '--');
@@ -4622,8 +4755,15 @@
       const shouldShowDrawing = payload.gameType === 'drawing' && payload.phase === 'playing';
       drawingCard.classList.toggle('hidden', !shouldShowDrawing);
       if (shouldShowDrawing) {
+        const drawingTurnKey = payload.drawingTurnKey || `${payload.currentRound || 0}:${payload.currentPlayerName || ''}`;
+        if (drawingTurnKey !== multiDeviceState.lastGuestDrawingTurnKey) {
+          multiDeviceState.lastGuestDrawingTurnKey = drawingTurnKey;
+          clearGuestDrawingCanvas();
+        }
         requestAnimationFrame(() => resizeGuestDrawingCanvas({ preserve: true }));
         if (payload.drawingSnapshot) applyGuestDrawingSnapshot(payload.drawingSnapshot);
+      } else {
+        multiDeviceState.lastGuestDrawingTurnKey = '';
       }
     }
 
@@ -5489,8 +5629,12 @@
       const shouldShow = gameState.gameType === 'drawing' && gameState.phase === 'playing';
       board.classList.toggle('hidden', !shouldShow);
       if (shouldShow) {
-        requestAnimationFrame(() => resizeDrawingCanvas({ preserve: !reset }));
-        if (reset) broadcastDrawingClear();
+        if (reset) {
+          resizeDrawingCanvas({ preserve: false });
+          broadcastDrawingClear();
+        } else {
+          requestAnimationFrame(() => resizeDrawingCanvas({ preserve: true }));
+        }
       }
     }
 
