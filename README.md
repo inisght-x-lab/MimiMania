@@ -9,7 +9,7 @@ This game was created for families who want to have fun with their children and 
 
 ## 🌟 About the Game
 
-**Mimi Mania** is a lightweight and interactive web game focused on simplicity and instant fun. No distractions, no ads — just one goal: guess the selected word through gestures before time runs out!
+**Charades Challenge** is a lightweight and interactive web game focused on simplicity and instant fun. No distractions, no ads — just one goal: guess the selected word through gestures before time runs out!
 
 ### Main Features
 
