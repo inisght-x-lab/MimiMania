@@ -17,8 +17,8 @@
     };
     const GAMEPLAY_MUSIC_SCREENS = ['game', 'score', 'final', 'guest'];
     const MUSIC_ASSET_BASE = './assets/songs';
-    const SUPPORTED_LANGUAGES = ['pt', 'en', 'es'];
-    const LANGUAGE_HTML_MAP = { pt: 'pt-BR', en: 'en', es: 'es' };
+    const SUPPORTED_LANGUAGES = ['pt', 'en', 'es', 'fr', 'de', 'it'];
+    const LANGUAGE_HTML_MAP = { pt: 'pt-BR', en: 'en', es: 'es', fr: 'fr', de: 'de', it: 'it' };
     const GAME_TYPES = ['mime', 'drawing'];
     const DIFFICULTY_KEYS = ['easy', 'normal', 'hard'];
     const CATEGORY_KEYS = ['objects', 'actions', 'animals', 'movies', 'professions', 'celebrities'];
@@ -94,7 +94,10 @@
         language: {
           pt: 'Português',
           en: 'English',
-          es: 'Español'
+          es: 'Español',
+          fr: 'Français',
+          de: 'Deutsch',
+          it: 'Italiano'
         },
         dev: {
           mode: 'Modo de desenvolvimento',
@@ -438,7 +441,10 @@
         language: {
           pt: 'Portuguese',
           en: 'English',
-          es: 'Spanish'
+          es: 'Spanish',
+          fr: 'French',
+          de: 'German',
+          it: 'Italian'
         },
         dev: {
           mode: 'Development mode',
@@ -782,7 +788,10 @@
         language: {
           pt: 'Portugués',
           en: 'Inglés',
-          es: 'Español'
+          es: 'Español',
+          fr: 'Francés',
+          de: 'Alemán',
+          it: 'Italiano'
         },
         dev: {
           mode: 'Modo de desarrollo',
@@ -1109,6 +1118,913 @@
         }
       }
     };
+
+    function mergeTranslations(base, overrides) {
+      const merged = { ...base };
+      Object.entries(overrides).forEach(([key, value]) => {
+        const isPlainObject = value && typeof value === 'object' && !Array.isArray(value) && typeof value !== 'function';
+        merged[key] = isPlainObject ? mergeTranslations(base?.[key] || {}, value) : value;
+      });
+      return merged;
+    }
+
+    TRANSLATIONS.fr = mergeTranslations(TRANSLATIONS.en, {
+      common: {
+        back: '← Retour',
+        add: '+ Ajouter',
+        copy: 'Copier',
+        continue: '▶️ Continuer',
+        restart: '🔄 Recommencer',
+        home: '🏠 Accueil',
+        playerSingular: 'joueur',
+        playerPlural: 'joueurs',
+        roundSingular: 'manche',
+        roundPlural: 'manches'
+      },
+      language: {
+        pt: 'Portugais',
+        en: 'Anglais',
+        es: 'Espagnol',
+        fr: 'Français',
+        de: 'Allemand',
+        it: 'Italien'
+      },
+      dev: {
+        mode: 'Mode développement',
+        description: 'Testez rapidement la mise en page sur mobile, tablette et ordinateur.',
+        previewLabel: 'Aperçu de la mise en page',
+        preview: { auto: 'Auto', mobile: 'Mobile', tablet: 'Tablette', desktop: 'Ordinateur' }
+      },
+      home: {
+        subtitle: '🎭 Mime et dessin en famille',
+        enterFullscreen: 'Plein écran',
+        exitFullscreen: 'Quitter le plein écran',
+        newGame: '🎮 Nouvelle partie',
+        multiDeviceGame: '📡 Nouvelle partie multi-device',
+        quickGame: '⚡ Partie rapide',
+        wordBank: '🧩 Contenu et extensions',
+        donate: '❤️ Faire un don',
+        settings: '⚙️ Paramètres',
+        howToTitle: '🏆 Comment jouer',
+        howTo: {
+          setupTitle: 'Préparez la partie',
+          setupDesc: 'Choisissez équipes ou chacun pour soi, puis définissez manches, difficulté et catégories.',
+          turnTitle: 'Regardez et mimez',
+          turnDesc: 'Un joueur voit le mot, le mémorise, puis le mime ou le dessine pendant que les autres devinent.',
+          timerTitle: 'Course contre la montre',
+          timerDesc: 'Le minuteur, les indices et les sons d’alerte rendent chaque tour rapide et amusant.',
+          winTitle: 'Marquez des points et gagnez',
+          winDesc: 'Chaque bonne réponse vaut 10 points. À la fin des manches, le score désigne le gagnant.'
+        }
+      },
+      multiDevice: {
+        title: 'Partie multi-device',
+        chooseTitle: 'Que voulez-vous faire ?',
+        chooseDesc: 'Ouvrez une session pour contrôler la partie ou connectez cet appareil comme écran auxiliaire.',
+        chooseHost: '📡 Ouvrir une session',
+        chooseJoin: '🔗 Rejoindre une session',
+        changeChoice: 'Changer d’option',
+        hostTitle: '📡 Ouvrir une session',
+        hostDesc: 'Cet appareil contrôle la partie. Les autres rejoignent pour voir le minuteur, les indices et le dessin.',
+        openSession: 'Ouvrir la session',
+        hostCreating: 'Création de la session...',
+        hostReady: 'Session ouverte. Scannez le QR Code sur les autres appareils.',
+        hostError: 'Impossible d’ouvrir la session.',
+        sessionCode: 'Code de session :',
+        guestsConnected: ({ count }) => `${count} appareil${count !== 1 ? 's' : ''} connecté${count !== 1 ? 's' : ''}`,
+        continueSetup: 'Continuer la configuration',
+        joinTitle: '🔗 Rejoindre',
+        joinDesc: 'Rejoignez comme écran auxiliaire pour suivre la partie de l’hôte.',
+        joinCodeLabel: 'Code ou lien de session',
+        joinCodePlaceholder: 'Collez le code ou le lien',
+        joinSession: 'Rejoindre la session',
+        joinHelp: 'Vous pouvez aussi scanner le QR Code affiché sur l’hôte.',
+        waitingTitle: 'En attente des données de la partie',
+        guestLabel: 'Écran auxiliaire',
+        connecting: 'Connexion...',
+        connected: 'Connecté',
+        disconnected: 'Déconnecté',
+        guestWaiting: 'En attente du lancement par l’hôte.',
+        guestPreparing: 'En attente de la révélation du mot.',
+        guestMemorizing: 'La manche va commencer.',
+        guestPlaying: 'Devinez !',
+        guestScore: 'En attente du prochain tour.',
+        guestFinal: 'Partie terminée.',
+        liveDrawing: '✏️ Dessin en direct',
+        disconnect: 'Se déconnecter',
+        linkCopied: '🔗 Lien de session copié !',
+        missingSession: 'Saisissez le code de session.',
+        peerUnavailable: 'PeerJS n’a pas chargé. Vérifiez la connexion et réessayez.',
+        qrUnavailable: 'QR Code indisponible. Utilisez le lien ou le code de session.'
+      },
+      setup: {
+        title: 'Nouvelle partie',
+        gameTypeTitle: '1️⃣ Type de jeu',
+        gameTypeMimeName: 'Mime',
+        gameTypeMimeDesc: 'Jouez sans parler',
+        gameTypeDrawingName: 'Dessin',
+        gameTypeDrawingDesc: 'Dessinez le mot',
+        modeTitle: '2️⃣ Mode de jeu',
+        modeTeamsName: 'Deux équipes',
+        modeTeamsDesc: 'Les équipes s’affrontent',
+        modeFfaName: 'Chacun pour soi',
+        modeFfaDesc: 'Tous contre tous',
+        teamPlayersTitle: '3️⃣ Joueurs par équipe',
+        playersTitle: '3️⃣ Joueurs',
+        teamAPlaceholder: 'Nom de l’équipe A',
+        teamBPlaceholder: 'Nom de l’équipe B',
+        playerNamePlaceholder: 'Nom du joueur...',
+        teamHelper: '💡 Minimum 1 par équipe, maximum 3 par équipe (jusqu’à 6 joueurs)',
+        ffaHelper: '💡 Minimum 3, maximum 6 joueurs',
+        difficultyTitle: '4️⃣ Difficulté',
+        difficultyEasyDesc: 'Idéal pour les enfants et débutants',
+        difficultyNormalDesc: 'Défi équilibré pour toute la famille',
+        difficultyHardDesc: 'Mots complexes, pour les courageux !',
+        optionsTitle: '5️⃣ Options de jeu',
+        randomChallengeLabel: 'Défi aléatoire',
+        randomChallengeSub: 'Ajoute des modificateurs au mime',
+        randomChallengeDisabledSub: 'Indisponible en mode dessin',
+        categoriesLabel: 'Catégories disponibles',
+        coreCategoriesLabel: 'Catégories core',
+        premiumCategoriesLabel: 'Catégories premium',
+        matchTitle: '6️⃣ Configurer la partie',
+        roundsLabel: 'Nombre de manches',
+        roundsSub: 'Nombre de manches par joueur',
+        startGame: '🎭 Commencer !'
+      },
+      difficulty: { easy: 'Facile', normal: 'Normal', hard: 'Difficile' },
+      category: {
+        objects: { plural: 'Objets', singular: 'Objet', tab: '🧸 Objets', option: '🧸 Objets' },
+        actions: { plural: 'Actions', singular: 'Action', tab: '🏃 Actions', option: '🏃 Actions' },
+        animals: { plural: 'Animaux', singular: 'Animal', tab: '🐾 Animaux', option: '🐾 Animaux' },
+        movies: { plural: 'Films', singular: 'Film', tab: '🎬 Films', option: '🎬 Films' },
+        professions: { plural: 'Métiers', singular: 'Métier', tab: '👔 Métiers', option: '👔 Métiers' },
+        celebrities: { plural: 'Célébrités', singular: 'Célébrité', tab: '⭐ Célébrités', option: '⭐ Célébrités' }
+      },
+      game: {
+        currentPlayerLabel: 'Au tour du mime :',
+        currentPlayerDrawingLabel: 'Au tour de dessiner :',
+        readyTitle: 'Prêts à voir le mot ?',
+        readyDrawingTitle: 'Prêts à voir quoi dessiner ?',
+        readySub: 'Seul le mime doit regarder ! Les autres ferment les yeux ! 👀',
+        readyDrawingSub: 'Seul le dessinateur doit regarder ! Les autres ferment les yeux ! 👀',
+        revealWord: '🎲 Révéler le mot',
+        memorizeTitle: '⚡ Mémorisez le mot !',
+        startsIn: 'Le jeu commence dans...',
+        onlyMimeCanSee: 'Seul le mime peut voir !',
+        onlyDrawerCanSee: 'Seul le dessinateur peut voir !',
+        secondsLabel: 'SECONDES',
+        hiddenWord: 'Mot masqué',
+        hintTitle: '💡 Indice',
+        showWord: '👁️ Afficher le mot',
+        hideWord: '🙈 Masquer le mot',
+        correct: '✅ Correct !',
+        wrong: '❌ Raté / Skip',
+        challengePrefix: '🎯 Défi :'
+      },
+      drawing: {
+        canvasLabel: 'Zone de dessin',
+        toolbarLabel: 'Outils de dessin',
+        penThick: 'Trait épais',
+        penThin: 'Trait fin',
+        eraserThick: 'Grosse gomme',
+        eraserThin: 'Petite gomme',
+        clear: 'Effacer le canvas'
+      },
+      result: { correctTitle: 'Correct !', wrongTitle: 'Raté !', timeUpTitle: 'Temps écoulé !', nextTurn: '➡️ Tour suivant' },
+      score: { title: '🏆 Score', nextRoundTitle: '🎊 Prochaine manche' },
+      final: { winnerLabel: 'GAGNANT !', resultTitle: '📊 Résultat final', playAgain: '🎮 Rejouer', tie: 'ÉGALITÉ !' },
+      wordbank: {
+        title: 'Contenu et extensions',
+        addTitle: '➕ Ajouter un mot',
+        newWordPlaceholder: 'Saisissez le mot...',
+        addToDifficulty: 'Il sera ajouté à la difficulté :',
+        addButton: '➕ Ajouter le mot',
+        listTitle: '📋 Mots',
+        resetButton: '↺ Restaurer',
+        challengesTitle: '🎯 Défis core',
+        addChallengeTitle: '🎯 Ajouter un défi',
+        newChallengePlaceholder: 'Saisissez le défi...',
+        addChallengeButton: '➕ Ajouter le défi',
+        installPackTitle: '📦 Installer un pack',
+        installPackSub: 'Envoyez le fichier .json acheté pour débloquer de nouveaux mots sur cet appareil.',
+        selectPackFile: '📁 Choisir un fichier',
+        installedPacksTitle: 'Packs installés',
+        noInstalledPacks: 'Aucun pack supplémentaire installé pour le moment.',
+        packEnabled: 'Actif',
+        packDisabled: 'Inactif',
+        removePack: 'Supprimer',
+        packPreviewTitle: '⭐ Contenu du pack',
+        packPreviewPrompt: 'Cliquez sur un pack installé pour voir les mots et défis.',
+        packPreviewWordsTitle: 'Mots du pack',
+        packPreviewChallengesTitle: 'Défis du pack',
+        packPreviewNoWords: 'Aucun mot dans cette langue et difficulté.',
+        packPreviewNoChallenges: 'Aucun défi dans cette langue.',
+        packPreviewSelected: ({ name }) => `Affichage : ${name}`
+      },
+      settings: {
+        title: 'Paramètres',
+        timerTitle: '⏱️ Minuteur',
+        roundTimeLabel: 'Temps par manche',
+        roundTimeSub: 'Secondes pour deviner',
+        penaltyLabel: 'Pénalité de skip',
+        penaltySub: '−10 points en passant',
+        generalTitle: '⚙️ Paramètres généraux',
+        languageLabel: 'Langue',
+        languageSub: 'Change l’interface et le contenu disponible dans le jeu',
+        alertSoundLabel: 'Son d’alerte',
+        alertSoundSub: 'Bip pendant les 10 dernières secondes',
+        navigationSoundLabel: 'Son de navigation',
+        navigationSoundSub: 'Son lors des clics sur l’interface',
+        gameroomMusicLabel: 'Musique des menus',
+        gameroomMusicSub: 'Jouée sur l’accueil, la configuration et les paramètres',
+        gameplayMusicLabel: 'Musique de jeu',
+        gameplayMusicSub: 'Jouée pendant la préparation, le minuteur et les scores',
+        userIdTitle: '🪪 ID d’achat',
+        userIdLabel: 'Votre user_id',
+        userIdSub: 'Utilisez ce code lors de l’achat de packs pour que le fichier soit émis pour cet appareil.',
+        copyUserId: 'Copier',
+        wordsTitle: '🎲 Mots',
+        shuffleWordsLabel: 'Mélanger les mots',
+        shuffleWordsSub: 'Ordre aléatoire à chaque partie',
+        appearanceTitle: '🎨 Apparence',
+        themeLabel: 'Thème visuel',
+        themeSub: 'Change les couleurs, transparences et typographies de l’interface',
+        resetAllTitle: '🧹 Restaurer l’application',
+        resetAllSub: 'Supprime paramètres, joueurs sauvegardés, packs installés et user_id de cet appareil.',
+        resetAllButton: 'Tout restaurer'
+      },
+      donate: {
+        title: 'Soutenez MimiMania',
+        chooseTitle: '❤️ Choisissez comment donner',
+        subtitle: 'Choisissez votre plateforme préférée pour soutenir le jeu et financer de nouveaux packs de mots, langues et améliorations.',
+        buyMeCoffeeSub: 'Soutien rapide et direct avec un don ponctuel.',
+        koFiSub: 'Faites un don via Ko-fi et aidez le projet à grandir.',
+        whyTitle: '🎭 Pourquoi donner ?',
+        whyLanguages: 'Votre soutien aide à financer de nouvelles langues, packs de contenu et extensions de la banque de mots.',
+        whyUpdates: 'Il aide aussi à maintenir MimiMania avec du polish, de l’équilibrage et de nouvelles fonctionnalités.'
+      },
+      share: { title: 'MimiMania', text: 'Viens jouer à MimiMania avec moi !' },
+      theme: { cosmic: 'Cosmique', 'liquid-glass': 'Automne', material3: 'Printemps', 'light-mode': 'Mode clair', 'dark-mode': 'Mode sombre', 'high-contrast': 'Contraste élevé' },
+      teams: { defaultA: 'Équipe A', defaultB: 'Équipe B' },
+      players: { defaultName: 'Joueur {number}' },
+      dynamic: {
+        roundDisplay: ({ current, total }) => `Manche ${current} sur ${total}`,
+        diffCount: ({ difficulty, count }) => `${difficulty} · ${count} mots disponibles`,
+        correctTeamPoints: ({ teamName }) => `+10 points pour ${teamName} !`,
+        correctPlayerPoints: ({ playerName }) => `+10 points pour ${playerName} !`,
+        penaltySkip: '-10 points (pénalité de skip)',
+        timeUpNoPoints: 'Temps écoulé ! Aucun point.',
+        skippedNoPoints: 'Mot passé. Aucun point.',
+        roundSummary: ({ roundDone, remaining }) => `Fin de la manche ${roundDone} — ${remaining} manche${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''} !`,
+        wordAdded: ({ word, difficulty }) => `✅ "${word}" ajouté (${difficulty}) !`,
+        teamAdded: ({ name, teamName }) => `✅ ${name} rejoint ${teamName} !`,
+        playerAdded: ({ name }) => `✅ ${name} est entré !`,
+        packInstalled: ({ name }) => `✅ Pack "${name}" installé !`,
+        packWordsSummary: ({ count }) => `${count} mot${count !== 1 ? 's' : ''}`,
+        packVersion: ({ version }) => `v${version}`,
+        challengeAdded: ({ challenge }) => `✅ Défi "${challenge}" ajouté !`
+      },
+      notifications: {
+        duplicateWord: '⚠️ Ce mot existe déjà !',
+        duplicateChallenge: '⚠️ Ce défi existe déjà !',
+        bankRestored: '✅ Banque de mots restaurée !',
+        challengeRemoved: 'Défi supprimé.',
+        challengesRestored: '✅ Défis restaurés !',
+        userIdCopied: '🪪 user_id copié !',
+        packInstallReading: 'Lecture du fichier...',
+        packInstallSuccess: '✅ Pack installé et activé !',
+        packInstallCancelled: 'Installation annulée.',
+        packRemoved: 'Pack supprimé.',
+        packToggled: 'Statut du pack mis à jour.',
+        maxPlayers: '❌ Maximum 6 joueurs !',
+        maxTeamPlayers: '❌ Maximum 3 par équipe !',
+        minTeamPlayers: '❌ Minimum 1 par équipe !',
+        minFfaPlayers: '❌ Minimum 3 joueurs !',
+        donationLinkUnavailable: '⚠️ Configurez le lien de don de ce partenaire pour l’activer.',
+        shareCopied: '🔗 Lien copié !',
+        shareUnavailable: '🔗 Lien copié pour partager.',
+        shareCopyFailed: '⚠️ Impossible de copier le lien.',
+        shareInstagramFallback: '🔗 Lien copié. Collez-le dans Instagram.',
+        shareTikTokFallback: '🔗 Lien copié. Collez-le dans TikTok.',
+        fullscreenUnavailable: '⚠️ Plein écran indisponible dans ce navigateur.'
+      },
+      confirmations: {
+        resetWords: 'Restaurer la banque de mots par défaut ? Les mots personnalisés seront perdus.',
+        resetChallenges: 'Restaurer les défis par défaut ? Les défis personnalisés seront perdus.',
+        resetAppDefaults: 'Restaurer toute l’application par défaut ? Les paramètres, joueurs sauvegardés, packs installés et user_id seront effacés.',
+        restartGame: 'Recommencer la partie ? Toute la progression sera perdue.',
+        replacePack: ({ packName }) => `Un pack avec cet ID est déjà installé (${packName}). Le remplacer ?`,
+        removePack: ({ packName }) => `Supprimer le pack "${packName}" de cet appareil ?`
+      },
+      packErrors: {
+        fileRequired: 'Sélectionnez un fichier de pack.',
+        invalidJson: 'Fichier invalide. Envoyez un JSON de pack.',
+        invalidSchema: 'Schéma du pack invalide.',
+        invalidUser: 'Ce pack a été émis pour un autre user_id.',
+        invalidPackId: 'pack_id manquant ou invalide.',
+        invalidAlgorithm: 'Algorithme de signature invalide.',
+        invalidSignature: 'Signature invalide. Le pack n’a pas été installé.',
+        invalidContentHash: 'Hash du contenu invalide.',
+        emptyPack: 'Le pack ne contient aucun mot ou défi valide.',
+        cryptoUnavailable: 'Ce navigateur ne prend pas en charge la validation sécurisée des packs.',
+        reservedPackId: 'Ce pack_id est réservé par le jeu.'
+      }
+    });
+
+    TRANSLATIONS.de = mergeTranslations(TRANSLATIONS.en, {
+      common: {
+        back: '← Zurück',
+        add: '+ Hinzufügen',
+        copy: 'Kopieren',
+        continue: '▶️ Weiter',
+        restart: '🔄 Neustarten',
+        home: '🏠 Start',
+        playerSingular: 'Spieler',
+        playerPlural: 'Spieler',
+        roundSingular: 'Runde',
+        roundPlural: 'Runden'
+      },
+      language: { pt: 'Portugiesisch', en: 'Englisch', es: 'Spanisch', fr: 'Französisch', de: 'Deutsch', it: 'Italienisch' },
+      dev: {
+        mode: 'Entwicklungsmodus',
+        description: 'Teste das Layout schnell auf Mobilgerät, Tablet und Desktop.',
+        previewLabel: 'Layout-Vorschau',
+        preview: { auto: 'Auto', mobile: 'Mobil', tablet: 'Tablet', desktop: 'Desktop' }
+      },
+      home: {
+        subtitle: '🎭 Pantomime und Zeichnen mit der Familie',
+        enterFullscreen: 'Vollbild',
+        exitFullscreen: 'Vollbild verlassen',
+        newGame: '🎮 Neues Spiel',
+        multiDeviceGame: '📡 Neues Multi-Device-Spiel',
+        quickGame: '⚡ Schnellspiel',
+        wordBank: '🧩 Inhalte und Erweiterungen',
+        donate: '❤️ Spenden',
+        settings: '⚙️ Einstellungen',
+        howToTitle: '🏆 Spielanleitung',
+        howTo: {
+          setupTitle: 'Spiel einrichten',
+          setupDesc: 'Wähle Teams oder Jeder gegen jeden und lege Runden, Schwierigkeit und Kategorien fest.',
+          turnTitle: 'Ansehen und vorspielen',
+          turnDesc: 'Ein Spieler sieht das Wort, merkt es sich und stellt es dar oder zeichnet, während alle anderen raten.',
+          timerTitle: 'Gegen die Zeit',
+          timerDesc: 'Timer, Hinweise und Warntöne halten jede Runde schnell, klar und unterhaltsam.',
+          winTitle: 'Punkte sammeln und gewinnen',
+          winDesc: 'Jede richtige Antwort zählt 10 Punkte. Am Ende entscheiden die Punkte über den Sieg.'
+        }
+      },
+      multiDevice: {
+        title: 'Multi-Device-Spiel',
+        chooseTitle: 'Was möchtest du tun?',
+        chooseDesc: 'Öffne eine Sitzung, um das Spiel zu steuern, oder verbinde dieses Gerät als Zusatzbildschirm.',
+        chooseHost: '📡 Sitzung öffnen',
+        chooseJoin: '🔗 Sitzung beitreten',
+        changeChoice: 'Option ändern',
+        hostTitle: '📡 Sitzung öffnen',
+        hostDesc: 'Dieses Gerät steuert das Spiel. Andere Geräte sehen Timer, Hinweise und Zeichnung.',
+        openSession: 'Sitzung öffnen',
+        hostCreating: 'Sitzung wird erstellt...',
+        hostReady: 'Sitzung geöffnet. Scanne den QR-Code auf den anderen Geräten.',
+        hostError: 'Sitzung konnte nicht geöffnet werden.',
+        sessionCode: 'Sitzungscode:',
+        guestsConnected: ({ count }) => `${count} Gerät${count !== 1 ? 'e' : ''} verbunden`,
+        continueSetup: 'Einrichtung fortsetzen',
+        joinTitle: '🔗 Beitreten',
+        joinDesc: 'Als Zusatzbildschirm beitreten, um dem Host-Spiel zu folgen.',
+        joinCodeLabel: 'Sitzungscode oder Link',
+        joinCodePlaceholder: 'Code oder Link einfügen',
+        joinSession: 'Sitzung beitreten',
+        joinHelp: 'Du kannst auch den QR-Code auf dem Host scannen.',
+        waitingTitle: 'Warte auf Spieldaten',
+        guestLabel: 'Zusatzbildschirm',
+        connecting: 'Verbinden...',
+        connected: 'Verbunden',
+        disconnected: 'Getrennt',
+        guestWaiting: 'Warte, bis der Host das Spiel startet.',
+        guestPreparing: 'Warte, bis das Wort aufgedeckt wird.',
+        guestMemorizing: 'Die Runde beginnt gleich.',
+        guestPlaying: 'Rat mal!',
+        guestScore: 'Warte auf den nächsten Zug.',
+        guestFinal: 'Spiel beendet.',
+        liveDrawing: '✏️ Live-Zeichnung',
+        disconnect: 'Trennen',
+        linkCopied: '🔗 Sitzungslink kopiert!',
+        missingSession: 'Gib den Sitzungscode ein.',
+        peerUnavailable: 'PeerJS wurde nicht geladen. Prüfe die Verbindung und versuche es erneut.',
+        qrUnavailable: 'QR-Code nicht verfügbar. Nutze den Link oder Sitzungscode.'
+      },
+      setup: {
+        title: 'Neues Spiel',
+        gameTypeTitle: '1️⃣ Spieltyp',
+        gameTypeMimeName: 'Pantomime',
+        gameTypeMimeDesc: 'Ohne Sprechen darstellen',
+        gameTypeDrawingName: 'Zeichnen',
+        gameTypeDrawingDesc: 'Zeichne das Wort',
+        modeTitle: '2️⃣ Spielmodus',
+        modeTeamsName: 'Zwei Teams',
+        modeTeamsDesc: 'Teams treten an',
+        modeFfaName: 'Jeder gegen jeden',
+        modeFfaDesc: 'Alle gegen alle',
+        teamPlayersTitle: '3️⃣ Spieler pro Team',
+        playersTitle: '3️⃣ Spieler',
+        teamAPlaceholder: 'Name von Team A',
+        teamBPlaceholder: 'Name von Team B',
+        playerNamePlaceholder: 'Spielername...',
+        teamHelper: '💡 Mindestens 1 pro Team, höchstens 3 pro Team (bis zu 6 Spieler)',
+        ffaHelper: '💡 Mindestens 3, höchstens 6 Spieler',
+        difficultyTitle: '4️⃣ Schwierigkeit',
+        difficultyEasyDesc: 'Ideal für Kinder und Anfänger',
+        difficultyNormalDesc: 'Ausgewogene Herausforderung für die Familie',
+        difficultyHardDesc: 'Komplexe Wörter für Mutige!',
+        optionsTitle: '5️⃣ Spieloptionen',
+        randomChallengeLabel: 'Zufällige Herausforderung',
+        randomChallengeSub: 'Fügt der Pantomime Modifikatoren hinzu',
+        randomChallengeDisabledSub: 'Im Zeichenmodus nicht verfügbar',
+        categoriesLabel: 'Verfügbare Kategorien',
+        coreCategoriesLabel: 'Core-Kategorien',
+        premiumCategoriesLabel: 'Premium-Kategorien',
+        matchTitle: '6️⃣ Spiel einrichten',
+        roundsLabel: 'Anzahl der Runden',
+        roundsSub: 'Runden pro Spieler',
+        startGame: '🎭 Spiel starten!'
+      },
+      difficulty: { easy: 'Einfach', normal: 'Normal', hard: 'Schwer' },
+      category: {
+        objects: { plural: 'Objekte', singular: 'Objekt', tab: '🧸 Objekte', option: '🧸 Objekte' },
+        actions: { plural: 'Aktionen', singular: 'Aktion', tab: '🏃 Aktionen', option: '🏃 Aktionen' },
+        animals: { plural: 'Tiere', singular: 'Tier', tab: '🐾 Tiere', option: '🐾 Tiere' },
+        movies: { plural: 'Filme', singular: 'Film', tab: '🎬 Filme', option: '🎬 Filme' },
+        professions: { plural: 'Berufe', singular: 'Beruf', tab: '👔 Berufe', option: '👔 Berufe' },
+        celebrities: { plural: 'Prominente', singular: 'Prominenter', tab: '⭐ Prominente', option: '⭐ Prominente' }
+      },
+      game: {
+        currentPlayerLabel: 'Pantomime-Spieler ist dran:',
+        currentPlayerDrawingLabel: 'Zeichner ist dran:',
+        readyTitle: 'Bereit, das Wort zu sehen?',
+        readyDrawingTitle: 'Bereit zu sehen, was gezeichnet wird?',
+        readySub: 'Nur der Mime darf schauen! Alle anderen Augen zu! 👀',
+        readyDrawingSub: 'Nur der Zeichner darf schauen! Alle anderen Augen zu! 👀',
+        revealWord: '🎲 Wort anzeigen',
+        memorizeTitle: '⚡ Merke dir das Wort!',
+        startsIn: 'Das Spiel beginnt in...',
+        onlyMimeCanSee: 'Nur der Mime darf es sehen!',
+        onlyDrawerCanSee: 'Nur der Zeichner darf es sehen!',
+        secondsLabel: 'SEKUNDEN',
+        hiddenWord: 'Verstecktes Wort',
+        hintTitle: '💡 Hinweis',
+        showWord: '👁️ Wort zeigen',
+        hideWord: '🙈 Wort verbergen',
+        correct: '✅ Richtig!',
+        wrong: '❌ Falsch / Skip',
+        challengePrefix: '🎯 Herausforderung:'
+      },
+      drawing: {
+        canvasLabel: 'Zeichenfläche',
+        toolbarLabel: 'Zeichenwerkzeuge',
+        penThick: 'Dicke Linie',
+        penThin: 'Dünne Linie',
+        eraserThick: 'Dicker Radierer',
+        eraserThin: 'Dünner Radierer',
+        clear: 'Canvas leeren'
+      },
+      result: { correctTitle: 'Richtig!', wrongTitle: 'Falsch!', timeUpTitle: 'Zeit abgelaufen!', nextTurn: '➡️ Nächster Zug' },
+      score: { title: '🏆 Punktestand', nextRoundTitle: '🎊 Nächste Runde' },
+      final: { winnerLabel: 'GEWINNER!', resultTitle: '📊 Endergebnis', playAgain: '🎮 Nochmals spielen', tie: 'UNENTSCHIEDEN!' },
+      wordbank: {
+        title: 'Inhalte und Erweiterungen',
+        addTitle: '➕ Wort hinzufügen',
+        newWordPlaceholder: 'Wort eingeben...',
+        addToDifficulty: 'Wird zu folgender Schwierigkeit hinzugefügt:',
+        addButton: '➕ Wort hinzufügen',
+        listTitle: '📋 Wörter',
+        resetButton: '↺ Wiederherstellen',
+        challengesTitle: '🎯 Core-Herausforderungen',
+        addChallengeTitle: '🎯 Herausforderung hinzufügen',
+        newChallengePlaceholder: 'Herausforderung eingeben...',
+        addChallengeButton: '➕ Herausforderung hinzufügen',
+        installPackTitle: '📦 Pack installieren',
+        installPackSub: 'Lade die gekaufte .json-Datei hoch, um neue Wörter auf diesem Gerät freizuschalten.',
+        selectPackFile: '📁 Datei wählen',
+        installedPacksTitle: 'Installierte Packs',
+        noInstalledPacks: 'Noch keine zusätzlichen Packs installiert.',
+        packEnabled: 'Aktiv',
+        packDisabled: 'Inaktiv',
+        removePack: 'Entfernen',
+        packPreviewTitle: '⭐ Pack-Inhalt',
+        packPreviewPrompt: 'Klicke auf ein installiertes Pack, um Wörter und Herausforderungen zu sehen.',
+        packPreviewWordsTitle: 'Wörter des Packs',
+        packPreviewChallengesTitle: 'Herausforderungen des Packs',
+        packPreviewNoWords: 'Keine Wörter in dieser Sprache und Schwierigkeit.',
+        packPreviewNoChallenges: 'Keine Herausforderungen in dieser Sprache.',
+        packPreviewSelected: ({ name }) => `Anzeige: ${name}`
+      },
+      settings: {
+        title: 'Einstellungen',
+        timerTitle: '⏱️ Timer',
+        roundTimeLabel: 'Zeit pro Runde',
+        roundTimeSub: 'Sekunden zum Raten',
+        penaltyLabel: 'Skip-Strafe',
+        penaltySub: '−10 Punkte beim Überspringen',
+        generalTitle: '⚙️ Allgemeine Einstellungen',
+        languageLabel: 'Sprache',
+        languageSub: 'Ändert die Oberfläche und die im Spiel verfügbaren Inhalte',
+        alertSoundLabel: 'Warnton',
+        alertSoundSub: 'Piepton in den letzten 10 Sekunden',
+        navigationSoundLabel: 'Navigationssound',
+        navigationSoundSub: 'Sound beim Klicken auf Interface-Buttons',
+        gameroomMusicLabel: 'Menümusik',
+        gameroomMusicSub: 'Läuft auf Startseite, Setup und Einstellungen',
+        gameplayMusicLabel: 'Gameplay-Musik',
+        gameplayMusicSub: 'Läuft während Vorbereitung, Timer und Punkteständen',
+        userIdTitle: '🪪 Kauf-ID',
+        userIdLabel: 'Deine user_id',
+        userIdSub: 'Nutze diesen Code beim Kauf von Packs, damit die Datei für dieses Gerät ausgestellt wird.',
+        copyUserId: 'Kopieren',
+        wordsTitle: '🎲 Wörter',
+        shuffleWordsLabel: 'Wörter mischen',
+        shuffleWordsSub: 'Zufällige Reihenfolge in jedem Spiel',
+        appearanceTitle: '🎨 Erscheinungsbild',
+        themeLabel: 'Visuelles Theme',
+        themeSub: 'Ändere Farben, Transparenzen und Typografie der Oberfläche',
+        resetAllTitle: '🧹 Anwendung zurücksetzen',
+        resetAllSub: 'Entfernt Einstellungen, gespeicherte Spieler, installierte Packs und die user_id dieses Geräts.',
+        resetAllButton: 'Alles zurücksetzen'
+      },
+      donate: {
+        title: 'MimiMania unterstützen',
+        chooseTitle: '❤️ Wähle deine Spendenart',
+        subtitle: 'Wähle deine bevorzugte Plattform, um das Spiel zu unterstützen und neue Wortpacks, Sprachen und Verbesserungen zu finanzieren.',
+        buyMeCoffeeSub: 'Schnelle direkte Unterstützung mit einer einmaligen Spende.',
+        koFiSub: 'Spende über Ko-fi und hilf dem Projekt zu wachsen.',
+        whyTitle: '🎭 Warum spenden?',
+        whyLanguages: 'Deine Unterstützung finanziert neue Sprachen, Inhaltspacks und künftige Erweiterungen der Wortbank.',
+        whyUpdates: 'Sie hilft auch, MimiMania mit Feinschliff, Balancing und neuen Funktionen aktuell zu halten.'
+      },
+      share: { title: 'MimiMania', text: 'Komm und spiel MimiMania mit mir!' },
+      theme: { cosmic: 'Kosmisch', 'liquid-glass': 'Herbst', material3: 'Frühling', 'light-mode': 'Heller Modus', 'dark-mode': 'Dunkler Modus', 'high-contrast': 'Hoher Kontrast' },
+      teams: { defaultA: 'Team A', defaultB: 'Team B' },
+      players: { defaultName: 'Spieler {number}' },
+      dynamic: {
+        roundDisplay: ({ current, total }) => `Runde ${current} von ${total}`,
+        diffCount: ({ difficulty, count }) => `${difficulty} · ${count} Wörter verfügbar`,
+        correctTeamPoints: ({ teamName }) => `+10 Punkte für ${teamName}!`,
+        correctPlayerPoints: ({ playerName }) => `+10 Punkte für ${playerName}!`,
+        penaltySkip: '-10 Punkte (Skip-Strafe)',
+        timeUpNoPoints: 'Zeit abgelaufen! Keine Punkte.',
+        skippedNoPoints: 'Wort übersprungen. Keine Punkte.',
+        roundSummary: ({ roundDone, remaining }) => `Ende von Runde ${roundDone} — ${remaining} Runde${remaining !== 1 ? 'n' : ''} übrig!`,
+        wordAdded: ({ word, difficulty }) => `✅ "${word}" hinzugefügt (${difficulty})!`,
+        teamAdded: ({ name, teamName }) => `✅ ${name} ist in ${teamName}!`,
+        playerAdded: ({ name }) => `✅ ${name} ist dabei!`,
+        packInstalled: ({ name }) => `✅ Pack "${name}" installiert!`,
+        packWordsSummary: ({ count }) => `${count} Wort${count !== 1 ? 'er' : ''}`,
+        packVersion: ({ version }) => `v${version}`,
+        challengeAdded: ({ challenge }) => `✅ Herausforderung "${challenge}" hinzugefügt!`
+      },
+      notifications: {
+        duplicateWord: '⚠️ Wort existiert bereits!',
+        duplicateChallenge: '⚠️ Herausforderung existiert bereits!',
+        bankRestored: '✅ Wortbank wiederhergestellt!',
+        challengeRemoved: 'Herausforderung entfernt.',
+        challengesRestored: '✅ Herausforderungen wiederhergestellt!',
+        userIdCopied: '🪪 user_id kopiert!',
+        packInstallReading: 'Datei wird gelesen...',
+        packInstallSuccess: '✅ Pack installiert und aktiviert!',
+        packInstallCancelled: 'Installation abgebrochen.',
+        packRemoved: 'Pack entfernt.',
+        packToggled: 'Pack-Status aktualisiert.',
+        maxPlayers: '❌ Maximal 6 Spieler!',
+        maxTeamPlayers: '❌ Maximal 3 pro Team!',
+        minTeamPlayers: '❌ Mindestens 1 pro Team!',
+        minFfaPlayers: '❌ Mindestens 3 Spieler!',
+        donationLinkUnavailable: '⚠️ Konfiguriere den Spendenlink dieses Partners, um ihn zu aktivieren.',
+        shareCopied: '🔗 Link kopiert!',
+        shareUnavailable: '🔗 Link zum Teilen kopiert.',
+        shareCopyFailed: '⚠️ Link konnte nicht kopiert werden.',
+        shareInstagramFallback: '🔗 Link kopiert. In Instagram einfügen.',
+        shareTikTokFallback: '🔗 Link kopiert. In TikTok einfügen.',
+        fullscreenUnavailable: '⚠️ Vollbild ist in diesem Browser nicht verfügbar.'
+      },
+      confirmations: {
+        resetWords: 'Standard-Wortbank wiederherstellen? Eigene Wörter gehen verloren.',
+        resetChallenges: 'Standard-Herausforderungen wiederherstellen? Eigene Herausforderungen gehen verloren.',
+        resetAppDefaults: 'Die gesamte Anwendung auf Standard zurücksetzen? Einstellungen, gespeicherte Spieler, installierte Packs und user_id werden gelöscht.',
+        restartGame: 'Spiel neu starten? Der gesamte Fortschritt geht verloren.',
+        replacePack: ({ packName }) => `Ein Pack mit dieser ID ist bereits installiert (${packName}). Ersetzen?`,
+        removePack: ({ packName }) => `Pack "${packName}" von diesem Gerät entfernen?`
+      },
+      packErrors: {
+        fileRequired: 'Wähle eine Pack-Datei aus.',
+        invalidJson: 'Ungültige Datei. Lade ein Pack-JSON hoch.',
+        invalidSchema: 'Ungültiges Pack-Schema.',
+        invalidUser: 'Dieses Pack wurde für eine andere user_id ausgestellt.',
+        invalidPackId: 'pack_id fehlt oder ist ungültig.',
+        invalidAlgorithm: 'Ungültiger Signaturalgorithmus.',
+        invalidSignature: 'Ungültige Signatur. Das Pack wurde nicht installiert.',
+        invalidContentHash: 'Ungültiger Content-Hash.',
+        emptyPack: 'Das Pack enthält keine gültigen Wörter oder Herausforderungen.',
+        cryptoUnavailable: 'Dieser Browser unterstützt keine sichere Pack-Validierung.',
+        reservedPackId: 'Diese pack_id ist für das Spiel reserviert.'
+      }
+    });
+
+    TRANSLATIONS.it = mergeTranslations(TRANSLATIONS.en, {
+      common: {
+        back: '← Indietro',
+        add: '+ Aggiungi',
+        copy: 'Copia',
+        continue: '▶️ Continua',
+        restart: '🔄 Riavvia',
+        home: '🏠 Home',
+        playerSingular: 'giocatore',
+        playerPlural: 'giocatori',
+        roundSingular: 'turno',
+        roundPlural: 'turni'
+      },
+      language: { pt: 'Portoghese', en: 'Inglese', es: 'Spagnolo', fr: 'Francese', de: 'Tedesco', it: 'Italiano' },
+      dev: {
+        mode: 'Modalità sviluppo',
+        description: 'Prova rapidamente il layout su mobile, tablet e desktop.',
+        previewLabel: 'Anteprima layout',
+        preview: { auto: 'Auto', mobile: 'Mobile', tablet: 'Tablet', desktop: 'Desktop' }
+      },
+      home: {
+        subtitle: '🎭 Mimica e disegno in famiglia',
+        enterFullscreen: 'Schermo intero',
+        exitFullscreen: 'Esci da schermo intero',
+        newGame: '🎮 Nuova partita',
+        multiDeviceGame: '📡 Nuova partita multi-device',
+        quickGame: '⚡ Partita rapida',
+        wordBank: '🧩 Contenuti ed espansioni',
+        donate: '❤️ Dona',
+        settings: '⚙️ Impostazioni',
+        howToTitle: '🏆 Come giocare',
+        howTo: {
+          setupTitle: 'Prepara la partita',
+          setupDesc: 'Scegli squadre o tutti contro tutti, poi imposta turni, difficoltà e categorie.',
+          turnTitle: 'Guarda e interpreta',
+          turnDesc: 'Un giocatore vede la parola, la memorizza e la mima o la disegna mentre gli altri indovinano.',
+          timerTitle: 'Corri contro il tempo',
+          timerDesc: 'Timer, suggerimenti e suoni di avviso rendono ogni turno rapido e divertente.',
+          winTitle: 'Fai punti e vinci',
+          winDesc: 'Ogni risposta corretta vale 10 punti. Alla fine dei turni, il punteggio decide il vincitore.'
+        }
+      },
+      multiDevice: {
+        title: 'Partita multi-device',
+        chooseTitle: 'Cosa vuoi fare?',
+        chooseDesc: 'Apri una sessione per controllare la partita o collega questo dispositivo come schermo ausiliario.',
+        chooseHost: '📡 Apri una sessione',
+        chooseJoin: '🔗 Entra in una sessione',
+        changeChoice: 'Cambia opzione',
+        hostTitle: '📡 Apri sessione',
+        hostDesc: 'Questo dispositivo controlla la partita. Gli altri entrano per vedere timer, suggerimenti e disegno.',
+        openSession: 'Apri sessione',
+        hostCreating: 'Creazione sessione...',
+        hostReady: 'Sessione aperta. Scansiona il QR Code sugli altri dispositivi.',
+        hostError: 'Impossibile aprire la sessione.',
+        sessionCode: 'Codice sessione:',
+        guestsConnected: ({ count }) => `${count} dispositiv${count !== 1 ? 'i' : 'o'} conness${count !== 1 ? 'i' : 'o'}`,
+        continueSetup: 'Continua configurazione',
+        joinTitle: '🔗 Connetti',
+        joinDesc: 'Entra come schermo ausiliario per seguire la partita dell’host.',
+        joinCodeLabel: 'Codice o link della sessione',
+        joinCodePlaceholder: 'Incolla codice o link',
+        joinSession: 'Connetti alla sessione',
+        joinHelp: 'Puoi anche scansionare il QR Code mostrato sull’host.',
+        waitingTitle: 'In attesa dei dati della partita',
+        guestLabel: 'Schermo ausiliario',
+        connecting: 'Connessione...',
+        connected: 'Connesso',
+        disconnected: 'Disconnesso',
+        guestWaiting: 'In attesa che l’host inizi la partita.',
+        guestPreparing: 'In attesa che la parola venga rivelata.',
+        guestMemorizing: 'Il turno sta per iniziare.',
+        guestPlaying: 'Indovinate!',
+        guestScore: 'In attesa del prossimo turno.',
+        guestFinal: 'Partita terminata.',
+        liveDrawing: '✏️ Disegno live',
+        disconnect: 'Disconnetti',
+        linkCopied: '🔗 Link della sessione copiato!',
+        missingSession: 'Inserisci il codice della sessione.',
+        peerUnavailable: 'PeerJS non è stato caricato. Controlla la connessione e riprova.',
+        qrUnavailable: 'QR Code non disponibile. Usa il link o il codice della sessione.'
+      },
+      setup: {
+        title: 'Nuova partita',
+        gameTypeTitle: '1️⃣ Tipo di gioco',
+        gameTypeMimeName: 'Mimica',
+        gameTypeMimeDesc: 'Recita senza parlare',
+        gameTypeDrawingName: 'Disegno',
+        gameTypeDrawingDesc: 'Disegna la parola',
+        modeTitle: '2️⃣ Modalità di gioco',
+        modeTeamsName: 'Due squadre',
+        modeTeamsDesc: 'Le squadre competono',
+        modeFfaName: 'Tutti contro tutti',
+        modeFfaDesc: 'Ognuno per sé',
+        teamPlayersTitle: '3️⃣ Giocatori per squadra',
+        playersTitle: '3️⃣ Giocatori',
+        teamAPlaceholder: 'Nome squadra A',
+        teamBPlaceholder: 'Nome squadra B',
+        playerNamePlaceholder: 'Nome giocatore...',
+        teamHelper: '💡 Minimo 1 per squadra, massimo 3 per squadra (fino a 6 giocatori)',
+        ffaHelper: '💡 Minimo 3, massimo 6 giocatori',
+        difficultyTitle: '4️⃣ Difficoltà',
+        difficultyEasyDesc: 'Ottimo per bambini e principianti',
+        difficultyNormalDesc: 'Sfida equilibrata per tutta la famiglia',
+        difficultyHardDesc: 'Parole complesse, per i coraggiosi!',
+        optionsTitle: '5️⃣ Opzioni di gioco',
+        randomChallengeLabel: 'Sfida casuale',
+        randomChallengeSub: 'Aggiunge modificatori alla mimica',
+        randomChallengeDisabledSub: 'Non disponibile in modalità disegno',
+        categoriesLabel: 'Categorie disponibili',
+        coreCategoriesLabel: 'Categorie core',
+        premiumCategoriesLabel: 'Categorie premium',
+        matchTitle: '6️⃣ Configura partita',
+        roundsLabel: 'Numero di turni',
+        roundsSub: 'Quanti turni per giocatore',
+        startGame: '🎭 Inizia il gioco!'
+      },
+      difficulty: { easy: 'Facile', normal: 'Normale', hard: 'Difficile' },
+      category: {
+        objects: { plural: 'Oggetti', singular: 'Oggetto', tab: '🧸 Oggetti', option: '🧸 Oggetti' },
+        actions: { plural: 'Azioni', singular: 'Azione', tab: '🏃 Azioni', option: '🏃 Azioni' },
+        animals: { plural: 'Animali', singular: 'Animale', tab: '🐾 Animali', option: '🐾 Animali' },
+        movies: { plural: 'Film', singular: 'Film', tab: '🎬 Film', option: '🎬 Film' },
+        professions: { plural: 'Professioni', singular: 'Professione', tab: '👔 Professioni', option: '👔 Professioni' },
+        celebrities: { plural: 'Celebrità', singular: 'Celebrità', tab: '⭐ Celebrità', option: '⭐ Celebrità' }
+      },
+      game: {
+        currentPlayerLabel: 'Turno di fare la mimica:',
+        currentPlayerDrawingLabel: 'Turno di disegnare:',
+        readyTitle: 'Pronti a vedere la parola?',
+        readyDrawingTitle: 'Pronti a vedere cosa disegnare?',
+        readySub: 'Solo chi mima deve guardare! Gli altri chiudano gli occhi! 👀',
+        readyDrawingSub: 'Solo chi disegna deve guardare! Gli altri chiudano gli occhi! 👀',
+        revealWord: '🎲 Rivela parola',
+        memorizeTitle: '⚡ Memorizza la parola!',
+        startsIn: 'Il gioco inizia tra...',
+        onlyMimeCanSee: 'Solo chi mima può vedere!',
+        onlyDrawerCanSee: 'Solo chi disegna può vedere!',
+        secondsLabel: 'SECONDI',
+        hiddenWord: 'Parola nascosta',
+        hintTitle: '💡 Suggerimento',
+        showWord: '👁️ Mostra parola',
+        hideWord: '🙈 Nascondi parola',
+        correct: '✅ Corretto!',
+        wrong: '❌ Sbagliato / Skip',
+        challengePrefix: '🎯 Sfida:'
+      },
+      drawing: {
+        canvasLabel: 'Area di disegno',
+        toolbarLabel: 'Strumenti di disegno',
+        penThick: 'Linea spessa',
+        penThin: 'Linea sottile',
+        eraserThick: 'Gomma grande',
+        eraserThin: 'Gomma piccola',
+        clear: 'Pulisci canvas'
+      },
+      result: { correctTitle: 'Corretto!', wrongTitle: 'Sbagliato!', timeUpTitle: 'Tempo scaduto!', nextTurn: '➡️ Prossimo turno' },
+      score: { title: '🏆 Punteggio', nextRoundTitle: '🎊 Prossimo turno' },
+      final: { winnerLabel: 'VINCITORE!', resultTitle: '📊 Risultato finale', playAgain: '🎮 Gioca ancora', tie: 'PAREGGIO!' },
+      wordbank: {
+        title: 'Contenuti ed espansioni',
+        addTitle: '➕ Aggiungi parola',
+        newWordPlaceholder: 'Digita la parola...',
+        addToDifficulty: 'Sarà aggiunta alla difficoltà:',
+        addButton: '➕ Aggiungi parola',
+        listTitle: '📋 Parole',
+        resetButton: '↺ Ripristina',
+        challengesTitle: '🎯 Sfide core',
+        addChallengeTitle: '🎯 Aggiungi sfida',
+        newChallengePlaceholder: 'Digita la sfida...',
+        addChallengeButton: '➕ Aggiungi sfida',
+        installPackTitle: '📦 Installa pack',
+        installPackSub: 'Carica il file .json acquistato per sbloccare nuove parole su questo dispositivo.',
+        selectPackFile: '📁 Scegli file',
+        installedPacksTitle: 'Pack installati',
+        noInstalledPacks: 'Nessun pack extra installato.',
+        packEnabled: 'Attivo',
+        packDisabled: 'Inattivo',
+        removePack: 'Rimuovi',
+        packPreviewTitle: '⭐ Contenuto del pack',
+        packPreviewPrompt: 'Clicca su un pack installato per vedere parole e sfide.',
+        packPreviewWordsTitle: 'Parole del pack',
+        packPreviewChallengesTitle: 'Sfide del pack',
+        packPreviewNoWords: 'Nessuna parola in questa lingua e difficoltà.',
+        packPreviewNoChallenges: 'Nessuna sfida in questa lingua.',
+        packPreviewSelected: ({ name }) => `Mostrando: ${name}`
+      },
+      settings: {
+        title: 'Impostazioni',
+        timerTitle: '⏱️ Timer',
+        roundTimeLabel: 'Tempo per turno',
+        roundTimeSub: 'Secondi per indovinare',
+        penaltyLabel: 'Penalità per skip',
+        penaltySub: '−10 punti quando si passa',
+        generalTitle: '⚙️ Impostazioni generali',
+        languageLabel: 'Lingua',
+        languageSub: 'Cambia l’interfaccia e i contenuti disponibili nel gioco',
+        alertSoundLabel: 'Suono di avviso',
+        alertSoundSub: 'Bip negli ultimi 10 secondi',
+        navigationSoundLabel: 'Suono di navigazione',
+        navigationSoundSub: 'Suono al clic sui pulsanti dell’interfaccia',
+        gameroomMusicLabel: 'Musica dei menu',
+        gameroomMusicSub: 'Riprodotta su home, configurazione e impostazioni',
+        gameplayMusicLabel: 'Musica di gioco',
+        gameplayMusicSub: 'Riprodotta durante preparazione, timer e punteggi',
+        userIdTitle: '🪪 ID di acquisto',
+        userIdLabel: 'Il tuo user_id',
+        userIdSub: 'Usa questo codice quando acquisti pack, così il file viene emesso per questo dispositivo.',
+        copyUserId: 'Copia',
+        wordsTitle: '🎲 Parole',
+        shuffleWordsLabel: 'Mescola parole',
+        shuffleWordsSub: 'Ordine casuale a ogni partita',
+        appearanceTitle: '🎨 Aspetto',
+        themeLabel: 'Tema visivo',
+        themeSub: 'Cambia colori, trasparenze e tipografia dell’interfaccia',
+        resetAllTitle: '🧹 Ripristina applicazione',
+        resetAllSub: 'Rimuove impostazioni, giocatori salvati, pack installati e user_id di questo dispositivo.',
+        resetAllButton: 'Ripristina tutto'
+      },
+      donate: {
+        title: 'Sostieni MimiMania',
+        chooseTitle: '❤️ Scegli come donare',
+        subtitle: 'Scegli la piattaforma preferita per sostenere il gioco e finanziare nuovi pack di parole, lingue e miglioramenti.',
+        buyMeCoffeeSub: 'Supporto rapido e diretto con una donazione singola.',
+        koFiSub: 'Dona via Ko-fi e aiuta il progetto a crescere.',
+        whyTitle: '🎭 Perché donare?',
+        whyLanguages: 'Il tuo supporto aiuta a finanziare nuove lingue, pack di contenuti e future espansioni della banca delle parole.',
+        whyUpdates: 'Aiuta anche a mantenere MimiMania aggiornato con rifiniture, bilanciamento e nuove funzionalità.'
+      },
+      share: { title: 'MimiMania', text: 'Vieni a giocare a MimiMania con me!' },
+      theme: { cosmic: 'Cosmico', 'liquid-glass': 'Autunno', material3: 'Primavera', 'light-mode': 'Modalità chiara', 'dark-mode': 'Modalità scura', 'high-contrast': 'Alto contrasto' },
+      teams: { defaultA: 'Squadra A', defaultB: 'Squadra B' },
+      players: { defaultName: 'Giocatore {number}' },
+      dynamic: {
+        roundDisplay: ({ current, total }) => `Turno ${current} di ${total}`,
+        diffCount: ({ difficulty, count }) => `${difficulty} · ${count} parole disponibili`,
+        correctTeamPoints: ({ teamName }) => `+10 punti per ${teamName}!`,
+        correctPlayerPoints: ({ playerName }) => `+10 punti per ${playerName}!`,
+        penaltySkip: '-10 punti (penalità per skip)',
+        timeUpNoPoints: 'Tempo scaduto! Nessun punto.',
+        skippedNoPoints: 'Parola saltata. Nessun punto.',
+        roundSummary: ({ roundDone, remaining }) => `Fine del turno ${roundDone} — ${remaining} turn${remaining !== 1 ? 'i' : 'o'} restant${remaining !== 1 ? 'i' : 'e'}!`,
+        wordAdded: ({ word, difficulty }) => `✅ "${word}" aggiunta (${difficulty})!`,
+        teamAdded: ({ name, teamName }) => `✅ ${name} in ${teamName}!`,
+        playerAdded: ({ name }) => `✅ ${name} è entrato!`,
+        packInstalled: ({ name }) => `✅ Pack "${name}" installato!`,
+        packWordsSummary: ({ count }) => `${count} parol${count !== 1 ? 'e' : 'a'}`,
+        packVersion: ({ version }) => `v${version}`,
+        challengeAdded: ({ challenge }) => `✅ Sfida "${challenge}" aggiunta!`
+      },
+      notifications: {
+        duplicateWord: '⚠️ La parola esiste già!',
+        duplicateChallenge: '⚠️ La sfida esiste già!',
+        bankRestored: '✅ Banca delle parole ripristinata!',
+        challengeRemoved: 'Sfida rimossa.',
+        challengesRestored: '✅ Sfide ripristinate!',
+        userIdCopied: '🪪 user_id copiato!',
+        packInstallReading: 'Lettura file...',
+        packInstallSuccess: '✅ Pack installato e attivato!',
+        packInstallCancelled: 'Installazione annullata.',
+        packRemoved: 'Pack rimosso.',
+        packToggled: 'Stato del pack aggiornato.',
+        maxPlayers: '❌ Massimo 6 giocatori!',
+        maxTeamPlayers: '❌ Massimo 3 per squadra!',
+        minTeamPlayers: '❌ Minimo 1 per squadra!',
+        minFfaPlayers: '❌ Minimo 3 giocatori!',
+        donationLinkUnavailable: '⚠️ Configura il link di donazione di questo partner per attivarlo.',
+        shareCopied: '🔗 Link copiato!',
+        shareUnavailable: '🔗 Link copiato per la condivisione.',
+        shareCopyFailed: '⚠️ Impossibile copiare il link.',
+        shareInstagramFallback: '🔗 Link copiato. Incollalo su Instagram.',
+        shareTikTokFallback: '🔗 Link copiato. Incollalo su TikTok.',
+        fullscreenUnavailable: '⚠️ Schermo intero non disponibile in questo browser.'
+      },
+      confirmations: {
+        resetWords: 'Ripristinare il banco parole predefinito? Le parole personalizzate andranno perse.',
+        resetChallenges: 'Ripristinare le sfide predefinite? Le sfide personalizzate andranno perse.',
+        resetAppDefaults: 'Ripristinare tutta l’applicazione ai valori predefiniti? Impostazioni, giocatori salvati, pack installati e user_id saranno cancellati.',
+        restartGame: 'Riavviare il gioco? Tutti i progressi andranno persi.',
+        replacePack: ({ packName }) => `Esiste già un pack installato con questo ID (${packName}). Sostituirlo?`,
+        removePack: ({ packName }) => `Rimuovere il pack "${packName}" da questo dispositivo?`
+      },
+      packErrors: {
+        fileRequired: 'Seleziona un file pack.',
+        invalidJson: 'File non valido. Carica un JSON di pack.',
+        invalidSchema: 'Schema del pack non valido.',
+        invalidUser: 'Questo pack è stato emesso per un altro user_id.',
+        invalidPackId: 'pack_id mancante o non valido.',
+        invalidAlgorithm: 'Algoritmo di firma non valido.',
+        invalidSignature: 'Firma non valida. Il pack non è stato installato.',
+        invalidContentHash: 'Hash del contenuto non valido.',
+        emptyPack: 'Il pack non contiene parole o sfide valide.',
+        cryptoUnavailable: 'Questo browser non supporta la validazione sicura dei pack.',
+        reservedPackId: 'Questo pack_id è riservato dal gioco.'
+      }
+    });
 
     function t(key, params = {}, language = currentLanguage) {
       const value =
@@ -1631,6 +2547,462 @@
       'Haz la mímica como si te estuviera mirando un público enorme', 'Haz la mímica como si fuera la última oportunidad de ganar el juego'
     ];
 
+    const DEFAULT_WORDS_FR = {
+      easy: {
+        objects: [
+          'Ballon', 'Verre', 'Chapeau', 'Chaussure', 'Livre', 'Chaise', 'Table', 'Lit', 'Porte', 'Fenêtre',
+          'Crayon', 'Gomme', 'Sac à dos', 'Lunettes', 'Parapluie', 'Téléphone', 'Miroir', 'Brosse', 'Peigne', 'Ciseaux',
+          'Clé', 'Fourchette', 'Cuillère', 'Assiette', 'Bouteille', 'Oreiller', 'Couverture', 'Serviette', 'Savon', 'Ballon de baudruche',
+          'Poupée', 'Petite voiture', 'Pop-corn', 'Glace', 'Gâteau', 'Pomme', 'Banane', 'Raisin', 'Fleur', 'Arbre',
+          'Soleil', 'Lune', 'Étoile', 'Nuage', 'Pluie', 'Armoire', 'Placard', 'Réfrigérateur', 'Cuisinière', 'Télévision'
+        ],
+        actions: [
+          'Courir', 'Sauter', 'Dormir', 'Manger', 'Boire', 'Rire', 'Pleurer', 'Danser', 'Chanter', 'Nager',
+          'Voler', 'Marcher', "S'asseoir", 'Se lever', 'Faire un câlin', 'Jouer', 'Dessiner', 'Peindre', 'Lire', 'Écrire',
+          'Écouter', 'Crier', 'Souffler', 'Respirer', 'Tousser', 'Éternuer', 'Bâiller', 'Applaudir', 'Faire signe', 'Montrer du doigt',
+          'Attraper', 'Lancer', 'Donner un coup de pied', 'Pousser', 'Tirer', 'Ouvrir', 'Fermer', 'Se laver les mains', 'Se brosser les dents', 'Se peigner',
+          'Mettre ses chaussures', 'Enlever ses chaussures', 'Allumer la télé', 'Éteindre la lumière', 'Taper dans les mains', 'Tourner', 'Rouler', 'Embrasser', 'Sourire', 'Penser'
+        ],
+        animals: [
+          'Chien', 'Chat', 'Poisson', 'Oiseau', 'Lapin', 'Poule', 'Vache', 'Cheval', 'Cochon', 'Mouton',
+          'Canard', 'Grenouille', 'Papillon', 'Fourmi', 'Abeille', 'Araignée', 'Ver de terre', 'Limace', 'Escargot', 'Chenille',
+          'Éléphant', 'Lion', 'Girafe', 'Singe', 'Zèbre', 'Hippopotame', 'Crocodile', 'Tortue', 'Pingouin', 'Ours',
+          'Loup', 'Renard', 'Cerf', 'Écureuil', 'Souris', 'Hamster', 'Iguane', 'Perroquet', 'Toucan', 'Flamant rose',
+          'Pélican', 'Kangourou', 'Koala', 'Panda', 'Dauphin', 'Baleine', 'Poulpe', 'Crabe', 'Crevette', 'Étoile de mer'
+        ],
+        movies: [
+          'Titanic', 'Avatar', 'Le Roi lion', 'Toy Story', 'La Reine des neiges', 'Shrek', 'Harry Potter', 'Spider-Man', 'Batman', 'Superman',
+          'Jurassic Park', 'Avengers', 'Star Wars', 'Les Minions', 'Cars', 'Le Monde de Nemo', 'Vice-versa', 'Aladdin',
+          'Cendrillon', 'Blanche-Neige', 'Matrix', 'Gladiator', 'E.T.', 'King Kong', 'Godzilla', 'Black Panther', 'Iron Man',
+          'Captain America', 'Thor', 'Hulk', 'Deadpool', 'Venom', 'Transformers', 'Pirates des Caraïbes', 'Jumanji',
+          'Mission impossible', '007', 'Rocky', 'Rambo', 'Karaté Kid', 'Gremlins', 'Ghostbusters', 'Scooby-Doo', 'Madagascar',
+          'Kung Fu Panda', 'Monstres et Cie', 'Là-haut', 'Encanto', 'Vaiana', 'Zootopie'
+        ],
+        professions: [
+          'Médecin', 'Dentiste', 'Professeur', 'Policier', 'Pompier', 'Chauffeur', 'Cuisinier', 'Serveur', 'Boulanger', 'Facteur',
+          'Mécanicien', 'Ingénieur', 'Avocat', 'Infirmier', 'Vétérinaire', 'Pilote', 'Coiffeur', 'Barbier', 'Acteur', 'Chanteur',
+          'Danseur', 'Agent de nettoyage', 'Agent de sécurité', 'Agriculteur', 'Pêcheur', 'Électricien', 'Maçon', 'Peintre', 'Jardinier',
+          'Chauffeur de taxi', 'Livreur', 'Vendeur', 'Caissier', 'Secrétaire', 'Réceptionniste', 'Entraîneur', 'Coach sportif', 'Baby-sitter',
+          'Aide-soignant', 'Concierge', 'Éboueur', 'Pompiste', 'Chauffeur de bus', 'Chauffeur de camion', 'Guide touristique', 'Photographe',
+          'Reporter', 'Animateur radio', 'Opérateur de caisse', 'Instructeur'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.easy.celebrities]
+      },
+      normal: {
+        objects: [
+          'Ordinateur', 'Clavier', 'Radio', 'Machine à laver', 'Aspirateur', 'Mixeur', 'Batteur', 'Cafetière', 'Canapé', 'Étagère',
+          'Ventilateur', 'Climatiseur', 'Micro-ondes', 'Four', 'Évier', 'Baignoire', 'Douche', 'Valise', 'Lampe de poche', 'Jumelles',
+          'Appareil photo', 'Horloge', 'Calculatrice', 'Thermomètre', 'Balance', 'Boussole', 'Guitare acoustique', 'Piano', 'Tambour', 'Flûte',
+          'Accordéon', 'Trompette', 'Violon', 'Harmonica', 'Xylophone', 'Raquette', 'Skateboard', 'Patins à roulettes', 'Gant de boxe', 'Casque',
+          'Gilet', 'Ceinture', 'Cravate', 'Sac', 'Parapluie', 'Canne', 'Béquille', 'Fauteuil roulant', 'Lunettes de soleil', 'Casquette'
+        ],
+        actions: [
+          'Cuisiner', 'Conduire', 'Faire du vélo', 'Pêcher', 'Plonger', 'Grimper', 'Camper', 'Faire du yoga', 'Méditer', 'Photographier',
+          'Filmer', 'Peindre un tableau', 'Sculpter', 'Tricoter', 'Coudre', 'Broder', 'Jardiner', 'Arroser une plante', 'Tailler un arbre', 'Balayer',
+          'Nettoyer une fenêtre', 'Repasser', 'Plier le linge', 'Faire le lit', 'Faire la vaisselle', 'Essuyer la vaisselle', 'Éplucher un fruit', 'Râper du fromage',
+          'Pétrir du pain', 'Ramer', 'Surfer', 'Skier', 'Patiner', 'Dribbler', 'Lancer', 'Arrêter un but', 'Servir au tennis',
+          'Faire de la gymnastique', 'Applaudir', 'Faire un discours', 'Interviewer', 'Escalader un mur', 'Faire de la magie', 'Garder l’équilibre', 'Jongler',
+          'Taper au clavier', 'Téléphoner', 'Prendre un selfie', 'Payer une facture', 'Faire la queue'
+        ],
+        animals: [
+          'Aigle', 'Faucon', 'Hibou', 'Chauve-souris', 'Chameau', 'Lama', 'Alpaga', 'Bison', 'Élan', 'Coyote',
+          'Guépard', 'Léopard', 'Jaguar', 'Puma', 'Rhinocéros', 'Anaconda', 'Ornithorynque', 'Dingo', 'Cacatoès', 'Émeu',
+          'Orque', 'Requin', 'Raie', 'Calmar', 'Hippocampe', 'Oursin', 'Ara', 'Paon', 'Autruche', 'Casoar',
+          'Albatros', 'Cigogne', 'Pélican', 'Ibis', 'Héron', 'Loutre', 'Phoque', 'Morse', 'Lion de mer', 'Dugong',
+          'Chèvre de montagne', 'Bouquetin', 'Antilope', 'Gnou', 'Buffle', 'Sanglier', 'Blaireau', 'Raton laveur', 'Furet', 'Musaraigne'
+        ],
+        movies: [
+          'Interstellar', 'Inception', 'Dune', 'Fight Club', 'Pulp Fiction', 'Le Loup de Wall Street', 'Joker', 'Parasite',
+          'Gatsby le Magnifique', 'Django Unchained', 'Inglourious Basterds', 'Whiplash', 'La La Land', 'Black Swan', 'Shining',
+          'Doctor Strange', 'Les Gardiens de la Galaxie', 'Captain Marvel', 'Logan', 'John Wick', 'Matrix Reloaded', 'Matrix Revolutions',
+          'The Revenant', 'Gravity', 'Mad Max: Fury Road', 'Blade Runner 2049', 'Terminator', 'Retour vers le futur',
+          'Sixième Sens', 'The Truman Show', 'La Momie', 'Da Vinci Code', 'Anges et Démons', 'Hunger Games', 'Twilight',
+          'Ça', 'Conjuring', 'Annabelle', 'La Nonne', 'Saw', 'Get Out', 'Us', 'Split', 'Glass',
+          'Fast and Furious', 'Top Gun', 'Mission: Impossible - Fallout', 'Kingsman', 'Sherlock Holmes', 'Man of Steel'
+        ],
+        professions: [
+          'Programmeur', 'Designer', 'Architecte', 'Nutritionniste', 'Psychologue', 'Psychiatre', 'Kinésithérapeute', 'Pharmacien',
+          'Biologiste', 'Chimiste', 'Physicien', 'Géologue', 'Astronome', 'Traducteur', 'Interprète', 'Monteur vidéo', 'Réalisateur',
+          'Producteur musical', 'DJ', 'YouTubeur', 'Influenceur', 'Streamer', 'Publicitaire', 'Rédacteur', 'Analyste système',
+          'Administrateur', 'Comptable', 'Économiste', 'Agent immobilier', 'Courtier en assurances', 'Enquêteur', 'Détective',
+          'Expert criminalistique', 'Auditeur', 'Consultant', 'Coach', 'Entraîneur sportif', 'Athlète professionnel', 'Surfeur',
+          'Footballeur', 'Combattant', 'Chorégraphe', 'Maquilleur', 'Esthéticien', 'Tatoueur', 'Illustrateur', 'Animateur',
+          'Game designer', 'Scénariste', 'Doubleur'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.normal.celebrities]
+      },
+      hard: {
+        objects: [
+          'Stéthoscope', 'Scalpel', 'Microscope', 'Télescope', 'Sextant', 'Astrolabe', 'Chronomètre', 'Métronome', 'Accordeur', 'Défibrillateur',
+          'Catapulte', 'Périscope', 'Distillateur', 'Centrifugeuse', 'Incubateur', 'Autoclave', 'Spectromètre', 'Chromatographe', 'Calorimètre', 'Potentiomètre',
+          'Lance-pierre', 'Harpon', 'Boomerang', 'Arc et flèche', 'Arbalète', 'Lance', 'Masse', 'Hache', 'Faucille', 'Trident',
+          'Appareil à sandwich', 'Déshydrateur', 'Fermenteur', 'Mijoteuse', 'Wok', 'Tajine', 'Fondue', 'Barbecue', 'Fumoir', 'Alambic',
+          'Théodolite', 'Altimètre', 'Baromètre', 'Hygromètre', 'Anémomètre', 'Pluviomètre', 'Sismographe', 'Générateur', 'Transformateur', 'Oscilloscope'
+        ],
+        actions: [
+          'Tenir en équilibre sur une corde raide', 'Avaler du feu', 'S’échapper d’une camisole de force', 'Casser des briques avec la main',
+          'Marcher sur des braises', 'Lire le braille', 'Faire des signes de plongée', 'Communiquer en langue des signes', 'Utiliser le code morse', 'Jouer d’un instrument avec les pieds',
+          'Extraire une dent', 'Faire une chirurgie', 'Réanimer', 'Immobiliser une fracture', 'Appliquer un garrot',
+          'Faire de l’escrime', 'Pratiquer le tai chi', 'Faire un coup de karaté', 'Lancer le marteau', 'Lancer le javelot olympique',
+          'Labourer la terre', 'Traire une vache', 'Tondre un mouton', 'Ferrer un cheval', 'Dompter un boeuf',
+          'Tisser sur un métier', 'Souffler du verre', 'Forger du métal', 'Façonner de la céramique au tour', 'Restaurer un tableau',
+          'Faire décoller un avion', 'Faire atterrir un hélicoptère', 'Naviguer sur un voilier', 'Conduire une grue', 'Conduire un train',
+          'Faire du rappel', 'Faire de l’escalade', 'Faire de la tyrolienne', 'Faire de l’escalade libre', 'Faire du slackline',
+          'Désamorcer une bombe', 'Négocier avec des otages', 'Faire du parachutisme', 'Faire une course d’obstacles', 'Faire de l’haltérophilie olympique'
+        ],
+        animals: [
+          'Axolotl', 'Tarsier', 'Fossa', 'Quokka', 'Numbat', 'Kakapo', 'Tuatara', 'Okapi', 'Takin', 'Saïga',
+          'Dugong', 'Lamantin', 'Narval', 'Béluga', 'Cachalot', 'Rorqual', 'Baleine à bosse', 'Dauphin de rivière', 'Marsouin', 'Franciscana',
+          'Scorpion', 'Mygale', 'Mamba noir', 'Taïpan', 'Serpent corail', 'Vipère', 'Crotale', 'Boomslang', 'Calmar géant', 'Pieuvre à anneaux bleus',
+          'Poisson-globe', 'Poisson-pierre', 'Poisson-lion', 'Cône marin', 'Méduse-boîte', 'Frelon asiatique', 'Scarabée bombardier', 'Moustique tigre', 'Fourmi balle de fusil', 'Chenille de feu',
+          'Pangolin', 'Aye-aye', 'Loris lent', 'Tatou à trois bandes', 'Tatou géant', 'Fourmilier géant', 'Paresseux à trois doigts', 'Hérisson pygmée', 'Musaraigne éléphant', 'Martre des pins'
+        ],
+        movies: [
+          'The Lighthouse', 'Hérédité', 'Midsommar', 'The Witch', 'Mise à mort du cerf sacré', 'The Lobster', 'Dogville', 'Antichrist',
+          'Melancholia', 'The Tree of Life', 'Synecdoche, New York', 'Donnie Darko', 'The Double', 'Enemy', 'Ex Machina', 'Annihilation',
+          'Coherence', 'Primer', 'Premier Contact', 'Moon', 'Solaris', 'Stalker', 'Le Miroir', 'Persona', 'Le Septième Sceau', 'Memento',
+          'Mulholland Drive', 'Blue Velvet', 'Eraserhead', 'The Fountain', 'Le Puits', 'La Plateforme', 'Climax', 'Irréversible',
+          'Enter the Void', 'The Host', 'Oldboy', 'Memories of Murder', 'Mademoiselle', 'Drive', 'Only God Forgives', 'The Master',
+          'Magnolia', 'There Will Be Blood', 'La Chasse', 'Les Bruits de Recife', 'Bacurau', 'Le Loup derrière la porte', 'Une seconde mère'
+        ],
+        professions: [
+          'Neurochirurgien', 'Oncologue', 'Anesthésiste', 'Cardiologue', 'Orthopédiste', 'Endocrinologue', 'Gynécologue', 'Urologue',
+          'Radiologue', 'Pathologiste', 'Épidémiologiste', 'Bioinformaticien', 'Ingénieur de données', 'Data scientist', 'Ingénieur aérospatial',
+          'Ingénieur nucléaire', 'Ingénieur pétrolier', 'Spécialiste en cybersécurité', 'Architecte logiciel', 'Ingénieur DevOps', 'Product manager',
+          'Scrum Master', 'UX researcher', 'UX designer', 'UI designer', 'Spécialiste SEO', 'Trader', 'Analyste financier',
+          'Gestionnaire d’investissements', 'Actuaire', 'Diplomate', 'Consul', 'Ambassadeur', 'Conservateur de musée', 'Restaurateur d’art', 'Archéologue',
+          'Paléontologue', 'Océanographe', 'Météorologue', 'Pilote de chasse', 'Contrôleur aérien', 'Capitaine de navire', 'Sommelier',
+          'Maître brasseur', 'Chef exécutif', 'Parfumeur', 'Designer automobile', 'Ingénieur robotique', 'Spécialiste en IA'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.hard.celebrities]
+      }
+    };
+
+    const DEFAULT_WORDS_DE = {
+      easy: {
+        objects: [
+          'Ball', 'Becher', 'Hut', 'Schuh', 'Buch', 'Stuhl', 'Tisch', 'Bett', 'Tür', 'Fenster',
+          'Bleistift', 'Radiergummi', 'Rucksack', 'Brille', 'Regenschirm', 'Telefon', 'Spiegel', 'Bürste', 'Kamm', 'Schere',
+          'Schlüssel', 'Gabel', 'Löffel', 'Teller', 'Flasche', 'Kissen', 'Decke', 'Handtuch', 'Seife', 'Luftballon',
+          'Puppe', 'Spielzeugauto', 'Popcorn', 'Eis', 'Kuchen', 'Apfel', 'Banane', 'Trauben', 'Blume', 'Baum',
+          'Sonne', 'Mond', 'Stern', 'Wolke', 'Regen', 'Kleiderschrank', 'Schrank', 'Kühlschrank', 'Herd', 'Fernseher'
+        ],
+        actions: [
+          'Rennen', 'Springen', 'Schlafen', 'Essen', 'Trinken', 'Lachen', 'Weinen', 'Tanzen', 'Singen', 'Schwimmen',
+          'Fliegen', 'Gehen', 'Sitzen', 'Aufstehen', 'Umarmen', 'Spielen', 'Zeichnen', 'Malen', 'Lesen', 'Schreiben',
+          'Zuhören', 'Schreien', 'Pusten', 'Atmen', 'Husten', 'Niesen', 'Gähnen', 'Klatschen', 'Winken', 'Zeigen',
+          'Greifen', 'Werfen', 'Treten', 'Schieben', 'Ziehen', 'Öffnen', 'Schließen', 'Hände waschen', 'Zähne putzen', 'Kämmen',
+          'Schuhe anziehen', 'Schuhe ausziehen', 'Fernseher einschalten', 'Licht ausschalten', 'In die Hände klatschen', 'Sich drehen', 'Rollen', 'Küssen', 'Lächeln', 'Denken'
+        ],
+        animals: [
+          'Hund', 'Katze', 'Fisch', 'Vogel', 'Kaninchen', 'Huhn', 'Kuh', 'Pferd', 'Schwein', 'Schaf',
+          'Ente', 'Frosch', 'Schmetterling', 'Ameise', 'Biene', 'Spinne', 'Regenwurm', 'Nacktschnecke', 'Schnecke', 'Raupe',
+          'Elefant', 'Löwe', 'Giraffe', 'Affe', 'Zebra', 'Nilpferd', 'Krokodil', 'Schildkröte', 'Pinguin', 'Bär',
+          'Wolf', 'Fuchs', 'Hirsch', 'Eichhörnchen', 'Maus', 'Hamster', 'Leguan', 'Papagei', 'Tukan', 'Flamingo',
+          'Pelikan', 'Känguru', 'Koala', 'Panda', 'Delfin', 'Wal', 'Oktopus', 'Krabbe', 'Garnele', 'Seestern'
+        ],
+        movies: [
+          'Titanic', 'Avatar', 'Der König der Löwen', 'Toy Story', 'Die Eiskönigin', 'Shrek', 'Harry Potter', 'Spider-Man', 'Batman', 'Superman',
+          'Jurassic Park', 'Die Avengers', 'Star Wars', 'Minions', 'Cars', 'Findet Nemo', 'Alles steht Kopf', 'Aladdin',
+          'Cinderella', 'Schneewittchen', 'Matrix', 'Gladiator', 'E.T.', 'King Kong', 'Godzilla', 'Black Panther', 'Iron Man',
+          'Captain America', 'Thor', 'Hulk', 'Deadpool', 'Venom', 'Transformers', 'Fluch der Karibik', 'Jumanji',
+          'Mission: Impossible', '007', 'Rocky', 'Rambo', 'Karate Kid', 'Gremlins', 'Ghostbusters', 'Scooby-Doo', 'Madagascar',
+          'Kung Fu Panda', 'Die Monster AG', 'Oben', 'Encanto', 'Vaiana', 'Zoomania'
+        ],
+        professions: [
+          'Arzt', 'Zahnarzt', 'Lehrer', 'Polizist', 'Feuerwehrmann', 'Fahrer', 'Koch', 'Kellner', 'Bäcker', 'Postbote',
+          'Mechaniker', 'Ingenieur', 'Anwalt', 'Krankenpfleger', 'Tierarzt', 'Pilot', 'Friseur', 'Barbier', 'Schauspieler', 'Sänger',
+          'Tänzer', 'Reinigungskraft', 'Sicherheitskraft', 'Landwirt', 'Fischer', 'Elektriker', 'Maurer', 'Maler', 'Gärtner',
+          'Taxifahrer', 'Lieferfahrer', 'Verkäufer', 'Kassierer', 'Sekretärin', 'Empfangsmitarbeiter', 'Trainer', 'Personal Trainer', 'Babysitter',
+          'Betreuer', 'Hausmeister', 'Müllwerker', 'Tankwart', 'Busfahrer', 'Lkw-Fahrer', 'Reiseführer', 'Fotograf',
+          'Reporter', 'Radiomoderator', 'Kassenbediener', 'Ausbilder'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.easy.celebrities]
+      },
+      normal: {
+        objects: [
+          'Computer', 'Tastatur', 'Radio', 'Waschmaschine', 'Staubsauger', 'Mixer', 'Handrührgerät', 'Kaffeemaschine', 'Sofa', 'Regal',
+          'Ventilator', 'Klimaanlage', 'Mikrowelle', 'Backofen', 'Spüle', 'Badewanne', 'Dusche', 'Koffer', 'Taschenlampe', 'Fernglas',
+          'Kamera', 'Uhr', 'Taschenrechner', 'Thermometer', 'Waage', 'Kompass', 'Akustikgitarre', 'Klavier', 'Trommel', 'Flöte',
+          'Akkordeon', 'Trompete', 'Geige', 'Mundharmonika', 'Xylophon', 'Schläger', 'Skateboard', 'Rollschuhe', 'Boxhandschuh', 'Helm',
+          'Weste', 'Gürtel', 'Krawatte', 'Tasche', 'Regenschirm', 'Gehstock', 'Krücke', 'Rollstuhl', 'Sonnenbrille', 'Kappe'
+        ],
+        actions: [
+          'Kochen', 'Fahren', 'Radfahren', 'Angeln', 'Tauchen', 'Klettern', 'Zelten', 'Yoga machen', 'Meditieren', 'Fotografieren',
+          'Filmen', 'Ein Bild malen', 'Bildhauern', 'Stricken', 'Nähen', 'Sticken', 'Gärtnern', 'Pflanze gießen', 'Baum beschneiden', 'Fegen',
+          'Fenster putzen', 'Kleidung bügeln', 'Kleidung falten', 'Bett machen', 'Geschirr spülen', 'Geschirr abtrocknen', 'Obst schälen', 'Käse reiben',
+          'Brot kneten', 'Rudern', 'Surfen', 'Skifahren', 'Schlittschuhlaufen', 'Dribbeln', 'Werfen', 'Ein Tor verteidigen', 'Beim Tennis aufschlagen',
+          'Gymnastik machen', 'Applaudieren', 'Eine Rede halten', 'Interviewen', 'Eine Wand erklimmen', 'Zaubern', 'Balancieren', 'Jonglieren',
+          'Tippen', 'Telefonieren', 'Ein Selfie machen', 'Eine Rechnung bezahlen', 'Schlange stehen'
+        ],
+        animals: [
+          'Adler', 'Falke', 'Eule', 'Fledermaus', 'Kamel', 'Lama', 'Alpaka', 'Bison', 'Elch', 'Kojote',
+          'Gepard', 'Leopard', 'Jaguar', 'Puma', 'Nashorn', 'Anakonda', 'Schnabeltier', 'Dingo', 'Kakadu', 'Emu',
+          'Orca', 'Hai', 'Rochen', 'Tintenfisch', 'Seepferdchen', 'Seeigel', 'Ara', 'Pfau', 'Strauß', 'Kasuar',
+          'Albatros', 'Storch', 'Pelikan', 'Ibis', 'Reiher', 'Otter', 'Seehund', 'Walross', 'Seelöwe', 'Dugong',
+          'Bergziege', 'Steinbock', 'Antilope', 'Gnu', 'Büffel', 'Wildschwein', 'Dachs', 'Waschbär', 'Frettchen', 'Spitzmaus'
+        ],
+        movies: [
+          'Interstellar', 'Inception', 'Dune', 'Fight Club', 'Pulp Fiction', 'The Wolf of Wall Street', 'Joker', 'Parasite',
+          'Der große Gatsby', 'Django Unchained', 'Inglourious Basterds', 'Whiplash', 'La La Land', 'Black Swan', 'Shining',
+          'Doctor Strange', 'Guardians of the Galaxy', 'Captain Marvel', 'Logan', 'John Wick', 'Matrix Reloaded', 'Matrix Revolutions',
+          'The Revenant', 'Gravity', 'Mad Max: Fury Road', 'Blade Runner 2049', 'Terminator', 'Zurück in die Zukunft',
+          'The Sixth Sense', 'Die Truman Show', 'Die Mumie', 'The Da Vinci Code', 'Illuminati', 'Die Tribute von Panem', 'Twilight',
+          'Es', 'Conjuring', 'Annabelle', 'The Nun', 'Saw', 'Get Out', 'Wir', 'Split', 'Glass',
+          'Fast & Furious', 'Top Gun', 'Mission: Impossible - Fallout', 'Kingsman', 'Sherlock Holmes', 'Man of Steel'
+        ],
+        professions: [
+          'Programmierer', 'Designer', 'Architekt', 'Ernährungsberater', 'Psychologe', 'Psychiater', 'Physiotherapeut', 'Apotheker',
+          'Biologe', 'Chemiker', 'Physiker', 'Geologe', 'Astronom', 'Übersetzer', 'Dolmetscher', 'Videoeditor', 'Filmregisseur',
+          'Musikproduzent', 'DJ', 'YouTuber', 'Influencer', 'Streamer', 'Werbefachmann', 'Texter', 'Systemanalyst',
+          'Administrator', 'Buchhalter', 'Ökonom', 'Immobilienmakler', 'Versicherungsmakler', 'Ermittler', 'Detektiv',
+          'Forensiker', 'Prüfer', 'Berater', 'Coach', 'Sporttrainer', 'Profisportler', 'Surfer',
+          'Fußballspieler', 'Kämpfer', 'Choreograf', 'Visagist', 'Kosmetiker', 'Tätowierer', 'Illustrator', 'Animator',
+          'Game Designer', 'Drehbuchautor', 'Synchronsprecher'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.normal.celebrities]
+      },
+      hard: {
+        objects: [
+          'Stethoskop', 'Skalpell', 'Mikroskop', 'Teleskop', 'Sextant', 'Astrolabium', 'Stoppuhr', 'Metronom', 'Stimmgerät', 'Defibrillator',
+          'Katapult', 'Periskop', 'Destilliergerät', 'Zentrifuge', 'Inkubator', 'Autoklav', 'Spektrometer', 'Chromatograph', 'Kalorimeter', 'Potentiometer',
+          'Schleuder', 'Harpune', 'Bumerang', 'Pfeil und Bogen', 'Armbrust', 'Speer', 'Streitkolben', 'Axt', 'Sichel', 'Dreizack',
+          'Sandwichtoaster', 'Dörrautomat', 'Fermenter', 'Schongarer', 'Wok', 'Tajine', 'Fondue', 'Grill', 'Räucherofen', 'Destille',
+          'Theodolit', 'Höhenmesser', 'Barometer', 'Hygrometer', 'Anemometer', 'Regenmesser', 'Seismograph', 'Generator', 'Transformator', 'Oszilloskop'
+        ],
+        actions: [
+          'Auf dem Drahtseil balancieren', 'Feuer schlucken', 'Aus einer Zwangsjacke entkommen', 'Ziegel mit der Hand zerbrechen',
+          'Über glühende Kohlen laufen', 'Brailleschrift lesen', 'Tauchzeichen geben', 'In Gebärdensprache kommunizieren', 'Morsecode benutzen', 'Ein Instrument mit den Füßen spielen',
+          'Einen Zahn ziehen', 'Eine Operation durchführen', 'Wiederbeleben', 'Einen Bruch ruhigstellen', 'Eine Aderpresse anlegen',
+          'Fechten', 'Tai Chi üben', 'Einen Karateschlag machen', 'Hammerwerfen', 'Olympischen Speerwurf machen',
+          'Erde pflügen', 'Eine Kuh melken', 'Ein Schaf scheren', 'Ein Pferd beschlagen', 'Einen Ochsen zähmen',
+          'Am Webstuhl weben', 'Glas blasen', 'Metall schmieden', 'Keramik auf der Drehscheibe formen', 'Ein Gemälde restaurieren',
+          'Ein Flugzeug starten', 'Einen Hubschrauber landen', 'Ein Segelboot steuern', 'Einen Kran bedienen', 'Einen Zug fahren',
+          'Abseilen', 'Felsklettern', 'Seilrutsche fahren', 'Freiklettern', 'Slackline gehen',
+          'Eine Bombe entschärfen', 'Mit Geiseln verhandeln', 'Fallschirmspringen', 'Hindernislauf machen', 'Olympisches Gewichtheben'
+        ],
+        animals: [
+          'Axolotl', 'Koboldmaki', 'Fossa', 'Quokka', 'Numbat', 'Kakapo', 'Tuatara', 'Okapi', 'Takin', 'Saiga',
+          'Dugong', 'Manati', 'Narwal', 'Beluga', 'Pottwal', 'Finnwal', 'Buckelwal', 'Flussdelfin', 'Schweinswal', 'Franciscana',
+          'Skorpion', 'Vogelspinne', 'Schwarze Mamba', 'Taipan', 'Korallenschlange', 'Viper', 'Klapperschlange', 'Boomslang', 'Riesenkalmar', 'Blauringkrake',
+          'Kugelfisch', 'Steinfisch', 'Feuerfisch', 'Kegelschnecke', 'Würfelqualle', 'Asiatische Hornisse', 'Bombardierkäfer', 'Tigermücke', '24-Stunden-Ameise', 'Feuerraupe',
+          'Pangolin', 'Aye-aye', 'Plumplori', 'Dreibinden-Gürteltier', 'Riesengürteltier', 'Großer Ameisenbär', 'Dreifingerfaultier', 'Zwergigel', 'Elefantenspitzmaus', 'Baummarder'
+        ],
+        movies: [
+          'Der Leuchtturm', 'Hereditary', 'Midsommar', 'The Witch', 'The Killing of a Sacred Deer', 'The Lobster', 'Dogville', 'Antichrist',
+          'Melancholia', 'The Tree of Life', 'Synecdoche, New York', 'Donnie Darko', 'The Double', 'Enemy', 'Ex Machina', 'Auslöschung',
+          'Coherence', 'Primer', 'Arrival', 'Moon', 'Solaris', 'Stalker', 'Der Spiegel', 'Persona', 'Das siebente Siegel', 'Memento',
+          'Mulholland Drive', 'Blue Velvet', 'Eraserhead', 'The Fountain', 'Der Schacht', 'Die Plattform', 'Climax', 'Irreversibel',
+          'Enter the Void', 'The Host', 'Oldboy', 'Memories of Murder', 'Die Taschendiebin', 'Drive', 'Only God Forgives', 'The Master',
+          'Magnolia', 'There Will Be Blood', 'Die Jagd', 'Neighbouring Sounds', 'Bacurau', 'Der Wolf hinter der Tür', 'Eine zweite Mutter'
+        ],
+        professions: [
+          'Neurochirurg', 'Onkologe', 'Anästhesist', 'Kardiologe', 'Orthopäde', 'Endokrinologe', 'Gynäkologe', 'Urologe',
+          'Radiologe', 'Pathologe', 'Epidemiologe', 'Bioinformatiker', 'Dateningenieur', 'Datenwissenschaftler', 'Luft- und Raumfahrtingenieur',
+          'Nuklearingenieur', 'Erdölingenieur', 'Cybersicherheitsspezialist', 'Softwarearchitekt', 'DevOps-Ingenieur', 'Produktmanager',
+          'Scrum Master', 'UX-Forscher', 'UX-Designer', 'UI-Designer', 'SEO-Spezialist', 'Trader', 'Finanzanalyst',
+          'Investmentmanager', 'Aktuar', 'Diplomat', 'Konsul', 'Botschafter', 'Museumskurator', 'Kunstrestaurator', 'Archäologe',
+          'Paläontologe', 'Ozeanograf', 'Meteorologe', 'Kampfpilot', 'Fluglotse', 'Schiffskapitän', 'Sommelier',
+          'Braumeister', 'Küchenchef', 'Parfümeur', 'Automobildesigner', 'Robotikingenieur', 'KI-Spezialist'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.hard.celebrities]
+      }
+    };
+
+    const DEFAULT_WORDS_IT = {
+      easy: {
+        objects: [
+          'Palla', 'Bicchiere', 'Cappello', 'Scarpa', 'Libro', 'Sedia', 'Tavolo', 'Letto', 'Porta', 'Finestra',
+          'Matita', 'Gomma', 'Zaino', 'Occhiali', 'Ombrello', 'Telefono', 'Specchio', 'Spazzola', 'Pettine', 'Forbici',
+          'Chiave', 'Forchetta', 'Cucchiaio', 'Piatto', 'Bottiglia', 'Cuscino', 'Coperta', 'Asciugamano', 'Sapone', 'Palloncino',
+          'Bambola', 'Macchinina', 'Popcorn', 'Gelato', 'Torta', 'Mela', 'Banana', 'Uva', 'Fiore', 'Albero',
+          'Sole', 'Luna', 'Stella', 'Nuvola', 'Pioggia', 'Guardaroba', 'Armadio', 'Frigorifero', 'Fornello', 'Televisione'
+        ],
+        actions: [
+          'Correre', 'Saltare', 'Dormire', 'Mangiare', 'Bere', 'Ridere', 'Piangere', 'Ballare', 'Cantare', 'Nuotare',
+          'Volare', 'Camminare', 'Sedersi', 'Alzarsi', 'Abbracciare', 'Giocare', 'Disegnare', 'Dipingere', 'Leggere', 'Scrivere',
+          'Ascoltare', 'Gridare', 'Soffiare', 'Respirare', 'Tossire', 'Starnutire', 'Sbadigliare', 'Applaudire', 'Salutare con la mano', 'Indicare',
+          'Prendere', 'Lanciare', 'Calciare', 'Spingere', 'Tirare', 'Aprire', 'Chiudere', 'Lavarsi le mani', 'Lavarsi i denti', 'Pettinarsi',
+          'Mettersi le scarpe', 'Togliersi le scarpe', 'Accendere la TV', 'Spegnere la luce', 'Battere le mani', 'Girare', 'Rotolare', 'Baciare', 'Sorridere', 'Pensare'
+        ],
+        animals: [
+          'Cane', 'Gatto', 'Pesce', 'Uccellino', 'Coniglio', 'Gallina', 'Mucca', 'Cavallo', 'Maiale', 'Pecora',
+          'Anatra', 'Rana', 'Farfalla', 'Formica', 'Ape', 'Ragno', 'Lombrico', 'Lumaca senza guscio', 'Chiocciola', 'Bruco',
+          'Elefante', 'Leone', 'Giraffa', 'Scimmia', 'Zebra', 'Ippopotamo', 'Coccodrillo', 'Tartaruga', 'Pinguino', 'Orso',
+          'Lupo', 'Volpe', 'Cervo', 'Scoiattolo', 'Topo', 'Criceto', 'Iguana', 'Pappagallo', 'Tucano', 'Fenicottero',
+          'Pellicano', 'Canguro', 'Koala', 'Panda', 'Delfino', 'Balena', 'Polpo', 'Granchio', 'Gambero', 'Stella marina'
+        ],
+        movies: [
+          'Titanic', 'Avatar', 'Il Re Leone', 'Toy Story', 'Frozen', 'Shrek', 'Harry Potter', 'Spider-Man', 'Batman', 'Superman',
+          'Jurassic Park', 'Avengers', 'Star Wars', 'Minions', 'Cars', 'Alla ricerca di Nemo', 'Inside Out', 'Aladdin',
+          'Cenerentola', 'Biancaneve', 'Matrix', 'Il Gladiatore', 'E.T.', 'King Kong', 'Godzilla', 'Black Panther', 'Iron Man',
+          'Captain America', 'Thor', 'Hulk', 'Deadpool', 'Venom', 'Transformers', 'Pirati dei Caraibi', 'Jumanji',
+          'Mission: Impossible', '007', 'Rocky', 'Rambo', 'Karate Kid', 'Gremlins', 'Ghostbusters', 'Scooby-Doo', 'Madagascar',
+          'Kung Fu Panda', 'Monsters & Co.', 'Up', 'Encanto', 'Oceania', 'Zootropolis'
+        ],
+        professions: [
+          'Medico', 'Dentista', 'Insegnante', 'Poliziotto', 'Vigile del fuoco', 'Autista', 'Cuoco', 'Cameriere', 'Fornaio', 'Postino',
+          'Meccanico', 'Ingegnere', 'Avvocato', 'Infermiere', 'Veterinario', 'Pilota', 'Parrucchiere', 'Barbiere', 'Attore', 'Cantante',
+          'Ballerino', 'Addetto alle pulizie', 'Guardia di sicurezza', 'Agricoltore', 'Pescatore', 'Elettricista', 'Muratore', 'Pittore', 'Giardiniere',
+          'Tassista', 'Corriere', 'Venditore', 'Cassiere', 'Segretaria', 'Receptionist', 'Allenatore', 'Personal trainer', 'Baby-sitter',
+          'Assistente', 'Custode', 'Operatore ecologico', 'Benzinaio', 'Autista di autobus', 'Camionista', 'Guida turistica', 'Fotografo',
+          'Reporter', 'Conduttore radiofonico', 'Operatore di cassa', 'Istruttore'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.easy.celebrities]
+      },
+      normal: {
+        objects: [
+          'Computer', 'Tastiera', 'Radio', 'Lavatrice', 'Aspirapolvere', 'Frullatore', 'Sbattitore', 'Caffettiera', 'Divano', 'Scaffale',
+          'Ventilatore', 'Condizionatore', 'Microonde', 'Forno', 'Lavandino', 'Vasca da bagno', 'Doccia', 'Valigia', 'Torcia', 'Binocolo',
+          'Fotocamera', 'Orologio', 'Calcolatrice', 'Termometro', 'Bilancia', 'Bussola', 'Chitarra acustica', 'Pianoforte', 'Tamburo', 'Flauto',
+          'Fisarmonica', 'Tromba', 'Violino', 'Armonica', 'Xilofono', 'Racchetta', 'Skateboard', 'Pattini', 'Guantone da boxe', 'Casco',
+          'Gilet', 'Cintura', 'Cravatta', 'Borsa', 'Ombrello', 'Bastone', 'Stampella', 'Sedia a rotelle', 'Occhiali da sole', 'Berretto'
+        ],
+        actions: [
+          'Cucinare', 'Guidare', 'Andare in bicicletta', 'Pescare', 'Immergersi', 'Scalare', 'Campeggiare', 'Fare yoga', 'Meditare', 'Fotografare',
+          'Filmare', 'Dipingere un quadro', 'Scolpire', 'Lavorare a maglia', 'Cucire', 'Ricamare', 'Fare giardinaggio', 'Annaffiare una pianta', 'Potare un albero', 'Spazzare',
+          'Pulire una finestra', 'Stirare', 'Piegare i vestiti', 'Rifare il letto', 'Lavare i piatti', 'Asciugare i piatti', 'Sbucciare la frutta', 'Grattugiare il formaggio',
+          'Impastare il pane', 'Remare', 'Fare surf', 'Sciare', 'Pattinare', 'Dribblare', 'Lanciare', 'Parare un gol', 'Servire a tennis',
+          'Fare ginnastica', 'Applaudire', 'Fare un discorso', 'Intervistare', 'Scalare una parete', 'Fare magia', 'Stare in equilibrio', 'Fare giocoleria',
+          'Digitare', 'Telefonare', 'Fare un selfie', 'Pagare una bolletta', 'Fare la fila'
+        ],
+        animals: [
+          'Aquila', 'Falco', 'Gufo', 'Pipistrello', 'Cammello', 'Lama', 'Alpaca', 'Bisonte', 'Alce', 'Coyote',
+          'Ghepardo', 'Leopardo', 'Giaguaro', 'Puma', 'Rinoceronte', 'Anaconda', 'Ornitorinco', 'Dingo', 'Cacatua', 'Emù',
+          'Orca', 'Squalo', 'Razza', 'Calamaro', 'Cavalluccio marino', 'Riccio di mare', 'Ara', 'Pavone', 'Struzzo', 'Casuario',
+          'Albatro', 'Cicogna', 'Pellicano', 'Ibis', 'Airone', 'Lontra', 'Foca', 'Tricheco', 'Leone marino', 'Dugongo',
+          'Capra di montagna', 'Stambecco', 'Antilope', 'Gnu', 'Bufalo', 'Cinghiale', 'Tasso', 'Procione', 'Furetto', 'Toporagno'
+        ],
+        movies: [
+          'Interstellar', 'Inception', 'Dune', 'Fight Club', 'Pulp Fiction', 'The Wolf of Wall Street', 'Joker', 'Parasite',
+          'Il grande Gatsby', 'Django Unchained', 'Bastardi senza gloria', 'Whiplash', 'La La Land', 'Il cigno nero', 'Shining',
+          'Doctor Strange', 'Guardiani della Galassia', 'Captain Marvel', 'Logan', 'John Wick', 'Matrix Reloaded', 'Matrix Revolutions',
+          'Revenant', 'Gravity', 'Mad Max: Fury Road', 'Blade Runner 2049', 'Terminator', 'Ritorno al futuro',
+          'Il sesto senso', 'The Truman Show', 'La mummia', 'Il codice da Vinci', 'Angeli e demoni', 'Hunger Games', 'Twilight',
+          'It', 'The Conjuring', 'Annabelle', 'The Nun', 'Saw', 'Scappa - Get Out', 'Noi', 'Split', 'Glass',
+          'Fast & Furious', 'Top Gun', 'Mission: Impossible - Fallout', 'Kingsman', 'Sherlock Holmes', 'L’uomo d’acciaio'
+        ],
+        professions: [
+          'Programmatore', 'Designer', 'Architetto', 'Nutrizionista', 'Psicologo', 'Psichiatra', 'Fisioterapista', 'Farmacista',
+          'Biologo', 'Chimico', 'Fisico', 'Geologo', 'Astronomo', 'Traduttore', 'Interprete', 'Montatore video', 'Regista',
+          'Produttore musicale', 'DJ', 'YouTuber', 'Influencer', 'Streamer', 'Pubblicitario', 'Copywriter', 'Analista di sistemi',
+          'Amministratore', 'Contabile', 'Economista', 'Agente immobiliare', 'Broker assicurativo', 'Investigatore', 'Detective',
+          'Perito forense', 'Revisore', 'Consulente', 'Coach', 'Allenatore sportivo', 'Atleta professionista', 'Surfista',
+          'Calciatore', 'Lottatore', 'Coreografo', 'Truccatore', 'Estetista', 'Tatuatore', 'Illustratore', 'Animatore',
+          'Game designer', 'Sceneggiatore', 'Doppiatore'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.normal.celebrities]
+      },
+      hard: {
+        objects: [
+          'Stetoscopio', 'Bisturi', 'Microscopio', 'Telescopio', 'Sestante', 'Astrolabio', 'Cronometro', 'Metronomo', 'Accordatore', 'Defibrillatore',
+          'Catapulta', 'Periscopio', 'Distillatore', 'Centrifuga', 'Incubatrice', 'Autoclave', 'Spettrometro', 'Cromatografo', 'Calorimetro', 'Potenziometro',
+          'Fionda', 'Arpione', 'Boomerang', 'Arco e freccia', 'Balestra', 'Lancia', 'Mazza', 'Ascia', 'Falce', 'Tridente',
+          'Tostiera', 'Essiccatore', 'Fermentatore', 'Slow cooker', 'Wok', 'Tajine', 'Fonduta', 'Barbecue', 'Affumicatore', 'Alambicco',
+          'Teodolite', 'Altimetro', 'Barometro', 'Igrometro', 'Anemometro', 'Pluviometro', 'Sismografo', 'Generatore', 'Trasformatore', 'Oscilloscopio'
+        ],
+        actions: [
+          'Stare in equilibrio sulla corda', 'Ingoiare fuoco', 'Scappare da una camicia di forza', 'Rompere mattoni con la mano',
+          'Camminare sui carboni ardenti', 'Leggere il braille', 'Fare segnali da sub', 'Comunicare in lingua dei segni', 'Usare il codice morse', 'Suonare uno strumento con i piedi',
+          'Estrarre un dente', 'Fare un intervento chirurgico', 'Rianimare', 'Immobilizzare una frattura', 'Applicare un laccio emostatico',
+          'Fare scherma', 'Praticare tai chi', 'Dare un colpo di karate', 'Lanciare il martello', 'Lancio olimpico del giavellotto',
+          'Arare la terra', 'Mungere una mucca', 'Tosare una pecora', 'Ferrare un cavallo', 'Domare un bue',
+          'Tessere al telaio', 'Soffiare il vetro', 'Forgiare il metallo', 'Modellare la ceramica al tornio', 'Restaurare un quadro',
+          'Decollare con un aereo', 'Atterrare con un elicottero', 'Navigare su una barca a vela', 'Manovrare una gru', 'Guidare un treno',
+          'Fare rappel', 'Arrampicata su roccia', 'Fare una zipline', 'Arrampicata libera', 'Fare slackline',
+          'Disinnescare una bomba', 'Negoziare con ostaggi', 'Fare paracadutismo', 'Corsa a ostacoli', 'Sollevamento pesi olimpico'
+        ],
+        animals: [
+          'Axolotl', 'Tarsio', 'Fossa', 'Quokka', 'Numbat', 'Kakapo', 'Tuatara', 'Okapi', 'Takin', 'Saiga',
+          'Dugongo', 'Lamantino', 'Narvalo', 'Beluga', 'Capodoglio', 'Balenottera comune', 'Megattera', 'Delfino di fiume', 'Focena', 'Franciscana',
+          'Scorpione', 'Tarantola', 'Mamba nero', 'Taipan', 'Serpente corallo', 'Vipera', 'Serpente a sonagli', 'Boomslang', 'Calamaro gigante', 'Polpo dagli anelli blu',
+          'Pesce palla', 'Pesce pietra', 'Pesce leone', 'Cono marino', 'Vespa di mare', 'Calabrone asiatico', 'Coleottero bombardiere', 'Zanzara tigre', 'Formica proiettile', 'Bruco di fuoco',
+          'Pangolino', 'Aye-aye', 'Lori lento', 'Armadillo a tre fasce', 'Armadillo gigante', 'Formichiere gigante', 'Bradipo tridattilo', 'Riccio pigmeo', 'Toporagno elefante', 'Martora'
+        ],
+        movies: [
+          'The Lighthouse', 'Hereditary', 'Midsommar', 'The Witch', 'Il sacrificio del cervo sacro', 'The Lobster', 'Dogville', 'Antichrist',
+          'Melancholia', 'The Tree of Life', 'Synecdoche, New York', 'Donnie Darko', 'The Double', 'Enemy', 'Ex Machina', 'Annientamento',
+          'Coherence', 'Primer', 'Arrival', 'Moon', 'Solaris', 'Stalker', 'Lo specchio', 'Persona', 'Il settimo sigillo', 'Memento',
+          'Mulholland Drive', 'Velluto blu', 'Eraserhead', 'The Fountain', 'Il pozzo', 'The Platform', 'Climax', 'Irreversible',
+          'Enter the Void', 'The Host', 'Oldboy', 'Memorie di un assassino', 'Mademoiselle', 'Drive', 'Only God Forgives', 'The Master',
+          'Magnolia', 'Il petroliere', 'Il sospetto', 'O Som ao Redor', 'Bacurau', 'Il lupo dietro la porta', 'Una seconda madre'
+        ],
+        professions: [
+          'Neurochirurgo', 'Oncologo', 'Anestesista', 'Cardiologo', 'Ortopedico', 'Endocrinologo', 'Ginecologo', 'Urologo',
+          'Radiologo', 'Patologo', 'Epidemiologo', 'Bioinformatico', 'Ingegnere dei dati', 'Data scientist', 'Ingegnere aerospaziale',
+          'Ingegnere nucleare', 'Ingegnere petrolifero', 'Specialista in cybersicurezza', 'Architetto software', 'Ingegnere DevOps', 'Product manager',
+          'Scrum Master', 'UX researcher', 'UX designer', 'UI designer', 'Specialista SEO', 'Trader', 'Analista finanziario',
+          'Gestore di investimenti', 'Attuario', 'Diplomatico', 'Console', 'Ambasciatore', 'Curatore museale', 'Restauratore d’arte', 'Archeologo',
+          'Paleontologo', 'Oceanografo', 'Meteorologo', 'Pilota da caccia', 'Controllore di volo', 'Capitano di nave', 'Sommelier',
+          'Mastro birraio', 'Executive chef', 'Profumiere', 'Designer automobilistico', 'Ingegnere robotico', 'Specialista in IA'
+        ],
+        celebrities: [...DEFAULT_WORDS_PT.hard.celebrities]
+      }
+    };
+
+    const CHALLENGES_FR = [
+      'Fais la mime assis', 'Fais la mime accroupi', 'Fais la mime en sautant', 'Fais la mime en marchant sur place',
+      'Fais la mime avec une main dans le dos', 'Fais la mime avec une seule main', 'Fais la mime avec les bras tendus',
+      'Fais la mime en tournant lentement', 'Fais la mime comme si tu étais au ralenti', 'Fais la mime comme si tu étais accéléré (super vite)',
+      'Fais la mime en exagérant BEAUCOUP', 'Fais la mime presque sans bouger', 'Fais la mime comme si tu avais peur',
+      'Fais la mime comme si tu étais très heureux', 'Fais la mime comme si tu étais en colère', 'Fais la mime comme si tu étais fatigué',
+      'Fais la mime comme si tu étais confus', 'Fais la mime comme si tu paniquais', 'Fais la mime comme un robot',
+      'Fais la mime comme un personnage de dessin animé', 'Fais la mime comme une personne âgée', 'Fais la mime comme un enfant',
+      'Fais la mime comme un super-héros', 'Fais la mime comme un méchant', 'Fais la mime comme un animal',
+      'Fais la mime comme si tu étais sur la lune (faible gravité)', 'Fais la mime comme si tu étais sous l’eau', 'Fais la mime comme si tu étais invisible',
+      'Fais la mime comme si tu étais géant', 'Fais la mime comme si tu étais minuscule', 'Tu ne peux pas utiliser les mains',
+      'Tu ne peux pas utiliser les bras', 'Tu ne peux pas bouger de ta place', 'Tu ne peux pas répéter le même geste', 'Tu ne peux rien montrer du doigt',
+      'Tu ne peux pas utiliser le visage (aucune expression)', 'Tu ne peux utiliser que le visage (pas le corps)', 'Tu dois commencer par la fin de l’action',
+      'Tu dois tout faire à l’envers (de la fin au début)', 'Tu dois t’immobiliser complètement toutes les 3 secondes',
+      'Fais la mime comme si tu étais dans un film d’action', 'Fais la mime comme si c’était une comédie',
+      'Fais la mime comme si tu étais au ralenti dramatique', 'Fais la mime comme si tu étais dans un rêve',
+      'Fais la mime comme si tu avais très froid', 'Fais la mime comme si tu avais très chaud',
+      'Fais la mime comme si tu étais dans le noir', 'Fais la mime comme si tu étais sur scène',
+      'Fais la mime comme si un immense public te regardait', 'Fais la mime comme si c’était ta dernière chance de gagner'
+    ];
+
+    const CHALLENGES_DE = [
+      'Spiele es im Sitzen vor', 'Spiele es in der Hocke vor', 'Spiele es springend vor', 'Spiele es gehend auf der Stelle vor',
+      'Spiele es mit einer Hand hinter dem Rücken vor', 'Spiele es nur mit einer Hand vor', 'Spiele es mit ausgestreckten Armen vor',
+      'Spiele es vor, während du dich langsam drehst', 'Spiele es wie in Zeitlupe vor', 'Spiele es wie im Schnelllauf vor (super schnell)',
+      'Spiele es SEHR übertrieben vor', 'Spiele es fast ohne Bewegung vor', 'Spiele es vor, als hättest du Angst',
+      'Spiele es vor, als wärst du sehr glücklich', 'Spiele es vor, als wärst du wütend', 'Spiele es vor, als wärst du müde',
+      'Spiele es vor, als wärst du verwirrt', 'Spiele es vor, als wärst du in Panik', 'Spiele es wie ein Roboter vor',
+      'Spiele es wie eine Zeichentrickfigur vor', 'Spiele es wie eine ältere Person vor', 'Spiele es wie ein Kind vor',
+      'Spiele es wie ein Superheld vor', 'Spiele es wie ein Bösewicht vor', 'Spiele es wie ein Tier vor',
+      'Spiele es vor, als wärst du auf dem Mond (geringe Schwerkraft)', 'Spiele es vor, als wärst du unter Wasser', 'Spiele es vor, als wärst du unsichtbar',
+      'Spiele es vor, als wärst du riesig', 'Spiele es vor, als wärst du winzig klein', 'Du darfst deine Hände nicht benutzen',
+      'Du darfst deine Arme nicht benutzen', 'Du darfst dich nicht vom Platz bewegen', 'Du darfst dieselbe Geste nicht wiederholen', 'Du darfst auf nichts zeigen',
+      'Du darfst dein Gesicht nicht benutzen (keine Mimik)', 'Du darfst nur dein Gesicht benutzen (kein Körper)', 'Du musst am Ende der Aktion beginnen',
+      'Du musst alles rückwärts machen (vom Ende zum Anfang)', 'Du musst alle 3 Sekunden komplett einfrieren',
+      'Spiele es vor, als wärst du in einem Actionfilm', 'Spiele es vor, als wäre es eine Komödie',
+      'Spiele es in dramatischer Zeitlupe vor', 'Spiele es vor, als wärst du in einem Traum',
+      'Spiele es vor, als wäre dir sehr kalt', 'Spiele es vor, als wäre dir sehr heiß',
+      'Spiele es vor, als wärst du im Dunkeln', 'Spiele es vor, als wärst du auf einer Bühne',
+      'Spiele es vor, als würde dich ein riesiges Publikum beobachten', 'Spiele es vor, als wäre es deine letzte Chance zu gewinnen'
+    ];
+
+    const CHALLENGES_IT = [
+      'Fai la mimica da seduto', 'Fai la mimica accovacciato', 'Fai la mimica saltando', 'Fai la mimica camminando sul posto',
+      'Fai la mimica con una mano dietro la schiena', 'Fai la mimica usando solo una mano', 'Fai la mimica con le braccia tese',
+      'Fai la mimica girando lentamente', 'Fai la mimica come se fossi al rallentatore', 'Fai la mimica come se fossi accelerato (super veloce)',
+      'Fai la mimica esagerando MOLTO', 'Fai la mimica quasi senza muoverti', 'Fai la mimica come se avessi paura',
+      'Fai la mimica come se fossi molto felice', 'Fai la mimica come se fossi arrabbiato', 'Fai la mimica come se fossi stanco',
+      'Fai la mimica come se fossi confuso', 'Fai la mimica come se fossi nel panico', 'Fai la mimica come un robot',
+      'Fai la mimica come un personaggio dei cartoni animati', 'Fai la mimica come una persona anziana', 'Fai la mimica come un bambino',
+      'Fai la mimica come un supereroe', 'Fai la mimica come un cattivo', 'Fai la mimica come un animale',
+      'Fai la mimica come se fossi sulla luna (bassa gravità)', 'Fai la mimica come se fossi sott’acqua', 'Fai la mimica come se fossi invisibile',
+      'Fai la mimica come se fossi gigante', 'Fai la mimica come se fossi minuscolo', 'Non puoi usare le mani',
+      'Non puoi usare le braccia', 'Non puoi muoverti dal posto', 'Non puoi ripetere lo stesso gesto', 'Non puoi indicare nulla',
+      'Non puoi usare il viso (niente espressioni facciali)', 'Puoi usare solo il viso (niente corpo)', 'Devi iniziare dalla fine dell’azione',
+      'Devi fare tutto al contrario (dalla fine all’inizio)', 'Devi fermarti completamente ogni 3 secondi',
+      'Fai la mimica come se fossi in un film d’azione', 'Fai la mimica come se fosse una commedia',
+      'Fai la mimica come se fossi al rallentatore drammatico', 'Fai la mimica come se fossi in un sogno',
+      'Fai la mimica come se avessi molto freddo', 'Fai la mimica come se avessi molto caldo',
+      'Fai la mimica come se fossi al buio', 'Fai la mimica come se fossi su un palco',
+      'Fai la mimica come se ti guardasse un pubblico enorme', 'Fai la mimica come se fosse l’ultima occasione per vincere'
+    ];
+
     // Content pack schema used by the app and by future downloadable packs:
     // {
     //   id,
@@ -1651,12 +3023,18 @@
         words: {
           pt: clone(DEFAULT_WORDS_PT),
           en: clone(DEFAULT_WORDS_EN),
-          es: clone(DEFAULT_WORDS_ES)
+          es: clone(DEFAULT_WORDS_ES),
+          fr: clone(DEFAULT_WORDS_FR),
+          de: clone(DEFAULT_WORDS_DE),
+          it: clone(DEFAULT_WORDS_IT)
         },
         challenges: {
           pt: clone(CHALLENGES_PT),
           en: clone(CHALLENGES_EN),
-          es: clone(CHALLENGES_ES)
+          es: clone(CHALLENGES_ES),
+          fr: clone(CHALLENGES_FR),
+          de: clone(CHALLENGES_DE),
+          it: clone(CHALLENGES_IT)
         }
       };
     }
