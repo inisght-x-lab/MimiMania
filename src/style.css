@@ -428,6 +428,14 @@
       width: 100%;
     }
 
+    .btn:disabled,
+    .btn:disabled:hover {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+      box-shadow: none;
+    }
+
     .home-actions > .btn {
       min-height: 64px;
       height: 64px;
@@ -995,6 +1003,45 @@
       border-radius: var(--radius-sm);
       margin-bottom: 8px;
       border: 1px solid var(--score-row-border);
+    }
+
+    .score-row-edit {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+
+    .score-manager-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .score-manager-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .score-manager-controls {
+      display: grid;
+      grid-template-columns: 40px 88px 40px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .score-manager-controls .btn {
+      min-width: 40px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .score-manager-input,
+    .points-input {
+      width: 88px;
+      text-align: center;
+      font-weight: 800;
     }
 
     .score-row.first {
@@ -1828,6 +1875,17 @@
       text-align: center;
     }
 
+    .result-guesser-picker {
+      width: min(360px, 100%);
+      background: var(--surface-bg);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin: 0 0 22px;
+      display: grid;
+      gap: 8px;
+    }
+
     .section-head {
       display: flex;
       align-items: center;
@@ -2348,6 +2406,26 @@
       .toggle-wrap {
         gap: 14px;
         align-items: flex-start;
+      }
+
+      .score-manager-head,
+      .score-row-edit {
+        grid-template-columns: 1fr;
+      }
+
+      .score-manager-head {
+        display: grid;
+      }
+
+      .score-manager-controls {
+        width: 100%;
+        grid-template-columns: 40px minmax(72px, 1fr) 40px;
+      }
+
+      .score-manager-input,
+      .points-input {
+        width: 100%;
+        max-width: 96px;
       }
 
       .drawing-canvas-shell {

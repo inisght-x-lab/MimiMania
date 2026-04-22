@@ -24,6 +24,9 @@
     const CATEGORY_KEYS = ['objects', 'actions', 'animals', 'movies', 'professions', 'celebrities'];
     const CATEGORY_ICONS = { objects: '🧸', actions: '🏃', animals: '🐾', movies: '🎬', professions: '👔', celebrities: '⭐' };
     const DIFFICULTY_ICONS = { easy: '🌱', normal: '⚡', hard: '🔥' };
+    const DEFAULT_CORRECT_POINTS = 10;
+    const DEFAULT_WRONG_PENALTY_POINTS = 0;
+    const DEFAULT_FFA_GUESSER_POINTS = 5;
     const CORE_PACK_ID = 'core-default';
     const WORD_PACK_SCHEMA = 'mimimania.wordpack.v1';
     const PACK_SIGNATURE_ALGORITHM = 'ECDSA_P256_SHA256';
@@ -255,7 +258,17 @@
           correctTitle: 'Acertou!',
           wrongTitle: 'Errou!',
           timeUpTitle: 'Tempo esgotado!',
+          guesserLabel: 'Quem acertou?',
+          guesserPlaceholder: 'Selecione quem adivinhou',
           nextTurn: '➡️ Próximo turno'
+        },
+        scoreManager: {
+          manageButton: '⚖️ Gerenciar',
+          title: 'Gerenciar placar',
+          backToGame: '← Voltar ao jogo',
+          currentScoreTitle: 'Placar atual',
+          resetInputs: '↺ Recarregar',
+          saveAndReturn: 'Salvar e voltar'
         },
         score: {
           title: '🏆 Placar',
@@ -302,6 +315,14 @@
           roundTimeSub: 'Segundos para adivinhar',
           penaltyLabel: 'Penalidade por Skip',
           penaltySub: '−10 pontos ao pular',
+          correctPointsLabel: 'Pontos por acerto',
+          correctPointsSub: 'Pontos para quem faz a mímica ou desenho',
+          wrongPenaltyPointsLabel: 'Pontos perdidos por erro',
+          wrongPenaltyPointsSub: 'Desconta pontos quando o jogador erra ou o tempo acaba',
+          ffaGuesserPointsLabel: 'Pontos para quem adivinha (FFA)',
+          ffaGuesserPointsSub: 'No Free For All, escolha quem acertou após cada acerto',
+          ffaGuesserPointsValueLabel: 'Pontos de quem acertou',
+          ffaGuesserPointsValueSub: 'Valor padrão inicial: 5 pontos',
           generalTitle: '⚙️ Configurações Gerais',
           languageLabel: 'Idioma',
           languageSub: 'Altera a interface e o conteúdo disponível no jogo',
@@ -365,11 +386,17 @@
         dynamic: {
           roundDisplay: ({ current, total }) => `Rodada ${current} de ${total}`,
           diffCount: ({ difficulty, count }) => `${difficulty} · ${count} palavras disponíveis`,
-          correctTeamPoints: ({ teamName }) => `+10 pontos para ${teamName}!`,
-          correctPlayerPoints: ({ playerName }) => `+10 pontos para ${playerName}!`,
-          penaltySkip: '-10 pontos (penalidade por skip)',
+          correctTeamPoints: ({ teamName, points }) => `+${points} pontos para ${teamName}!`,
+          correctPlayerPoints: ({ playerName, points }) => `+${points} pontos para ${playerName}!`,
+          guesserPoints: ({ playerName, points }) => `+${points} pontos para quem acertou: ${playerName}!`,
+          correctWithGuesserPoints: ({ actorName, actorPoints, guesserName, guesserPoints }) => `+${actorPoints} para ${actorName} · +${guesserPoints} para ${guesserName}`,
+          chooseGuesserPoints: ({ points }) => `Selecione quem acertou para ganhar +${points} pontos.`,
+          penaltySkip: ({ points }) => `-${points} pontos (erro/skip)`,
+          penaltyApplied: ({ playerName, points }) => `-${points} pontos para ${playerName}.`,
+          timeUpPenalty: ({ playerName, points }) => `Tempo esgotado. -${points} pontos para ${playerName}.`,
           timeUpNoPoints: 'O tempo acabou! Sem pontos.',
           skippedNoPoints: 'Palavra pulada. Sem pontos.',
+          scoreManagerContext: ({ round, total, playerName }) => `Rodada ${round} de ${total} · Vez de ${playerName}`,
           roundSummary: ({ roundDone, remaining }) => `Fim da Rodada ${roundDone} — ${remaining} rodada${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''}!`,
           wordAdded: ({ word, difficulty }) => `✅ "${word}" adicionada (${difficulty})!`,
           teamAdded: ({ name, teamName }) => `✅ ${name} em ${teamName}!`,
@@ -604,7 +631,17 @@
           correctTitle: 'Correct!',
           wrongTitle: 'Wrong!',
           timeUpTitle: 'Time is up!',
+          guesserLabel: 'Who guessed it?',
+          guesserPlaceholder: 'Select who guessed it',
           nextTurn: '➡️ Next turn'
+        },
+        scoreManager: {
+          manageButton: '⚖️ Manage',
+          title: 'Manage scoreboard',
+          backToGame: '← Back to game',
+          currentScoreTitle: 'Current score',
+          resetInputs: '↺ Reload',
+          saveAndReturn: 'Save and return'
         },
         score: {
           title: '🏆 Scoreboard',
@@ -651,6 +688,14 @@
           roundTimeSub: 'Seconds to guess',
           penaltyLabel: 'Skip Penalty',
           penaltySub: '−10 points when skipping',
+          correctPointsLabel: 'Points for a correct answer',
+          correctPointsSub: 'Points for the player acting or drawing',
+          wrongPenaltyPointsLabel: 'Points lost for a mistake',
+          wrongPenaltyPointsSub: 'Subtracts points when the player is wrong or time runs out',
+          ffaGuesserPointsLabel: 'Points for the guesser (FFA)',
+          ffaGuesserPointsSub: 'In Free for All, choose who guessed after each correct answer',
+          ffaGuesserPointsValueLabel: 'Guesser points',
+          ffaGuesserPointsValueSub: 'Initial default value: 5 points',
           generalTitle: '⚙️ General Settings',
           languageLabel: 'Language',
           languageSub: 'Changes the interface and the content available in the game',
@@ -714,11 +759,17 @@
         dynamic: {
           roundDisplay: ({ current, total }) => `Round ${current} of ${total}`,
           diffCount: ({ difficulty, count }) => `${difficulty} · ${count} available words`,
-          correctTeamPoints: ({ teamName }) => `+10 points for ${teamName}!`,
-          correctPlayerPoints: ({ playerName }) => `+10 points for ${playerName}!`,
-          penaltySkip: '-10 points (skip penalty)',
+          correctTeamPoints: ({ teamName, points }) => `+${points} points for ${teamName}!`,
+          correctPlayerPoints: ({ playerName, points }) => `+${points} points for ${playerName}!`,
+          guesserPoints: ({ playerName, points }) => `+${points} points for the guesser: ${playerName}!`,
+          correctWithGuesserPoints: ({ actorName, actorPoints, guesserName, guesserPoints }) => `+${actorPoints} for ${actorName} · +${guesserPoints} for ${guesserName}`,
+          chooseGuesserPoints: ({ points }) => `Select who guessed it to receive +${points} points.`,
+          penaltySkip: ({ points }) => `-${points} points (wrong/skip)`,
+          penaltyApplied: ({ playerName, points }) => `-${points} points for ${playerName}.`,
+          timeUpPenalty: ({ playerName, points }) => `Time is up. -${points} points for ${playerName}.`,
           timeUpNoPoints: 'Time is up! No points.',
           skippedNoPoints: 'Word skipped. No points.',
+          scoreManagerContext: ({ round, total, playerName }) => `Round ${round} of ${total} · ${playerName}'s turn`,
           roundSummary: ({ roundDone, remaining }) => `End of Round ${roundDone} — ${remaining} round${remaining !== 1 ? 's' : ''} remaining!`,
           wordAdded: ({ word, difficulty }) => `✅ "${word}" added (${difficulty})!`,
           teamAdded: ({ name, teamName }) => `✅ ${name} joined ${teamName}!`,
@@ -953,7 +1004,17 @@
           correctTitle: '¡Acertó!',
           wrongTitle: '¡Falló!',
           timeUpTitle: '¡Tiempo agotado!',
+          guesserLabel: '¿Quién acertó?',
+          guesserPlaceholder: 'Selecciona quién adivinó',
           nextTurn: '➡️ Siguiente turno'
+        },
+        scoreManager: {
+          manageButton: '⚖️ Gestionar',
+          title: 'Gestionar marcador',
+          backToGame: '← Volver al juego',
+          currentScoreTitle: 'Marcador actual',
+          resetInputs: '↺ Recargar',
+          saveAndReturn: 'Guardar y volver'
         },
         score: {
           title: '🏆 Marcador',
@@ -1000,6 +1061,14 @@
           roundTimeSub: 'Segundos para adivinar',
           penaltyLabel: 'Penalización por Skip',
           penaltySub: '−10 puntos al saltar',
+          correctPointsLabel: 'Puntos por acierto',
+          correctPointsSub: 'Puntos para quien hace la mímica o dibuja',
+          wrongPenaltyPointsLabel: 'Puntos perdidos por error',
+          wrongPenaltyPointsSub: 'Descuenta puntos cuando el jugador falla o se acaba el tiempo',
+          ffaGuesserPointsLabel: 'Puntos para quien adivina (FFA)',
+          ffaGuesserPointsSub: 'En Todos contra todos, elige quién acertó tras cada acierto',
+          ffaGuesserPointsValueLabel: 'Puntos de quien acertó',
+          ffaGuesserPointsValueSub: 'Valor inicial predeterminado: 5 puntos',
           generalTitle: '⚙️ Configuración General',
           languageLabel: 'Idioma',
           languageSub: 'Cambia la interfaz y el contenido disponible en el juego',
@@ -1063,11 +1132,17 @@
         dynamic: {
           roundDisplay: ({ current, total }) => `Ronda ${current} de ${total}`,
           diffCount: ({ difficulty, count }) => `${difficulty} · ${count} palabras disponibles`,
-          correctTeamPoints: ({ teamName }) => `+10 puntos para ${teamName}!`,
-          correctPlayerPoints: ({ playerName }) => `+10 puntos para ${playerName}!`,
-          penaltySkip: '-10 puntos (penalización por skip)',
+          correctTeamPoints: ({ teamName, points }) => `+${points} puntos para ${teamName}!`,
+          correctPlayerPoints: ({ playerName, points }) => `+${points} puntos para ${playerName}!`,
+          guesserPoints: ({ playerName, points }) => `+${points} puntos para quien acertó: ${playerName}!`,
+          correctWithGuesserPoints: ({ actorName, actorPoints, guesserName, guesserPoints }) => `+${actorPoints} para ${actorName} · +${guesserPoints} para ${guesserName}`,
+          chooseGuesserPoints: ({ points }) => `Selecciona quién acertó para ganar +${points} puntos.`,
+          penaltySkip: ({ points }) => `-${points} puntos (error/skip)`,
+          penaltyApplied: ({ playerName, points }) => `-${points} puntos para ${playerName}.`,
+          timeUpPenalty: ({ playerName, points }) => `Tiempo agotado. -${points} puntos para ${playerName}.`,
           timeUpNoPoints: '¡Se acabó el tiempo! Sin puntos.',
           skippedNoPoints: 'Palabra saltada. Sin puntos.',
+          scoreManagerContext: ({ round, total, playerName }) => `Ronda ${round} de ${total} · Turno de ${playerName}`,
           roundSummary: ({ roundDone, remaining }) => `Fin de la Ronda ${roundDone} — ${remaining} ronda${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''}!`,
           wordAdded: ({ word, difficulty }) => `✅ "${word}" añadida (${difficulty})!`,
           teamAdded: ({ name, teamName }) => `✅ ${name} entró en ${teamName}!`,
@@ -1299,7 +1374,22 @@
         eraserThin: 'Petite gomme',
         clear: 'Effacer le canvas'
       },
-      result: { correctTitle: 'Correct !', wrongTitle: 'Raté !', timeUpTitle: 'Temps écoulé !', nextTurn: '➡️ Tour suivant' },
+      result: {
+        correctTitle: 'Correct !',
+        wrongTitle: 'Raté !',
+        timeUpTitle: 'Temps écoulé !',
+        guesserLabel: 'Qui a deviné ?',
+        guesserPlaceholder: 'Sélectionnez qui a deviné',
+        nextTurn: '➡️ Tour suivant'
+      },
+      scoreManager: {
+        manageButton: '⚖️ Gérer',
+        title: 'Gérer le score',
+        backToGame: '← Retour au jeu',
+        currentScoreTitle: 'Score actuel',
+        resetInputs: '↺ Recharger',
+        saveAndReturn: 'Enregistrer et revenir'
+      },
       score: { title: '🏆 Score', nextRoundTitle: '🎊 Prochaine manche' },
       final: { winnerLabel: 'GAGNANT !', resultTitle: '📊 Résultat final', playAgain: '🎮 Rejouer', tie: 'ÉGALITÉ !' },
       wordbank: {
@@ -1337,6 +1427,14 @@
         roundTimeSub: 'Secondes pour deviner',
         penaltyLabel: 'Pénalité de skip',
         penaltySub: '−10 points en passant',
+        correctPointsLabel: 'Points par bonne réponse',
+        correctPointsSub: 'Points pour celui qui mime ou dessine',
+        wrongPenaltyPointsLabel: 'Points perdus en cas d’erreur',
+        wrongPenaltyPointsSub: 'Retire des points si le joueur se trompe ou si le temps expire',
+        ffaGuesserPointsLabel: 'Points pour celui qui devine (FFA)',
+        ffaGuesserPointsSub: 'En chacun pour soi, choisissez qui a deviné après chaque bonne réponse',
+        ffaGuesserPointsValueLabel: 'Points de celui qui a deviné',
+        ffaGuesserPointsValueSub: 'Valeur initiale par défaut : 5 points',
         generalTitle: '⚙️ Paramètres généraux',
         languageLabel: 'Langue',
         languageSub: 'Change l’interface et le contenu disponible dans le jeu',
@@ -1384,11 +1482,17 @@
       dynamic: {
         roundDisplay: ({ current, total }) => `Manche ${current} sur ${total}`,
         diffCount: ({ difficulty, count }) => `${difficulty} · ${count} mots disponibles`,
-        correctTeamPoints: ({ teamName }) => `+10 points pour ${teamName} !`,
-        correctPlayerPoints: ({ playerName }) => `+10 points pour ${playerName} !`,
-        penaltySkip: '-10 points (pénalité de skip)',
+        correctTeamPoints: ({ teamName, points }) => `+${points} points pour ${teamName} !`,
+        correctPlayerPoints: ({ playerName, points }) => `+${points} points pour ${playerName} !`,
+        guesserPoints: ({ playerName, points }) => `+${points} points pour celui qui a deviné : ${playerName} !`,
+        correctWithGuesserPoints: ({ actorName, actorPoints, guesserName, guesserPoints }) => `+${actorPoints} pour ${actorName} · +${guesserPoints} pour ${guesserName}`,
+        chooseGuesserPoints: ({ points }) => `Sélectionnez qui a deviné pour gagner +${points} points.`,
+        penaltySkip: ({ points }) => `-${points} points (erreur/skip)`,
+        penaltyApplied: ({ playerName, points }) => `-${points} points pour ${playerName}.`,
+        timeUpPenalty: ({ playerName, points }) => `Temps écoulé. -${points} points pour ${playerName}.`,
         timeUpNoPoints: 'Temps écoulé ! Aucun point.',
         skippedNoPoints: 'Mot passé. Aucun point.',
+        scoreManagerContext: ({ round, total, playerName }) => `Manche ${round} sur ${total} · Tour de ${playerName}`,
         roundSummary: ({ roundDone, remaining }) => `Fin de la manche ${roundDone} — ${remaining} manche${remaining !== 1 ? 's' : ''} restante${remaining !== 1 ? 's' : ''} !`,
         wordAdded: ({ word, difficulty }) => `✅ "${word}" ajouté (${difficulty}) !`,
         teamAdded: ({ name, teamName }) => `✅ ${name} rejoint ${teamName} !`,
@@ -1603,7 +1707,22 @@
         eraserThin: 'Dünner Radierer',
         clear: 'Canvas leeren'
       },
-      result: { correctTitle: 'Richtig!', wrongTitle: 'Falsch!', timeUpTitle: 'Zeit abgelaufen!', nextTurn: '➡️ Nächster Zug' },
+      result: {
+        correctTitle: 'Richtig!',
+        wrongTitle: 'Falsch!',
+        timeUpTitle: 'Zeit abgelaufen!',
+        guesserLabel: 'Wer hat geraten?',
+        guesserPlaceholder: 'Wähle aus, wer geraten hat',
+        nextTurn: '➡️ Nächster Zug'
+      },
+      scoreManager: {
+        manageButton: '⚖️ Verwalten',
+        title: 'Punktestand verwalten',
+        backToGame: '← Zurück zum Spiel',
+        currentScoreTitle: 'Aktueller Punktestand',
+        resetInputs: '↺ Neu laden',
+        saveAndReturn: 'Speichern und zurück'
+      },
       score: { title: '🏆 Punktestand', nextRoundTitle: '🎊 Nächste Runde' },
       final: { winnerLabel: 'GEWINNER!', resultTitle: '📊 Endergebnis', playAgain: '🎮 Nochmals spielen', tie: 'UNENTSCHIEDEN!' },
       wordbank: {
@@ -1641,6 +1760,14 @@
         roundTimeSub: 'Sekunden zum Raten',
         penaltyLabel: 'Skip-Strafe',
         penaltySub: '−10 Punkte beim Überspringen',
+        correctPointsLabel: 'Punkte für richtig',
+        correctPointsSub: 'Punkte für den Spieler, der darstellt oder zeichnet',
+        wrongPenaltyPointsLabel: 'Punktverlust bei Fehler',
+        wrongPenaltyPointsSub: 'Zieht Punkte ab, wenn der Spieler falsch liegt oder die Zeit abläuft',
+        ffaGuesserPointsLabel: 'Punkte für den Ratenden (FFA)',
+        ffaGuesserPointsSub: 'In Jeder gegen jeden nach jedem Treffer auswählen, wer geraten hat',
+        ffaGuesserPointsValueLabel: 'Punkte für den Ratenden',
+        ffaGuesserPointsValueSub: 'Anfangsstandard: 5 Punkte',
         generalTitle: '⚙️ Allgemeine Einstellungen',
         languageLabel: 'Sprache',
         languageSub: 'Ändert die Oberfläche und die im Spiel verfügbaren Inhalte',
@@ -1688,11 +1815,17 @@
       dynamic: {
         roundDisplay: ({ current, total }) => `Runde ${current} von ${total}`,
         diffCount: ({ difficulty, count }) => `${difficulty} · ${count} Wörter verfügbar`,
-        correctTeamPoints: ({ teamName }) => `+10 Punkte für ${teamName}!`,
-        correctPlayerPoints: ({ playerName }) => `+10 Punkte für ${playerName}!`,
-        penaltySkip: '-10 Punkte (Skip-Strafe)',
+        correctTeamPoints: ({ teamName, points }) => `+${points} Punkte für ${teamName}!`,
+        correctPlayerPoints: ({ playerName, points }) => `+${points} Punkte für ${playerName}!`,
+        guesserPoints: ({ playerName, points }) => `+${points} Punkte für den Ratenden: ${playerName}!`,
+        correctWithGuesserPoints: ({ actorName, actorPoints, guesserName, guesserPoints }) => `+${actorPoints} für ${actorName} · +${guesserPoints} für ${guesserName}`,
+        chooseGuesserPoints: ({ points }) => `Wähle aus, wer geraten hat, um +${points} Punkte zu erhalten.`,
+        penaltySkip: ({ points }) => `-${points} Punkte (falsch/skip)`,
+        penaltyApplied: ({ playerName, points }) => `-${points} Punkte für ${playerName}.`,
+        timeUpPenalty: ({ playerName, points }) => `Zeit abgelaufen. -${points} Punkte für ${playerName}.`,
         timeUpNoPoints: 'Zeit abgelaufen! Keine Punkte.',
         skippedNoPoints: 'Wort übersprungen. Keine Punkte.',
+        scoreManagerContext: ({ round, total, playerName }) => `Runde ${round} von ${total} · ${playerName} ist dran`,
         roundSummary: ({ roundDone, remaining }) => `Ende von Runde ${roundDone} — ${remaining} Runde${remaining !== 1 ? 'n' : ''} übrig!`,
         wordAdded: ({ word, difficulty }) => `✅ "${word}" hinzugefügt (${difficulty})!`,
         teamAdded: ({ name, teamName }) => `✅ ${name} ist in ${teamName}!`,
@@ -1907,7 +2040,22 @@
         eraserThin: 'Gomma piccola',
         clear: 'Pulisci canvas'
       },
-      result: { correctTitle: 'Corretto!', wrongTitle: 'Sbagliato!', timeUpTitle: 'Tempo scaduto!', nextTurn: '➡️ Prossimo turno' },
+      result: {
+        correctTitle: 'Corretto!',
+        wrongTitle: 'Sbagliato!',
+        timeUpTitle: 'Tempo scaduto!',
+        guesserLabel: 'Chi ha indovinato?',
+        guesserPlaceholder: 'Seleziona chi ha indovinato',
+        nextTurn: '➡️ Prossimo turno'
+      },
+      scoreManager: {
+        manageButton: '⚖️ Gestisci',
+        title: 'Gestisci punteggio',
+        backToGame: '← Torna al gioco',
+        currentScoreTitle: 'Punteggio attuale',
+        resetInputs: '↺ Ricarica',
+        saveAndReturn: 'Salva e torna'
+      },
       score: { title: '🏆 Punteggio', nextRoundTitle: '🎊 Prossimo turno' },
       final: { winnerLabel: 'VINCITORE!', resultTitle: '📊 Risultato finale', playAgain: '🎮 Gioca ancora', tie: 'PAREGGIO!' },
       wordbank: {
@@ -1945,6 +2093,14 @@
         roundTimeSub: 'Secondi per indovinare',
         penaltyLabel: 'Penalità per skip',
         penaltySub: '−10 punti quando si passa',
+        correctPointsLabel: 'Punti per risposta corretta',
+        correctPointsSub: 'Punti per chi fa la mimica o disegna',
+        wrongPenaltyPointsLabel: 'Punti persi per errore',
+        wrongPenaltyPointsSub: 'Sottrae punti quando il giocatore sbaglia o finisce il tempo',
+        ffaGuesserPointsLabel: 'Punti per chi indovina (FFA)',
+        ffaGuesserPointsSub: 'In Tutti contro tutti, scegli chi ha indovinato dopo ogni risposta corretta',
+        ffaGuesserPointsValueLabel: 'Punti di chi ha indovinato',
+        ffaGuesserPointsValueSub: 'Valore iniziale predefinito: 5 punti',
         generalTitle: '⚙️ Impostazioni generali',
         languageLabel: 'Lingua',
         languageSub: 'Cambia l’interfaccia e i contenuti disponibili nel gioco',
@@ -1992,11 +2148,17 @@
       dynamic: {
         roundDisplay: ({ current, total }) => `Turno ${current} di ${total}`,
         diffCount: ({ difficulty, count }) => `${difficulty} · ${count} parole disponibili`,
-        correctTeamPoints: ({ teamName }) => `+10 punti per ${teamName}!`,
-        correctPlayerPoints: ({ playerName }) => `+10 punti per ${playerName}!`,
-        penaltySkip: '-10 punti (penalità per skip)',
+        correctTeamPoints: ({ teamName, points }) => `+${points} punti per ${teamName}!`,
+        correctPlayerPoints: ({ playerName, points }) => `+${points} punti per ${playerName}!`,
+        guesserPoints: ({ playerName, points }) => `+${points} punti per chi ha indovinato: ${playerName}!`,
+        correctWithGuesserPoints: ({ actorName, actorPoints, guesserName, guesserPoints }) => `+${actorPoints} per ${actorName} · +${guesserPoints} per ${guesserName}`,
+        chooseGuesserPoints: ({ points }) => `Seleziona chi ha indovinato per ricevere +${points} punti.`,
+        penaltySkip: ({ points }) => `-${points} punti (errore/skip)`,
+        penaltyApplied: ({ playerName, points }) => `-${points} punti per ${playerName}.`,
+        timeUpPenalty: ({ playerName, points }) => `Tempo scaduto. -${points} punti per ${playerName}.`,
         timeUpNoPoints: 'Tempo scaduto! Nessun punto.',
         skippedNoPoints: 'Parola saltata. Nessun punto.',
+        scoreManagerContext: ({ round, total, playerName }) => `Turno ${round} di ${total} · Tocca a ${playerName}`,
         roundSummary: ({ roundDone, remaining }) => `Fine del turno ${roundDone} — ${remaining} turn${remaining !== 1 ? 'i' : 'o'} restant${remaining !== 1 ? 'i' : 'e'}!`,
         wordAdded: ({ word, difficulty }) => `✅ "${word}" aggiunta (${difficulty})!`,
         teamAdded: ({ name, teamName }) => `✅ ${name} in ${teamName}!`,
@@ -3478,6 +3640,32 @@
       return `${count} ${t(count === 1 ? singularKey : pluralKey)}`;
     }
 
+    function parsePointValue(value, fallback = 0) {
+      const parsed = Number.parseInt(value, 10);
+      return Number.isFinite(parsed) ? Math.max(0, Math.min(999, parsed)) : fallback;
+    }
+
+    function getConfiguredCorrectPoints() {
+      return parsePointValue(document.getElementById('correct-points-input')?.value, DEFAULT_CORRECT_POINTS);
+    }
+
+    function getConfiguredWrongPenaltyPoints() {
+      return parsePointValue(document.getElementById('wrong-points-input')?.value, DEFAULT_WRONG_PENALTY_POINTS);
+    }
+
+    function isFfaGuesserPointsEnabled() {
+      return document.getElementById('toggle-ffa-guesser-points')?.checked !== false;
+    }
+
+    function getConfiguredFfaGuesserPoints() {
+      return parsePointValue(document.getElementById('ffa-guesser-points-input')?.value, DEFAULT_FFA_GUESSER_POINTS);
+    }
+
+    function addScore(scoreKey, delta) {
+      if (!scoreKey || !Number.isFinite(delta) || delta === 0) return;
+      gameState.scores[scoreKey] = (gameState.scores[scoreKey] || 0) + delta;
+    }
+
     function getQuickGamePlayerCount(config) {
       return config.mode === 'teams'
         ? (config.teams.A?.length || 0) + (config.teams.B?.length || 0)
@@ -3599,6 +3787,7 @@
     let wbDiff = 'easy';
     let wbCat = 'objects';
     let wbPreviewPackId = '';
+    let resultAwardState = null;
 
     // ============================================================
     // STARS
@@ -3660,6 +3849,8 @@
       refreshScoreScreenCopy();
       refreshFinalScreenCopy();
       renderScoreMini();
+      if (document.getElementById('screen-score-manager')?.classList.contains('active')) renderScoreManager();
+      updateScoreManagerButton();
       updateTimerLabel(document.getElementById('timer-slider').value);
       updateFullscreenButton();
     }
@@ -4744,7 +4935,10 @@
         navigationSoundEnabled: document.getElementById('toggle-navigation-sound').checked,
         gameroomMusicEnabled: document.getElementById('toggle-gameroom-music').checked,
         gameplayMusicEnabled: document.getElementById('toggle-gameplay-music').checked,
-        penaltyEnabled: document.getElementById('toggle-penalty').checked,
+        correctPoints: getConfiguredCorrectPoints(),
+        wrongPenaltyPoints: getConfiguredWrongPenaltyPoints(),
+        ffaGuesserPointsEnabled: isFfaGuesserPointsEnabled(),
+        ffaGuesserPoints: getConfiguredFfaGuesserPoints(),
         shuffleEnabled: document.getElementById('toggle-shuffle').checked,
         theme: document.getElementById('theme-select').value || 'cosmic',
         language: document.getElementById('language-select').value || DEFAULT_LANGUAGE
@@ -4773,7 +4967,10 @@
         navigationSoundEnabled: true,
         gameroomMusicEnabled: true,
         gameplayMusicEnabled: true,
-        penaltyEnabled: false,
+        correctPoints: DEFAULT_CORRECT_POINTS,
+        wrongPenaltyPoints: DEFAULT_WRONG_PENALTY_POINTS,
+        ffaGuesserPointsEnabled: true,
+        ffaGuesserPoints: DEFAULT_FFA_GUESSER_POINTS,
         shuffleEnabled: true,
         theme: 'cosmic',
         language: DEFAULT_LANGUAGE
@@ -4792,7 +4989,10 @@
       document.getElementById('toggle-navigation-sound').checked = Boolean(saved.navigationSoundEnabled);
       document.getElementById('toggle-gameroom-music').checked = Boolean(saved.gameroomMusicEnabled);
       document.getElementById('toggle-gameplay-music').checked = Boolean(saved.gameplayMusicEnabled);
-      document.getElementById('toggle-penalty').checked = Boolean(saved.penaltyEnabled);
+      document.getElementById('correct-points-input').value = parsePointValue(saved.correctPoints, DEFAULT_CORRECT_POINTS);
+      document.getElementById('wrong-points-input').value = parsePointValue(saved.wrongPenaltyPoints, DEFAULT_WRONG_PENALTY_POINTS);
+      document.getElementById('toggle-ffa-guesser-points').checked = saved.ffaGuesserPointsEnabled !== false;
+      document.getElementById('ffa-guesser-points-input').value = parsePointValue(saved.ffaGuesserPoints, DEFAULT_FFA_GUESSER_POINTS);
       document.getElementById('toggle-shuffle').checked = Boolean(saved.shuffleEnabled);
       document.getElementById('theme-select').value = applyTheme(saved.theme);
       document.getElementById('language-select').value = SUPPORTED_LANGUAGES.includes(saved.language) ? saved.language : DEFAULT_LANGUAGE;
@@ -5212,6 +5412,12 @@
       }
     }
 
+    function updateScoreManagerButton() {
+      const button = document.getElementById('score-manager-open-btn');
+      if (!button) return;
+      button.classList.toggle('hidden', !(gameState.players.length && gameState.phase === 'preparing'));
+    }
+
     function refreshCurrentTurnCopy() {
       if (gameState.players.length) {
         document.getElementById('round-display').textContent = t('dynamic.roundDisplay', {
@@ -5226,6 +5432,7 @@
         document.getElementById('word-display').textContent = gameState.currentWord.word;
       }
       document.getElementById('btn-toggle-word').textContent = gameState.wordVisible ? t('game.hideWord') : t('game.showWord');
+      updateScoreManagerButton();
     }
 
     function initTurn() {
@@ -5251,6 +5458,7 @@
       refreshGameTypeUI();
       syncDrawingBoardVisibility();
       renderScoreMini();
+      updateScoreManagerButton();
       broadcastHostGameState();
     }
 
@@ -5259,6 +5467,7 @@
     // ============================================================
     function revealWord() {
       gameState.phase = 'memorizing';
+      updateScoreManagerButton();
       gameState.currentWord = pickWord();
       document.getElementById('mem-word-display').textContent = gameState.currentWord.word;
       document.getElementById('hint-text').textContent = getCategoryLabel(gameState.currentWord.cat, { singular: true, withIcon: true });
@@ -5299,6 +5508,7 @@
           document.getElementById('memorize-state').classList.add('hidden');
           document.getElementById('playing-state').classList.remove('hidden');
           gameState.phase = 'playing';
+          updateScoreManagerButton();
           syncDrawingBoardVisibility({ reset: true });
           broadcastHostGameState({ includeDrawingSnapshot: true });
           playAlertBeep(880);
@@ -5636,40 +5846,129 @@
     // ============================================================
     // RESULT
     // ============================================================
+    function resetResultGuesserPicker() {
+      resultAwardState = null;
+      const picker = document.getElementById('resultGuesserPicker');
+      const select = document.getElementById('result-guesser-select');
+      const help = document.getElementById('resultGuesserHelp');
+      const nextButton = document.getElementById('result-next-turn-btn');
+      picker?.classList.add('hidden');
+      if (select) select.innerHTML = '';
+      if (help) help.textContent = '';
+      if (nextButton) nextButton.disabled = false;
+    }
+
+    function getFfaGuesserCandidates(actorName) {
+      return gameState.players
+        .map(player => player.name || player)
+        .filter(name => name && name !== actorName);
+    }
+
+    function renderResultGuesserPicker(actorName, actorPoints) {
+      const guesserPoints = getConfiguredFfaGuesserPoints();
+      if (gameState.mode !== 'ffa' || !isFfaGuesserPointsEnabled() || guesserPoints <= 0) return;
+      const candidates = getFfaGuesserCandidates(actorName);
+      if (!candidates.length) return;
+
+      resultAwardState = {
+        actorName,
+        actorPoints,
+        guesserPoints,
+        selectedName: '',
+        requiresGuesser: true
+      };
+
+      const picker = document.getElementById('resultGuesserPicker');
+      const select = document.getElementById('result-guesser-select');
+      const help = document.getElementById('resultGuesserHelp');
+      const nextButton = document.getElementById('result-next-turn-btn');
+      if (!picker || !select || !help) return;
+
+      select.innerHTML = '';
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = t('result.guesserPlaceholder');
+      select.appendChild(placeholder);
+      candidates.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+      help.textContent = t('dynamic.chooseGuesserPoints', { points: guesserPoints });
+      picker.classList.remove('hidden');
+      if (nextButton) nextButton.disabled = true;
+    }
+
+    function applyResultGuesserSelection(nextName) {
+      if (!resultAwardState) return;
+      const { selectedName, guesserPoints, actorName, actorPoints } = resultAwardState;
+      if (selectedName === nextName) return;
+      if (selectedName) addScore(selectedName, -guesserPoints);
+      if (nextName) addScore(nextName, guesserPoints);
+      resultAwardState.selectedName = nextName;
+
+      const sub = document.getElementById('resultSub');
+      const help = document.getElementById('resultGuesserHelp');
+      const nextButton = document.getElementById('result-next-turn-btn');
+      if (nextName) {
+        sub.textContent = t('dynamic.correctWithGuesserPoints', {
+          actorName,
+          actorPoints,
+          guesserName: nextName,
+          guesserPoints
+        });
+        if (help) help.textContent = t('dynamic.guesserPoints', { playerName: nextName, points: guesserPoints });
+        if (nextButton) nextButton.disabled = false;
+      } else {
+        sub.textContent = t('dynamic.correctPlayerPoints', { playerName: actorName, points: actorPoints });
+        if (help) help.textContent = t('dynamic.chooseGuesserPoints', { points: guesserPoints });
+        if (nextButton) nextButton.disabled = true;
+      }
+      renderScoreMini();
+      broadcastHostGameState();
+    }
+
     function markResult(correct, timeUp = false) {
       clearInterval(gameState.timerInterval);
       clearInterval(gameState.memInterval);
       document.getElementById('memorize-state').classList.add('hidden');
+      resetResultGuesserPicker();
       const player = gameState.players[gameState.currentPlayerIdx];
       const playerName = player.name || player;
       const emoji = document.getElementById('resultEmoji');
       const title = document.getElementById('resultTitle');
       const sub = document.getElementById('resultSub');
+      const correctPoints = getConfiguredCorrectPoints();
+      const wrongPenaltyPoints = getConfiguredWrongPenaltyPoints();
 
       if (correct) {
         if (gameState.mode === 'teams') {
-          gameState.scores['team' + player.team] = (gameState.scores['team' + player.team] || 0) + 10;
-          gameState.scores[playerName] = (gameState.scores[playerName] || 0) + 10;
+          addScore('team' + player.team, correctPoints);
+          addScore(playerName, correctPoints);
         } else {
-          gameState.scores[playerName] = (gameState.scores[playerName] || 0) + 10;
+          addScore(playerName, correctPoints);
         }
 
         emoji.textContent = '🎉';
         title.textContent = t('result.correctTitle');
         title.style.color = 'var(--accent3)';
         sub.textContent = gameState.mode === 'teams'
-          ? t('dynamic.correctTeamPoints', { teamName: gameState.teamNames[player.team] || getDefaultTeamName(player.team) })
-          : t('dynamic.correctPlayerPoints', { playerName });
+          ? t('dynamic.correctTeamPoints', { teamName: gameState.teamNames[player.team] || getDefaultTeamName(player.team), points: correctPoints })
+          : t('dynamic.correctPlayerPoints', { playerName, points: correctPoints });
+        renderResultGuesserPicker(playerName, correctPoints);
         launchConfetti();
       } else {
-        if (document.getElementById('toggle-penalty').checked && !timeUp) {
+        if (wrongPenaltyPoints > 0) {
           if (gameState.mode === 'teams') {
-            gameState.scores['team' + player.team] = Math.max(0, (gameState.scores['team' + player.team] || 0) - 10);
-            gameState.scores[playerName] = Math.max(0, (gameState.scores[playerName] || 0) - 10);
+            addScore('team' + player.team, -wrongPenaltyPoints);
+            addScore(playerName, -wrongPenaltyPoints);
           } else {
-            gameState.scores[playerName] = Math.max(0, (gameState.scores[playerName] || 0) - 10);
+            addScore(playerName, -wrongPenaltyPoints);
           }
-          sub.textContent = t('dynamic.penaltySkip');
+          sub.textContent = timeUp
+            ? t('dynamic.timeUpPenalty', { playerName, points: wrongPenaltyPoints })
+            : t('dynamic.penaltyApplied', { playerName, points: wrongPenaltyPoints });
         } else {
           sub.textContent = timeUp ? t('dynamic.timeUpNoPoints') : t('dynamic.skippedNoPoints');
         }
@@ -5679,13 +5978,20 @@
       }
 
       gameState.phase = 'score';
+      updateScoreManagerButton();
       syncDrawingBoardVisibility();
+      renderScoreMini();
       broadcastHostGameState();
       document.getElementById('resultOverlay').classList.add('show');
     }
 
     function nextTurn() {
+      if (resultAwardState?.requiresGuesser && !resultAwardState.selectedName) {
+        showNotif(t('dynamic.chooseGuesserPoints', { points: resultAwardState.guesserPoints }), 'var(--accent2)', 'var(--text)');
+        return;
+      }
       document.getElementById('resultOverlay').classList.remove('show');
+      resetResultGuesserPicker();
       gameState.turnsDone++;
       if (gameState.turnsDone >= gameState.totalTurns) {
         showFinalScore();
@@ -5752,6 +6058,100 @@
         div.innerHTML = `<div class="rank-badge">${ranks[index] || (index + 1)}</div><div class="score-name" style="flex:1;${color ? 'color:' + color : ''}">${entry.name}</div><div class="score-pts">${entry.pts} <span style="font-size:0.8rem;color:var(--text3)">${t('common.pointsShort')}</span></div>`;
         cont.appendChild(div);
       });
+    }
+
+    function getScoreManagerEntries() {
+      if (gameState.mode === 'teams') {
+        return [
+          { key: 'teamA', name: `🔴 ${gameState.teamNames.A || getDefaultTeamName('A')}`, team: 'A' },
+          { key: 'teamB', name: `🔵 ${gameState.teamNames.B || getDefaultTeamName('B')}`, team: 'B' }
+        ];
+      }
+      return gameState.players.map(player => {
+        const name = player.name || player;
+        return { key: name, name };
+      });
+    }
+
+    function renderScoreManager() {
+      const container = document.getElementById('score-manager-list');
+      if (!container) return;
+      container.innerHTML = '';
+      const currentPlayer = gameState.players[gameState.currentPlayerIdx];
+      const currentName = currentPlayer ? (currentPlayer.name || currentPlayer) : '--';
+      const context = document.getElementById('score-manager-context');
+      if (context) {
+        context.textContent = t('dynamic.scoreManagerContext', {
+          round: gameState.currentRound,
+          total: gameState.totalRounds,
+          playerName: currentName
+        });
+      }
+
+      getScoreManagerEntries().forEach(entry => {
+        const row = document.createElement('div');
+        row.className = 'score-row score-row-edit';
+        const color = entry.team === 'A' ? 'var(--team1)' : entry.team === 'B' ? 'var(--team2)' : '';
+        const name = document.createElement('div');
+        name.className = 'score-name';
+        name.textContent = entry.name;
+        if (color) name.style.color = color;
+        const controls = document.createElement('div');
+        controls.className = 'score-manager-controls';
+        const decrement = document.createElement('button');
+        decrement.className = 'btn btn-ghost btn-sm';
+        decrement.dataset.action = 'adjust-score-manager';
+        decrement.dataset.scoreKey = entry.key;
+        decrement.dataset.scoreDelta = '-1';
+        decrement.textContent = '−';
+        const input = document.createElement('input');
+        input.className = 'inp score-manager-input';
+        input.type = 'number';
+        input.step = '1';
+        input.value = String(gameState.scores[entry.key] || 0);
+        input.dataset.scoreManagerInput = entry.key;
+        const increment = document.createElement('button');
+        increment.className = 'btn btn-ghost btn-sm';
+        increment.dataset.action = 'adjust-score-manager';
+        increment.dataset.scoreKey = entry.key;
+        increment.dataset.scoreDelta = '1';
+        increment.textContent = '+';
+        controls.append(decrement, input, increment);
+        row.append(name, controls);
+        container.appendChild(row);
+      });
+    }
+
+    function openScoreManager() {
+      if (gameState.phase !== 'preparing' || !gameState.players.length) return;
+      renderScoreManager();
+      goTo('score-manager');
+    }
+
+    function closeScoreManager() {
+      goTo('game');
+      updateScoreManagerButton();
+    }
+
+    function resetScoreManagerInputs() {
+      renderScoreManager();
+    }
+
+    function adjustScoreManagerInput(scoreKey, delta) {
+      const input = Array.from(document.querySelectorAll('[data-score-manager-input]'))
+        .find(item => item.dataset.scoreManagerInput === scoreKey);
+      if (!input) return;
+      input.value = String((Number.parseInt(input.value, 10) || 0) + delta);
+    }
+
+    function saveScoreManager() {
+      document.querySelectorAll('[data-score-manager-input]').forEach(input => {
+        const key = input.dataset.scoreManagerInput;
+        gameState.scores[key] = Number.parseInt(input.value, 10) || 0;
+      });
+      renderScoreMini();
+      broadcastHostGameState();
+      closeScoreManager();
     }
 
     function refreshScoreScreenCopy() {
@@ -6122,6 +6522,7 @@
         clearInterval(gameState.timerInterval);
         clearInterval(gameState.memInterval);
         document.getElementById('resultOverlay').classList.remove('show');
+        resetResultGuesserPicker();
         const prevDiff = gameState.difficulty;
         const prevGameType = gameState.gameType;
         gameState = {
@@ -6193,7 +6594,7 @@
     }
 
     function handleAction(button) {
-      const { action, team, index, wordCategory, wordDiff, wordPack, platform, packId } = button.dataset;
+      const { action, team, index, wordCategory, wordDiff, wordPack, platform, packId, scoreKey, scoreDelta } = button.dataset;
 
       if (shouldPlayNavigationSoundForAction(action)) {
         playNavigationSound();
@@ -6259,6 +6660,14 @@
         return startGame();
       }
       if (action === 'confirm-restart') return confirmRestart();
+      if (action === 'open-score-manager') {
+        animateButtonClick(button);
+        return openScoreManager();
+      }
+      if (action === 'close-score-manager') return closeScoreManager();
+      if (action === 'reset-score-manager-inputs') return resetScoreManagerInputs();
+      if (action === 'adjust-score-manager') return adjustScoreManagerInput(scoreKey, Number(scoreDelta) || 0);
+      if (action === 'save-score-manager') return saveScoreManager();
       if (action === 'reveal-word') return revealWord();
       if (action === 'toggle-word') return toggleWordVisibility();
       if (action === 'mark-correct') {
@@ -6372,6 +6781,18 @@
         saveSettings();
       });
 
+      ['correct-points-input', 'wrong-points-input', 'ffa-guesser-points-input'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', event => {
+          const fallback = id === 'correct-points-input'
+            ? DEFAULT_CORRECT_POINTS
+            : id === 'ffa-guesser-points-input'
+              ? DEFAULT_FFA_GUESSER_POINTS
+              : DEFAULT_WRONG_PENALTY_POINTS;
+          event.target.value = parsePointValue(event.target.value, fallback);
+          saveSettings();
+        });
+      });
+
       document.getElementById('random-challenge-toggle').addEventListener('change', event => {
         toggleRandomChallenge(event.target.checked);
       });
@@ -6380,8 +6801,11 @@
       document.getElementById('toggle-navigation-sound').addEventListener('change', saveSettings);
       document.getElementById('toggle-gameroom-music').addEventListener('change', handleMusicSettingChange);
       document.getElementById('toggle-gameplay-music').addEventListener('change', handleMusicSettingChange);
-      document.getElementById('toggle-penalty').addEventListener('change', saveSettings);
+      document.getElementById('toggle-ffa-guesser-points')?.addEventListener('change', saveSettings);
       document.getElementById('toggle-shuffle').addEventListener('change', saveSettings);
+      document.getElementById('result-guesser-select')?.addEventListener('change', event => {
+        applyResultGuesserSelection(event.target.value);
+      });
       document.getElementById('language-select').addEventListener('change', event => {
         setLanguage(event.target.value, { save: true });
       });
