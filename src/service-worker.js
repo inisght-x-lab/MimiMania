@@ -9,6 +9,7 @@ const APP_SHELL = [
   './themes.css',
   './script.js',
   './manifest.webmanifest',
+  './favicon.ico',
   './assets/icons/icon.svg',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
