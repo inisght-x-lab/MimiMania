@@ -2035,6 +2035,33 @@
       margin: 0 auto;
     }
 
+    .guest-result-card {
+      position: fixed;
+      inset: 0;
+      z-index: 520;
+      min-height: 0;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 14px;
+      padding: 28px 20px;
+      text-align: center;
+      background: var(--overlay-backdrop);
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .guest-result-title,
+    .guest-result-sub {
+      margin: 0;
+    }
+
+    .guest-result-reveal {
+      width: min(420px, 100%);
+      margin-bottom: 0;
+    }
+
     .guest-canvas-shell {
       min-height: min(58vh, 520px);
       aspect-ratio: 16 / 10;
@@ -2068,20 +2095,73 @@
 
     @media (min-width: 768px) {
       body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-watch-layout {
-        grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.22fr);
-        gap: 18px;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0, 1fr);
+        align-content: start;
+        gap: 12px;
+        height: 100%;
       }
 
-      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card,
-      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card {
-        height: min(62vh, 600px);
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        height: auto;
         min-height: 0;
+        padding: 8px 10px;
+        justify-content: stretch;
+      }
+
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .current-player {
+        margin: 0;
+        padding: 8px 10px;
+        text-align: left;
+      }
+
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .cp-label,
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .cp-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-wrap {
-        --timer-size: min(24vw, 260px);
-        --timer-number-size: clamp(3.2rem, 7vw, 5.4rem);
-        --timer-label-bottom: 34px;
+        --timer-size: 76px;
+        --timer-number-size: 2rem;
+        width: 76px;
+        height: 76px;
+        margin: 0;
+      }
+
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-wrap .timer-label {
+        display: none;
+      }
+
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card {
+        height: auto;
+        min-height: 0;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card .card-title {
+        display: none;
+      }
+
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-canvas-shell {
+        flex: none;
+        width: 100%;
+        min-height: min(52vh, 500px);
+        height: min(52vh, 500px);
+        aspect-ratio: auto;
+      }
+    }
+
+    @media (min-width: 1180px) {
+      body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-canvas-shell {
+        min-height: min(54vh, 540px);
+        height: min(54vh, 540px);
       }
     }
 
@@ -2178,6 +2258,10 @@
         padding: 10px 12px;
       }
 
+      .guest-result-title {
+        font-size: 2rem;
+      }
+
       body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-watch-layout {
         grid-template-rows: auto auto;
         align-content: start;
@@ -2245,17 +2329,15 @@
       }
 
       body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card .card-title {
-        margin-bottom: 6px;
-        font-size: 0.86rem;
-        line-height: 1;
+        display: none;
       }
 
       body[data-active-screen="guest"][data-guest-game-type="drawing"] .guest-canvas-shell {
         flex: none;
         width: 100%;
         height: auto;
-        min-height: 0;
-        aspect-ratio: 16 / 10;
+        min-height: min(54vh, 360px);
+        aspect-ratio: auto;
       }
     }
 
@@ -2588,6 +2670,38 @@
       font-weight: 700;
       margin-bottom: 28px;
       text-align: center;
+    }
+
+    .result-reveal {
+      width: min(420px, 100%);
+      background: var(--surface-bg);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin: 0 0 22px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .result-reveal-row {
+      display: grid;
+      gap: 6px;
+      text-align: left;
+    }
+
+    .result-reveal-label {
+      color: var(--text3);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .result-reveal-value {
+      color: var(--text);
+      font-size: 1.1rem;
+      line-height: 1.35;
+      word-break: break-word;
     }
 
     .result-guesser-picker {
@@ -4065,4 +4179,101 @@
 
     body[data-preview-mode="mobile"][data-game-type="drawing"] .drawing-timer-dock .timer-num {
       font-size: 1.35rem;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-watch-layout,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-watch-layout,
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-watch-layout {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto minmax(0, 1fr);
+      align-content: start;
+      gap: 12px;
+      height: 100%;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card,
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      height: auto;
+      min-height: 0;
+      padding: 8px 10px;
+      justify-content: stretch;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .current-player,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .current-player,
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .current-player {
+      margin: 0;
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .cp-label,
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .cp-name,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .cp-label,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .cp-name,
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .cp-label,
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-card .cp-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-wrap,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-wrap {
+      --timer-size: 76px;
+      --timer-number-size: 2rem;
+      width: 76px;
+      height: 76px;
+      margin: 0;
+    }
+
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-wrap {
+      --timer-size: 54px;
+      --timer-number-size: 1.35rem;
+      width: 54px;
+      height: 54px;
+      margin: 0;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-wrap .timer-label,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-wrap .timer-label,
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-timer-wrap .timer-label {
+      display: none;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card,
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card {
+      height: auto;
+      min-height: 0;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card .card-title,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card .card-title,
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-drawing-card .card-title {
+      display: none;
+    }
+
+    body[data-preview-mode="tablet"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-canvas-shell,
+    body[data-preview-mode="desktop"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-canvas-shell {
+      flex: none;
+      width: 100%;
+      min-height: min(52vh, 500px);
+      height: min(52vh, 500px);
+      aspect-ratio: auto;
+    }
+
+    body[data-preview-mode="mobile"][data-active-screen="guest"][data-guest-game-type="drawing"] .guest-canvas-shell {
+      flex: none;
+      width: 100%;
+      min-height: min(54vh, 360px);
+      height: auto;
+      aspect-ratio: auto;
     }

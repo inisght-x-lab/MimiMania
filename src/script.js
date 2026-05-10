@@ -434,7 +434,7 @@
           'high-contrast': 'Alto Contraste'
         },
         footer: {
-          copyPrefix: '© 2025 Desafio da Mímica v6.1 · Insight X Lab Technologies'
+          copyPrefix: '© 2025 Desafio da Mímica v7.0 · Insight X Lab Technologies'
         },
         teams: {
           defaultA: 'Time A',
@@ -1300,7 +1300,7 @@
           'high-contrast': 'Alto Contraste'
         },
         footer: {
-          copyPrefix: '© 2025 Desafío de Mímica v6.1 · Insight X Lab Technologies'
+          copyPrefix: '© 2025 Desafío de Mímica v7.0 · Insight X Lab Technologies'
         },
         teams: {
           defaultA: 'Equipo A',
@@ -1705,7 +1705,7 @@
         footerAriaLabel: 'Partager Défi du Mime'
       },
       theme: { cosmic: 'Cosmique', 'liquid-glass': 'Automne', material3: 'Printemps', 'light-mode': 'Mode clair', 'dark-mode': 'Mode sombre', 'high-contrast': 'Contraste élevé' },
-      footer: { copyPrefix: '© 2025 Défi du Mime v6.1 · Insight X Lab Technologies' },
+      footer: { copyPrefix: '© 2025 Défi du Mime v7.0 · Insight X Lab Technologies' },
       teams: { defaultA: 'Équipe A', defaultB: 'Équipe B' },
       players: { defaultName: 'Joueur {number}' },
       dynamic: {
@@ -2087,7 +2087,7 @@
         footerAriaLabel: 'Pantomime Challenge teilen'
       },
       theme: { cosmic: 'Kosmisch', 'liquid-glass': 'Herbst', material3: 'Frühling', 'light-mode': 'Heller Modus', 'dark-mode': 'Dunkler Modus', 'high-contrast': 'Hoher Kontrast' },
-      footer: { copyPrefix: '© 2025 Pantomime Challenge v6.1 · Insight X Lab Technologies' },
+      footer: { copyPrefix: '© 2025 Pantomime Challenge v7.0 · Insight X Lab Technologies' },
       teams: { defaultA: 'Team A', defaultB: 'Team B' },
       players: { defaultName: 'Spieler {number}' },
       dynamic: {
@@ -2469,7 +2469,7 @@
         footerAriaLabel: 'Condividi Sfida di Mimica'
       },
       theme: { cosmic: 'Cosmico', 'liquid-glass': 'Autunno', material3: 'Primavera', 'light-mode': 'Modalità chiara', 'dark-mode': 'Modalità scura', 'high-contrast': 'Alto contrasto' },
-      footer: { copyPrefix: '© 2025 Sfida di Mimica v6.1 · Insight X Lab Technologies' },
+      footer: { copyPrefix: '© 2025 Sfida di Mimica v7.0 · Insight X Lab Technologies' },
       teams: { defaultA: 'Squadra A', defaultB: 'Squadra B' },
       players: { defaultName: 'Giocatore {number}' },
       dynamic: {
@@ -4105,6 +4105,7 @@
       hintShown: false,
       wordVisible: false,
       phase: 'preparing',
+      lastResult: null,
       totalTurns: 0,
       turnsDone: 0,
       leaderboardRecorded: false,
@@ -4579,6 +4580,30 @@
       return 'guestWaiting';
     }
 
+    function getResultOutcome(correct, timeUp = false) {
+      if (correct) return 'correct';
+      return timeUp ? 'timeUp' : 'wrong';
+    }
+
+    function getResultPresentation(outcome) {
+      if (outcome === 'correct') {
+        return { emoji: '🎉', titleKey: 'result.correctTitle', color: 'var(--accent3)' };
+      }
+      if (outcome === 'timeUp') {
+        return { emoji: '⏰', titleKey: 'result.timeUpTitle', color: 'var(--accent1)' };
+      }
+      return { emoji: '😅', titleKey: 'result.wrongTitle', color: 'var(--accent1)' };
+    }
+
+    function renderResultRevealFields({ wordId, challengeId, challengeRowId }, details = {}) {
+      const wordEl = document.getElementById(wordId);
+      const challengeEl = document.getElementById(challengeId);
+      const challengeRowEl = document.getElementById(challengeRowId);
+      if (wordEl) wordEl.textContent = details.word || '---';
+      if (challengeEl) challengeEl.textContent = details.challenge || '---';
+      if (challengeRowEl) challengeRowEl.classList.toggle('hidden', !details.challenge);
+    }
+
     function buildHostGamePayload(options = {}) {
       const { includeDrawingSnapshot = false } = options;
       const hasStarted = Boolean(gameState.players.length && gameState.totalTurns);
@@ -4604,6 +4629,13 @@
         hintCategory: gameState.currentWord?.cat || '',
         hintText
       };
+      if (phase === 'score' && gameState.lastResult) {
+        payload.result = {
+          outcome: gameState.lastResult.outcome,
+          word: gameState.lastResult.word,
+          challenge: gameState.lastResult.challenge
+        };
+      }
       if (includeDrawingSnapshot && gameState.gameType === 'drawing' && phase === 'playing') {
         payload.drawingSnapshot = getDrawingSnapshot();
       }
@@ -4772,10 +4804,16 @@
       document.getElementById('guest-current-player-name').textContent = payload.phase === 'waiting' ? '--' : (payload.currentPlayerName || '--');
       updateGuestTimerDisplay(payload.timerLeft, payload.timerDur);
 
+      const timerCard = document.querySelector('.guest-timer-card');
+      const resultCard = document.getElementById('guest-result-card');
+      const shouldShowResult = payload.phase === 'score' && payload.result;
+      timerCard?.classList.toggle('hidden', shouldShowResult);
+      resultCard?.classList.toggle('hidden', !shouldShowResult);
+
       const hint = document.getElementById('guest-hint-banner');
       const hintText = document.getElementById('guest-hint-text');
       const localizedHintText = getGuestHintText(payload);
-      if (payload.hintVisible && localizedHintText) {
+      if (!shouldShowResult && payload.hintVisible && localizedHintText) {
         hintText.textContent = localizedHintText;
         hint.classList.remove('hidden');
       } else {
@@ -4783,7 +4821,7 @@
       }
 
       const drawingCard = document.getElementById('guest-drawing-card');
-      const shouldShowDrawing = payload.gameType === 'drawing' && payload.phase === 'playing';
+      const shouldShowDrawing = !shouldShowResult && payload.gameType === 'drawing' && payload.phase === 'playing';
       drawingCard.classList.toggle('hidden', !shouldShowDrawing);
       if (shouldShowDrawing) {
         const drawingTurnKey = payload.drawingTurnKey || `${payload.currentRound || 0}:${payload.currentPlayerName || ''}`;
@@ -4795,6 +4833,24 @@
         if (payload.drawingSnapshot) applyGuestDrawingSnapshot(payload.drawingSnapshot);
       } else {
         multiDeviceState.lastGuestDrawingTurnKey = '';
+      }
+
+      if (shouldShowResult) {
+        const resultPresentation = getResultPresentation(payload.result.outcome);
+        const guestResultEmoji = document.getElementById('guest-result-emoji');
+        const guestResultTitle = document.getElementById('guest-result-title');
+        const guestResultSub = document.getElementById('guest-result-sub');
+        if (guestResultEmoji) guestResultEmoji.textContent = resultPresentation.emoji;
+        if (guestResultTitle) {
+          guestResultTitle.textContent = t(resultPresentation.titleKey);
+          guestResultTitle.style.color = resultPresentation.color;
+        }
+        if (guestResultSub) guestResultSub.textContent = t('multiDevice.guestScore');
+        renderResultRevealFields({
+          wordId: 'guest-result-hidden-word',
+          challengeId: 'guest-result-hidden-challenge',
+          challengeRowId: 'guest-result-hidden-challenge-row'
+        }, payload.result);
       }
     }
 
@@ -6056,6 +6112,7 @@
       gameState.phase = 'preparing';
       gameState.currentWord = null;
       gameState.currentChallenge = null;
+      gameState.lastResult = null;
       gameState.hintShown = false;
       gameState.wordVisible = false;
       gameState.timerLeft = gameState.timerDur;
@@ -6558,6 +6615,8 @@
       const sub = document.getElementById('resultSub');
       const correctPoints = getConfiguredCorrectPoints();
       const wrongPenaltyPoints = getConfiguredWrongPenaltyPoints();
+      const outcome = getResultOutcome(correct, timeUp);
+      const resultPresentation = getResultPresentation(outcome);
 
       if (correct) {
         if (gameState.mode === 'teams') {
@@ -6567,9 +6626,9 @@
           addScore(playerName, correctPoints);
         }
 
-        emoji.textContent = '🎉';
-        title.textContent = t('result.correctTitle');
-        title.style.color = 'var(--accent3)';
+        emoji.textContent = resultPresentation.emoji;
+        title.textContent = t(resultPresentation.titleKey);
+        title.style.color = resultPresentation.color;
         sub.textContent = gameState.mode === 'teams'
           ? t('dynamic.correctTeamPoints', { teamName: gameState.teamNames[player.team] || getDefaultTeamName(player.team), points: correctPoints })
           : t('dynamic.correctPlayerPoints', { playerName, points: correctPoints });
@@ -6589,11 +6648,21 @@
         } else {
           sub.textContent = timeUp ? t('dynamic.timeUpNoPoints') : t('dynamic.skippedNoPoints');
         }
-        emoji.textContent = timeUp ? '⏰' : '😅';
-        title.textContent = timeUp ? t('result.timeUpTitle') : t('result.wrongTitle');
-        title.style.color = 'var(--accent1)';
+        emoji.textContent = resultPresentation.emoji;
+        title.textContent = t(resultPresentation.titleKey);
+        title.style.color = resultPresentation.color;
       }
 
+      gameState.lastResult = {
+        outcome,
+        word: gameState.currentWord?.word || '---',
+        challenge: gameState.currentChallenge || ''
+      };
+      renderResultRevealFields({
+        wordId: 'resultHiddenWord',
+        challengeId: 'resultHiddenChallenge',
+        challengeRowId: 'resultHiddenChallengeRow'
+      }, gameState.lastResult);
       gameState.phase = 'score';
       updateScoreManagerButton();
       syncDrawingBoardVisibility();
@@ -7457,6 +7526,7 @@
           hintShown: false,
           wordVisible: false,
           phase: 'preparing',
+          lastResult: null,
           totalTurns: 0,
           turnsDone: 0,
           leaderboardRecorded: false,

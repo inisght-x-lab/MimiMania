@@ -32,6 +32,16 @@
     <div class="result-emoji" id="resultEmoji">🎉</div>
     <div class="result-title" id="resultTitle" data-i18n="result.correctTitle">Acertou!</div>
     <div class="result-sub" id="resultSub">+10 pontos</div>
+    <div class="result-reveal" id="resultReveal">
+      <div class="result-reveal-row">
+        <span class="result-reveal-label" data-i18n="game.hiddenWord">Palavra oculta</span>
+        <strong class="result-reveal-value" id="resultHiddenWord">---</strong>
+      </div>
+      <div class="result-reveal-row hidden" id="resultHiddenChallengeRow">
+        <span class="result-reveal-label" data-i18n="game.challengePrefix">🎯 Desafio:</span>
+        <strong class="result-reveal-value" id="resultHiddenChallenge">---</strong>
+      </div>
+    </div>
     <div class="result-guesser-picker hidden" id="resultGuesserPicker">
       <label class="toggle-label" for="result-guesser-select" data-i18n="result.guesserLabel">Quem acertou?</label>
       <select class="inp" id="result-guesser-select"></select>
@@ -274,6 +284,21 @@
           <div class="hint-banner guest-hint hidden" id="guest-hint-banner">
             <div class="eyebrow eyebrow-hint mb-xxs" data-i18n="game.hintTitle">💡 Dica</div>
             <div class="hint-text" id="guest-hint-text">---</div>
+          </div>
+        </div>
+        <div class="card guest-result-card hidden" id="guest-result-card">
+          <div class="result-emoji guest-result-emoji" id="guest-result-emoji">🎉</div>
+          <div class="result-title guest-result-title" id="guest-result-title" data-i18n="result.correctTitle">Acertou!</div>
+          <div class="result-sub guest-result-sub" id="guest-result-sub" data-i18n="multiDevice.guestScore">Aguardando o próximo turno.</div>
+          <div class="result-reveal guest-result-reveal">
+            <div class="result-reveal-row">
+              <span class="result-reveal-label" data-i18n="game.hiddenWord">Palavra oculta</span>
+              <strong class="result-reveal-value" id="guest-result-hidden-word">---</strong>
+            </div>
+            <div class="result-reveal-row hidden" id="guest-result-hidden-challenge-row">
+              <span class="result-reveal-label" data-i18n="game.challengePrefix">🎯 Desafio:</span>
+              <strong class="result-reveal-value" id="guest-result-hidden-challenge">---</strong>
+            </div>
           </div>
         </div>
         <div class="card guest-drawing-card hidden" id="guest-drawing-card">
@@ -1019,7 +1044,7 @@
     </div>
 
     <footer class="site-footer">
-      <span data-i18n="footer.copyPrefix">© 2025 Desafio da Mímica v6.1 · Insight X Lab Technologies</span>
+      <span data-i18n="footer.copyPrefix">© 2025 Desafio da Mímica v7.0 · Insight X Lab Technologies</span>
     </footer>
   </div>
 
